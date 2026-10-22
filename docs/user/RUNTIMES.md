@@ -1,50 +1,31 @@
 # Direct and Upstream Runtimes
 
-AI Director ships two llama.cpp-derived server profiles that intentionally have different ownership and update policies.
+AI Director provides two llama.cpp-derived runtime profiles.
 
 ## Direct
 
-**Direct** is the pinned product runtime lane.
+**Direct** is the pinned product runtime.
 
-Current source authority:
-
-- repository: `nikolaoskalomiris/llama-cpp-flashnext-direct`;
-- accepted immutable commit: `c8f321699adbd0035c8c755bdefcb4182705262b`;
-- accepted tree: `a17cf64683bc6877e2dbc4e0b4ef8933106257fb`.
-
-The installed runtime identifies Direct as the custom AI Director llama.cpp runtime. Ordinary Upstream updates do not modify it.
+Choose Direct when you want the runtime version validated and shipped with the AI Director release. Ordinary Upstream updates do not modify Direct.
 
 ## Upstream
 
-**Upstream** is the independently updateable runtime lane.
+**Upstream** is the independently updateable runtime.
 
-The accepted 0.3.25 source identity is reconstructed from the Unsloth llama.cpp source authority and is bound to:
-
-- repository: `unslothai/llama.cpp`;
-- accepted reconstructed source tree: `edd784f1d459cd39f2605ccf66adc0c79ef75a93`;
-- accepted runtime source identity: `b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d`.
-
-The installed Upstream root is transactionally replaceable by the managed updater after compatibility, integrity and live-health checks.
+Choose Upstream when you want the managed updater to install compatible newer Upstream runtime builds after integrity and health checks.
 
 ## Shared CUDA
 
-Direct and Upstream share the product's CUDA 13.3.1 runtime lane. Ordinary Upstream updates must not replace the shared CUDA payload.
+Direct and Upstream share AI Director's managed CUDA runtime. Ordinary Upstream updates do not replace that shared CUDA payload.
 
-The current shared payload contains the NVIDIA redistributable runtime libraries required by the accepted stack, including `cudart64_13.dll`, `cublas64_13.dll` and `cublasLt64_13.dll`.
+The machine CUDA Toolkit is relevant to source builds only; installed AI Director uses its managed runtime libraries.
 
-For source builds, those shipping DLLs are extracted from pinned official NVIDIA CUDA 13.3.1 redistributable archives. They are not copied from the machine CUDA Toolkit; the Toolkit is an external compiler/inspection prerequisite.
+## Which profile should I use?
 
-## Source builds versus installed-product updates
+Use **Direct** as the predictable default.
 
-These are separate paths:
+Use **Upstream** if you specifically want the independently updateable runtime lane.
 
-- **Source build:** constructs both Direct and Upstream server shipping sets from pinned source authorities, then assembles a candidate runtime stack with shared CUDA.
-- **Installed-product Upstream update:** downloads a compatible Upstream runtime release asset, verifies its concrete release/asset identity and SHA-256, stages and preflights it, then swaps only the Upstream lane.
+Both profiles use the selected local model configuration. Switching profiles does not duplicate or relicense your model files.
 
-Historical accepted Direct/Upstream server binaries may be retained for release comparison/provenance, but they are not normal clean-build inputs.
-
-## Choosing a profile
-
-Use Direct when you want the pinned product runtime behavior. Use Upstream when you want the updater-managed runtime line and its independent update path.
-
-Changing profiles does not relicense or duplicate your model files; both profiles operate against the selected local model configuration.
+For source identities and build provenance, see [Release Provenance](../release/RELEASE_PROVENANCE.md). For update behavior, see [Updater and Rollback](UPDATER_AND_ROLLBACK.md).

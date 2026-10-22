@@ -1,24 +1,24 @@
-# Post-First-Release TODO
+# Post-Release TODO
 
-This file tracks deliberately deferred engineering work that is **not a blocker for the first public release unless new evidence explicitly reopens it**.
+This file tracks deferred engineering work. Items here are not release blockers unless new evidence explicitly reopens them.
 
-## MCP 4.14.4 compatibility bundle
+## MCP compatibility bundle
 
 Priority: high.
 
-The accepted first-release MCP seed is `4.10.4`. MCP `4.14.4` was correctly refused before mutation because its `resolve-advanced` dependency/runtime contract no longer matches the accepted immutable Advanced Node dependency image.
+The currently accepted MCP seed remains on the validated compatibility image. A newer dependency-changing MCP candidate was correctly refused before mutation because its runtime/dependency contract did not match that image.
 
 Post-release work:
 
-- build a new version-bound compatibility bundle for the selected MCP successor;
-- produce and provenance-bind a new immutable Advanced Node dependency image that satisfies the candidate `package.json` / `package-lock.json` semantics;
-- update any companion Python/runtime image only when the candidate contract requires it;
-- keep the current fail-closed behavior: never authorize a dependency-changing candidate by weakening hash/lockfile checks;
+- build a version-bound compatibility bundle for the selected MCP successor;
+- produce and provenance-bind a new immutable Advanced Node dependency image that satisfies the candidate package/lockfile semantics;
+- update companion runtime images only when the candidate contract requires it;
+- keep the fail-closed behavior: never authorize a dependency-changing candidate by weakening hash or lockfile checks;
 - validate staging, source/runtime identities, the full MCP tool surface, mandatory read-only Resolve canary, commit and rollback;
-- review the 4.14.x security/correctness changes before promotion, including argument/command handling changes around `conform.relink_scalefix`;
-- only after the new bundle is accepted should the bundled/accepted MCP authority advance from 4.10.4.
+- review relevant security/correctness changes before promotion;
+- advance the bundled/accepted MCP authority only after the new compatibility bundle is accepted.
 
-Pinned 4.14.4 identity observed during first-release engineering:
+The first investigated successor was MCP 4.14.4:
 
 ```text
 repository:           samuelgursky/davinci-resolve-mcp
@@ -29,7 +29,7 @@ commit:               a07f594bc7357092432e812190909b615ef41a59
 
 ## Supported in-place upgrade path
 
-The first public release documentation requires uninstalling the previous AI Director version before installing a newer one.
+The current supported upgrade procedure is to uninstall the previous AI Director application before installing a newer release, and to reinstall Resolve Integration when used.
 
 Before claiming in-place upgrade support:
 
@@ -50,8 +50,8 @@ Before claiming in-place upgrade support:
 Add automation where practical for:
 
 - clean install -> smoke -> uninstall -> reinstall;
-- accepted predecessor -> successor upgrade once upgrade support is implemented;
-- installed Direct 17/17 candidate-payload verification;
+- predecessor -> successor upgrade once in-place upgrade support is implemented;
+- installed Direct candidate-payload verification;
 - installed Upstream identity/update smoke;
 - Resolve Integration install/repair/uninstall ownership;
 - shortcut/icon and uninstall-registration checks;
@@ -60,4 +60,4 @@ Add automation where practical for:
 
 ## Documentation maintenance
 
-Keep the root README, structured `docs/` tree and Wiki projection synchronized when release/build/update policy changes. The structured repository docs are the technical authority; Wiki pages should remain concise navigational/tutorial projections.
+Keep the root README, structured `docs/` tree and Wiki projection synchronized when release/build/update policy changes. The repository docs are the technical authority; Wiki pages should stay concise and task-oriented.

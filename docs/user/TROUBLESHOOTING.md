@@ -1,95 +1,79 @@
 # Troubleshooting
 
-## Installer is blocked by Windows SmartScreen
+## Windows SmartScreen blocks the installer
 
-First determine whether the release is intentionally unsigned.
+Confirm that the installer came from the official [GitHub Releases](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/releases/latest) page and check the release's signing status.
 
-- Confirm you downloaded the file from the official GitHub Release.
-- Verify its SHA-256 against the published checksum.
-- Confirm the release notes explicitly identify the artifact as unsigned when applicable.
+If needed, verify its checksum as described in [Release Verification](../release/RELEASE_VERIFICATION.md).
 
-Unsigned and self-signed applications can receive SmartScreen warnings. Enterprise policy may prevent continuation. See [../release/RELEASE_VERIFICATION.md](../release/RELEASE_VERIFICATION.md).
+Enterprise Windows policy may prevent unsigned or low-reputation applications from running even when the file is legitimate.
 
 ## No local models appear
 
-AI Director recursively scans:
+AI Director scans:
 
 ```text
 %USERPROFILE%\.lmstudio\models
 %USERPROFILE%\.cache\lm-studio\models
 ```
 
-Check that the primary model file ends in `.gguf`. Auxiliary MTP/draft/mmproj files are not shown as standalone primary models, and non-primary multipart pieces are not listed separately.
+Check that your primary model is a `.gguf` file. Auxiliary draft/MTP/mmproj files and non-primary multipart pieces are not listed as separate primary models.
 
-For Qwen3.8 Flash Next, make sure the compatible MTP draft GGUF is beside the primary model. See [MODELS.md](MODELS.md).
+For Qwen3.8 Flash Next, keep the compatible MTP draft GGUF beside the primary model.
 
-## FFmpeg shows unavailable or validation failed
-
-The selected `ffmpeg.exe` and `ffprobe.exe` must:
-
-- exist at absolute paths;
-- be named exactly `ffmpeg.exe` and `ffprobe.exe`;
-- come from the same directory;
-- execute successfully;
-- identify compatible versions;
-- expose the capabilities AI Director requires.
-
-Re-select the pair in Settings or disable FFmpeg if you do not need FFmpeg-backed operations. See [FFMPEG.md](FFMPEG.md).
+See [Local Models](MODELS.md).
 
 ## AI Director says setup is required
 
-The server cannot start until a runtime profile and an available local model have been selected. Open Settings, choose Direct or Upstream, select a detected model and apply the settings.
+Open Settings and select:
+
+1. a runtime profile (**Direct** or **Upstream**);
+2. an available local model.
+
+Apply the settings, then start the server.
+
+## FFmpeg is unavailable
+
+Select `ffmpeg.exe` and `ffprobe.exe` from the same compatible FFmpeg installation, or leave FFmpeg disabled if you do not need FFmpeg-backed operations.
+
+See [FFmpeg](FFMPEG.md).
 
 ## Port 8091 is already in use
 
-Identify the listener before terminating anything. Do not assume a process is stale merely because it owns AI Director's usual local llama-server port.
+Do not terminate processes blindly.
 
-If another AI Director-managed server is already running, use the application's normal stop/restart controls rather than killing unrelated processes.
+If AI Director already has a managed server running, use the application's normal stop/restart controls. If another application owns the port, stop or reconfigure that application before retrying.
 
-## Upstream update was rejected
+## An Upstream update was rejected
 
-A rejected update can be a successful safety outcome. The Upstream transaction verifies release/asset identity, SHA-256, staged executable viability, local runtime identity and live server/backend/cache health before finalizing.
+A rejected candidate can be a successful safety outcome. AI Director stages and health-checks the candidate before finalizing it.
 
-If the live-health gate fails and rollback succeeds, the previous runtime is restored and the candidate remains rejected. Preserve the error message; do not delete the backup/rejected runtime directories as a first response.
+If rollback succeeds, the previous runtime remains active. Preserve the reported error instead of manually deleting update or backup directories.
 
-If rollback itself fails, stop update attempts until the runtime state is inspected. See [UPDATER_AND_ROLLBACK.md](UPDATER_AND_ROLLBACK.md).
+If rollback itself fails, stop further update attempts until the installed runtime state is inspected.
 
-## MCP update says Resolve must be open
+See [Updater and Rollback](UPDATER_AND_ROLLBACK.md).
 
-This is expected for an installable MCP candidate. MCP updates can change the Resolve-facing tool contract, so the transaction requires a live read-only Resolve canary before commit.
+## An MCP update says Resolve must be open
 
-Open DaVinci Resolve and retry the MCP update.
+Open DaVinci Resolve and retry.
 
-## MCP update says the dependency/runtime contract changed
+MCP updates require a live read-only Resolve check before the new MCP runtime can be committed.
 
-This is also an expected safety outcome.
+## An MCP update reports a compatibility/dependency change
 
-If the candidate's dependency/runtime semantics no longer match the accepted immutable dependency image, AI Director refuses the update before replacing accepted files. The accepted MCP remains active.
+This can be an intentional fail-closed refusal. AI Director keeps the accepted MCP active when the candidate requires a dependency/runtime image that has not been validated yet.
 
-Do not manually copy the new MCP over the accepted installation and do not weaken the hash/lockfile checks. Wait for an AI Director compatibility bundle/runtime image that explicitly validates that MCP dependency contract.
+Do not manually overwrite the accepted MCP or bypass the compatibility checks. Wait for an AI Director release/update that provides a matching compatibility bundle.
 
-## Resolve Integration is installed but does not launch AI Director
+## Resolve Integration does not launch AI Director
 
-The integration is only a launcher. Confirm that the standalone AI Director application is installed for the current Windows user.
+1. Confirm the standalone AI Director application is installed for the current Windows user.
+2. Restart DaVinci Resolve.
+3. Repair/reinstall Resolve Integration from the current release if needed.
 
-If the integration was installed or updated while Resolve was open, restart Resolve. If necessary, repair it with the separate `DaVinci Resolve AI Director Integration Setup <version>.exe` artifact.
+See [Resolve Integration](RESOLVE_INTEGRATION.md).
 
-See [RESOLVE_INTEGRATION.md](RESOLVE_INTEGRATION.md).
+## Building from source
 
-## Source build fails before compilation
-
-For a maintained/source build, distinguish bootstrap failure from compiler failure.
-
-Check:
-
-- the Direct repository is reachable and the pinned commit/tree can be checked out;
-- the Upstream source asset matches the contracted size/SHA-256;
-- the exact external MSVC/Windows SDK/CMake/Ninja/CUDA Toolkit identities required by the build contracts are present;
-- the runtime-base bootstrap asset and NVIDIA shared-CUDA redistributable archives are available and match their contracted SHA-256 values;
-- no inherited `CL`, `_CL_`, `NVCC_PREPEND_FLAGS`, `NVCC_APPEND_FLAGS`, `CUDAARCHS` or `CMAKE_CUDA_ARCHITECTURES` contamination is changing the build environment.
-
-Do not substitute historical server binaries when a source acquisition/build prerequisite fails.
-
-## Builder health for maintainers
-
-On a maintained repository, use the documented build/health entrypoints and preserve operation evidence after any failure. A fresh public-source build may legitimately start without `_inputs`, `_toolchain` or `_cache`; plain `BUILD.cmd` bootstraps the owned/downloaded inputs before compilation. Do not manually delete active transaction journals or candidate evidence merely to make a subsequent check pass.
+Build failures and maintainer toolchain diagnostics are documented separately in [Building from Source](../build/BUILDING.md).

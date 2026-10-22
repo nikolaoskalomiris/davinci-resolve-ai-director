@@ -1,9 +1,8 @@
 # Updater and Rollback
 
-AI Director treats Upstream llama.cpp and DaVinci Resolve MCP as separate update transactions.
+AI Director updates the Upstream runtime and Resolve MCP through separate guarded transactions.
 
-Upstream updates are staged, hashed, preflighted and live-health tested before finalization. When the candidate fails and the previous backup is intact, AI Director restores the prior runtime.
+- **Upstream:** downloaded candidates are staged and health-checked before they replace the active runtime. Failed candidates can roll back to the previous runtime.
+- **MCP:** Resolve must be available for a live read-only validation before commit. Candidates that require an unsupported dependency/runtime contract are refused before accepted files are replaced.
 
-MCP updates additionally require a live read-only Resolve canary because MCP changes can alter the Resolve-facing tool contract. A dependency-changing MCP candidate is refused before mutation if the accepted immutable dependency/runtime image cannot satisfy it; supporting that candidate requires a matching validated compatibility bundle/runtime image.
-
-See [Updater and Rollback](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/UPDATER_AND_ROLLBACK.md) in the repository for the complete sequence and failure semantics.
+See the full [Updater and Rollback guide](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/UPDATER_AND_ROLLBACK.md).

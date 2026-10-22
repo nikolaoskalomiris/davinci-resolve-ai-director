@@ -1,11 +1,11 @@
 # Resolve Integration
 
-The Resolve Integration is a small machine-scoped launcher that starts or foregrounds the standalone AI Director application from DaVinci Resolve.
+Resolve Integration is a small launcher that lets DaVinci Resolve start or foreground the standalone AI Director application.
 
-It requires elevation to install, but the core AI Director desktop application remains a current-user install. The integration can be installed from the main Setup's assisted option or from the separate Integration Setup artifact.
+The desktop application is installed for the current Windows user. Resolve Integration is machine-scoped and requires elevation.
 
-For the first public release line, uninstall the previous Resolve Integration before installing a newer AI Director release, then reinstall the integration from that new release when wanted. In-place/dirty upgrade is not the supported release procedure.
+The main AI Director installer can install it for you. If Resolve was open during installation or repair, restart Resolve before testing the Workflow Integration menu.
 
-If Resolve was already open when the launcher was installed or updated, restart Resolve.
+When upgrading, uninstall the previous Resolve Integration entry before installing the new release.
 
-See [Resolve Integration](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/RESOLVE_INTEGRATION.md) in the repository for scope and uninstall ownership details.
+See the full [Resolve Integration guide](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/RESOLVE_INTEGRATION.md).

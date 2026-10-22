@@ -1,9 +1,10 @@
 # Direct and Upstream Runtimes
 
-**Direct** is the pinned product runtime lane. Ordinary Upstream updates never replace it.
+AI Director offers two runtime profiles:
 
-**Upstream** is the independently managed llama.cpp-derived lane. Its updater verifies concrete release/asset identity, SHA-256 and live runtime health before final commit.
+- **Direct** — the pinned runtime shipped with AI Director. Use this as the predictable default.
+- **Upstream** — the independently updateable runtime. Use this when you specifically want the managed Upstream update path.
 
-Both lanes share the product's CUDA runtime boundary but have separate source/provenance identities. Clean source builds construct both server lanes from source; shipping shared-CUDA DLLs are extracted from pinned official NVIDIA redistributable archives.
+Ordinary Upstream updates do not replace Direct or the shared CUDA runtime.
 
-See [Runtimes](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/RUNTIMES.md) in the repository for the exact source identities and ownership rules.
+See the full [Runtimes guide](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/RUNTIMES.md).

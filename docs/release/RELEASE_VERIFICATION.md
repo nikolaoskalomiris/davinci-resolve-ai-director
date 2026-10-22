@@ -1,47 +1,35 @@
 # Release Verification
 
-Verify both the download source and the file identity before running a release artifact.
+Download release artifacts only from the project's official [GitHub Releases](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/releases/latest) page.
 
 ## SHA-256
 
-In PowerShell:
+Each release provides checksum information for its distributed artifacts. In PowerShell:
 
 ```powershell
-Get-FileHash -LiteralPath '.\DaVinci Resolve AI Director Setup X.Y.Z.exe' -Algorithm SHA256
-Get-FileHash -LiteralPath '.\DaVinci Resolve AI Director Integration Setup X.Y.Z.exe' -Algorithm SHA256
+Get-FileHash -LiteralPath '.\your-downloaded-installer.exe' -Algorithm SHA256
 ```
 
-Compare each hash with the value published for the exact GitHub Release asset. A hash from another version or an engineering report is not a substitute.
+Compare the result with the checksum published for the **same release asset**.
 
 ## Authenticode
 
 If the release is signed:
 
 ```powershell
-Get-AuthenticodeSignature -LiteralPath '.\DaVinci Resolve AI Director Setup X.Y.Z.exe' | Format-List *
+Get-AuthenticodeSignature -LiteralPath '.\your-downloaded-installer.exe' | Format-List *
 ```
 
-Verify the actual certificate identity and signature status. Do not infer the certificate subject from the product's PE `CompanyName`/Publisher metadata; those are separate identities.
+Verify the signature status and certificate identity. Product `CompanyName`/Publisher metadata is not the same thing as an Authenticode certificate identity.
 
 ## Unsigned releases
 
-An unsigned release is acceptable only when the maintainer explicitly labels it unsigned and publishes the exact SHA-256/provenance.
+A release may be published unsigned when that status is stated explicitly in the release notes.
 
-Windows SmartScreen may warn on unsigned binaries. Microsoft documents that unsigned files start with no transferable publisher reputation, while self-signed certificates behave like unsigned files for SmartScreen reputation. Even a newly signed binary can still receive an "unrecognized app" warning until reputation develops.
+Windows SmartScreen may warn about an unsigned or low-reputation binary. A warning is not proof that a file is malicious, but it should not be ignored blindly: confirm the official GitHub origin and checksum before continuing.
 
-A SmartScreen warning is therefore not proof that a file is malicious, but it is also not something to ignore blindly. Verify the GitHub origin and SHA-256 first.
+## Source and provenance
 
-## Deterministic unsigned versus signed hashes
+Version-specific source, build and artifact identities are recorded in [RELEASE_PROVENANCE.md](RELEASE_PROVENANCE.md).
 
-If signing is applied after the deterministic build, the signed file is expected to have a different SHA-256. Release provenance should preserve both:
-
-```text
-UNSIGNED_BUILD_SHA256=...
-SIGNED_RELEASE_SHA256=...
-```
-
-## Source/provenance verification
-
-The public source repository should expose the Direct and Upstream source-build contracts and provenance records used for the tag. Those records identify the immutable source inputs used to construct the server payloads.
-
-A public release is not considered reproducible merely because its installers are attached to GitHub; the tagged source must also pass the documented clean-build procedure.
+A public upload alone does not prove reproducibility. Reproducibility requires a clean build from the exact public release source/tag using the documented public inputs and external prerequisites.

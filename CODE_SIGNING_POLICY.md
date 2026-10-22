@@ -4,29 +4,29 @@
 
 Public Windows release binaries should use SHA-256 Authenticode with a trusted timestamp when a trusted production signing path is available.
 
-Signing is not allowed to block unrelated release engineering. If trusted signing is unavailable when the remaining release gates are complete, an unsigned public release requires an explicit maintainer decision and clear unsigned/SmartScreen/checksum disclosure.
+Signing is a distribution trust improvement, not a substitute for build provenance or checksums. If trusted signing is unavailable for a release, publishing unsigned requires an explicit maintainer decision and clear release-note/checksum disclosure.
 
 ## Preferred signer
 
-The preferred zero-cost production path is the **SignPath Foundation OSS program**, conditional on project eligibility and acceptance.
+The preferred zero-cost production path is the **SignPath Foundation OSS program**, subject to project eligibility and acceptance.
 
-Initial SignPath acceptance is an external dependency and is non-blocking.
+SignPath acceptance is an external dependency and does not block source development or unrelated release engineering.
 
-## Files that may receive the AI Director project signature
+## What may be signed
 
-Only first-party release artifacts:
+Only first-party release artifacts should receive the AI Director project signature:
 
 1. the AI Director application executable;
-2. `DaVinci Resolve AI Director Setup <version>.exe`;
-3. `DaVinci Resolve AI Director Integration Setup <version>.exe`.
+2. the main AI Director installer;
+3. the Resolve Integration installer.
 
 Do **not** stamp the AI Director project signature onto third-party/upstream runtime DLLs or executables.
 
 ## Algorithms
 
 - Authenticode file digest: SHA-256.
-- Timestamp: SignPath-managed timestamping when using SignPath.
-- If another trusted CA-backed signer is used later, require RFC 3161 timestamping with SHA-256.
+- Timestamp: trusted timestamping supplied by the signing service.
+- If another CA-backed signer is used, require RFC 3161 timestamping with SHA-256.
 - Do not use SHA-1 dual signing for the current release line.
 
 ## Provenance
@@ -38,29 +38,20 @@ UNSIGNED_BUILD_SHA256=<deterministic build identity>
 SIGNED_RELEASE_SHA256=<post-signing distribution identity>
 ```
 
-Never overwrite the deterministic unsigned hash with the signed hash.
+Never overwrite the deterministic unsigned hash with the signed distribution hash.
 
 ## SmartScreen
 
-Microsoft documents SmartScreen reputation as depending on both publisher/signing reputation and file-hash reputation. An unsigned file starts without transferable publisher reputation; a self-signed certificate behaves like no trusted signature for SmartScreen. Even a newly signed binary may still be reported as unrecognized until reputation develops.
+Trusted signing can improve publisher reputation, but it does not guarantee that every new binary will avoid SmartScreen warnings. Self-signed certificates are development/testing tools and do not provide normal Windows publisher trust.
 
-Therefore:
-
-- a trusted signature is valuable but is not a guarantee that every first download will be warning-free;
-- unsigned public releases must be explicitly labeled and checksum-verifiable;
-- self-signed certificates are development/testing only.
+Unsigned releases must therefore be clearly identified and checksum-verifiable.
 
 ## User verification
 
-```powershell
-Get-AuthenticodeSignature -LiteralPath '.\DaVinci Resolve AI Director Setup X.Y.Z.exe' | Format-List *
-Get-FileHash -LiteralPath '.\DaVinci Resolve AI Director Setup X.Y.Z.exe' -Algorithm SHA256
-```
+Users should verify release artifacts as described in [Release Verification](docs/release/RELEASE_VERIFICATION.md).
 
-See [docs/release/RELEASE_VERIFICATION.md](docs/release/RELEASE_VERIFICATION.md).
+## Product metadata versus certificate identity
 
-## Windows publisher metadata versus certificate identity
+The Windows PE `CompanyName` and installer `Publisher` identify the product/project. They are not the Authenticode certificate subject.
 
-The deterministic unsigned Windows PE metadata uses **DaVinci Resolve AI Director** as the project-publisher identity (`CompanyName` / installer `Publisher`). This is product metadata and is not a claim that a legal entity with that name owns the signing certificate.
-
-The Authenticode signer identity is a separate trust boundary and must come from the certificate actually used for signing. Do not preconfigure electron-builder `publisherName` from the project-publisher string; bind it only after the production certificate subject has been observed from a signed artifact.
+Signing configuration must be bound to the certificate actually used. Do not infer or preconfigure certificate identity from the product metadata string.

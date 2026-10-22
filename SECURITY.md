@@ -1,20 +1,20 @@
 # Security Policy
 
-## Supported release line
+## Supported releases
 
-Before the first public release is published, the accepted engineering baseline is **0.3.25**. After public release authority exists, supported versions should be identified by the project's GitHub Releases/security advisories rather than by this pre-release engineering statement.
+Use the project's [GitHub Releases](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/releases/latest) page to identify the current public release. Security fixes and support status should be communicated through release notes and GitHub security advisories rather than hardcoded into this file.
 
 ## Reporting a vulnerability
 
-Prefer GitHub's **private vulnerability reporting / Security Advisory** feature once the public repository enables it. Do not publish exploit details in a normal issue before coordinated disclosure.
+Prefer GitHub's **private vulnerability reporting / Security Advisory** feature when available. Do not publish exploit details in a normal issue before coordinated disclosure.
 
-If private reporting is temporarily unavailable, open a non-sensitive issue requesting a private contact path without including exploit details, credentials, tokens, private project data or working proof-of-concept code.
+If private reporting is unavailable, open a non-sensitive issue requesting a private contact path without including exploit details, credentials, tokens, private project data or working proof-of-concept code.
 
 A useful report includes:
 
-- affected AI Director version/build;
+- affected AI Director version;
 - Windows and DaVinci Resolve versions;
-- whether the Resolve Integration launcher is installed;
+- whether Resolve Integration is installed;
 - selected Direct/Upstream runtime profile when relevant;
 - exact reproduction steps;
 - expected versus actual security impact;
@@ -28,7 +28,7 @@ AI Director includes several distinct trust boundaries:
 - local Direct and Upstream llama.cpp-derived runtimes;
 - managed davinci-resolve-mcp runtime;
 - DaVinci Resolve scripting/Workflow Integration launcher;
-- update/download paths for supported managed components;
+- update/download paths for managed components;
 - source-build bootstrap/download paths;
 - optional external FFmpeg/FFprobe configured by the user.
 
@@ -36,6 +36,6 @@ The Resolve Integration launcher is separate from the current-user desktop appli
 
 ## Release verification
 
-Release assets must be accompanied by SHA-256 checksums and provenance. See [docs/release/RELEASE_VERIFICATION.md](docs/release/RELEASE_VERIFICATION.md).
+Release assets are accompanied by checksums and provenance information. See [docs/release/RELEASE_VERIFICATION.md](docs/release/RELEASE_VERIFICATION.md).
 
-Trusted Authenticode signing may be deferred. If a release is unsigned, it must be explicitly labeled unsigned. A self-signed development certificate must not be presented as Windows-trusted production signing.
+A release may be unsigned when the maintainer explicitly states that status. A self-signed development certificate must not be presented as Windows-trusted production signing.

@@ -1,51 +1,43 @@
 # SignPath Foundation Application Notes
 
-Status: preparation notes only. Acceptance is external and non-blocking.
+Status: planning notes for a future trusted signing path. SignPath acceptance is an external dependency and is not required for ordinary source development.
 
 ## Project
 
 - Name: DaVinci Resolve AI Director
 - Platform: Windows x64
-- Intended public repository license: Apache-2.0 for first-party source/documentation
+- Public repository license: Apache-2.0 for first-party source/documentation
 - Build/distribution: Electron desktop application plus NSIS installers
-- Signing scope: first-party application EXE and two first-party installers only
+- Intended signing scope: first-party application executable and first-party installers only
 
-## Third-party/upstream components that should be disclosed
+## Third-party components to disclose
 
 ### Electron
 
-Electron `36.3.2`, MIT plus bundled Chromium/Node third-party notices.
+Electron is MIT-licensed and its packaged distributions include Chromium, Node.js and additional third-party notices.
 
 ### llama.cpp-derived runtime
 
-Pinned llama.cpp/ggml-derived local inference binaries. Upstream is MIT-licensed; accepted runtime tracks both a direct pinned source and an Unsloth-maintained upstream/current line.
+Local inference binaries are derived from pinned llama.cpp/ggml source authorities. Upstream source remains under its own license and authorship.
 
 ### davinci-resolve-mcp
 
-Accepted seed `4.10.4`, commit `8911bd24aee76894238924317a461005dd013d94`, MIT license.
+The managed Resolve MCP runtime is third-party MIT-licensed software and must retain its upstream notices.
 
 ### NVIDIA CUDA
 
-The installer/runtime payload includes NVIDIA CUDA 13.3.1 redistributable DLLs:
+The installed runtime includes NVIDIA CUDA redistributable DLLs such as `cudart`, `cublas` and `cublasLt`. They are distributed under NVIDIA's CUDA terms, not the project's Apache-2.0 license.
 
-- `cudart64_13.dll`
-- `cublas64_13.dll`
-- `cublasLt64_13.dll`
-
-They are distributed under NVIDIA's CUDA EULA, not the project's Apache-2.0 license, and are installed in an AI Director-specific runtime location. NVIDIA's current CUDA EULA lists CUDA Runtime and cuBLAS/cuBLASLt runtime libraries as redistributable components subject to its terms.
-
-**Eligibility question for SignPath:** whether these proprietary but vendor-authorized runtime redistributables are acceptable under SignPath Foundation's OSS-project restrictions / System Library exception. Do not conceal or assume the answer.
+**Eligibility question for SignPath:** confirm whether these vendor-authorized proprietary redistributables fit the Foundation program's project restrictions/exceptions. Do not assume or conceal the answer.
 
 ### FFmpeg
 
-Not bundled in the managed AI Director runtime. Users configure an external FFmpeg/FFprobe installation if they want FFmpeg-dependent features.
+FFmpeg is not bundled in the managed AI Director runtime. Users configure an external FFmpeg/FFprobe installation when needed.
 
-## Non-blocking policy
+## Signing policy
 
-Do not pause Gate 5/6 engineering while the application is reviewed. If SignPath is still unavailable when all other release gates are complete, an unsigned release requires an explicit maintainer decision and clear SmartScreen/checksum disclosure.
+Do not stamp the AI Director project signature onto third-party runtime binaries.
 
-## PE metadata identity prepared before signing
+If trusted signing is introduced, preserve the deterministic unsigned build hash and record the signed distribution hash separately. Signing configuration must be derived from the actual certificate subject rather than guessed from product metadata.
 
-The unsigned Windows artifacts use `DaVinci Resolve AI Director` as the stable project-publisher `CompanyName` and installer Publisher, while the product name remains `DaVinci Resolve AI Director`. This metadata identity is intentionally separate from the future Authenticode certificate subject. Under the free SignPath Foundation certificate path, the certificate is issued to SignPath Foundation; the signing configuration must therefore be derived from the actual certificate subject rather than guessed from the PE `CompanyName`.
-
-The Builder statically verifies the first-party application, main Setup, and AI Director Integration Setup metadata before a release candidate is committed. Signing remains a later transformation that preserves the deterministic unsigned SHA-256 as provenance.
+See [../../CODE_SIGNING_POLICY.md](../../CODE_SIGNING_POLICY.md) and [RELEASE_VERIFICATION.md](RELEASE_VERIFICATION.md).

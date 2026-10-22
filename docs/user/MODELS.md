@@ -1,44 +1,42 @@
 # Local Models
 
-AI Director is built for local GGUF inference. It discovers models from LM Studio-compatible user directories but does not require the LM Studio application to own or run the inference server.
+AI Director runs local GGUF models. It can discover models from LM Studio-compatible folders, but the LM Studio application itself is not required.
 
-## Discovery roots
+## Model folders
 
-AI Director recursively scans:
+AI Director scans:
 
 ```text
 %USERPROFILE%\.lmstudio\models
 %USERPROFILE%\.cache\lm-studio\models
 ```
 
-If an `lms` CLI is available, AI Director may use its catalog metadata in addition to filesystem discovery. If it is unavailable, model discovery falls back to the filesystem.
+If the `lms` CLI is available, AI Director may use its local catalog metadata. Otherwise it discovers models directly from the filesystem.
 
-Only `.gguf` files are considered. Auxiliary files such as MTP/draft/mmproj GGUFs are not listed as standalone primary models, and non-primary pieces of multipart GGUFs are not listed separately.
+Only primary `.gguf` files are shown as selectable models. Auxiliary draft/MTP/mmproj files and non-primary multipart pieces are not listed as separate primary models.
 
-## Model support levels
-
-Discovery is not the same thing as validation.
+## Support levels
 
 ### Qwen3.8 Flash Next
 
-AI Director has a dedicated `flash_next_mtp` recipe and treats this family as the preferred tested path. A compatible MTP draft GGUF must be present beside the primary model for this profile to be available.
+This is the preferred tested path. A compatible MTP draft GGUF must be present beside the primary model for the Flash Next profile to be available.
 
 ### Qwen3.6-35B-A3B
 
-AI Director has a dedicated MoE recipe for this family. The current source classifies it as a **candidate** support path rather than the preferred tested profile.
+AI Director includes dedicated handling for this model family, but it is treated as a candidate support path rather than the preferred tested profile.
 
 ### Other GGUF models
 
-Other primary GGUF files may appear as **Local GGUF** models using a generic recipe. The source marks this class **unvalidated**. A model appearing in the list is therefore not a promise that its architecture, chat template, tool use, context behavior or memory footprint has been validated by the project.
+Other primary GGUF files may appear as **Local GGUF** models. These are not automatically validated simply because they were discovered.
 
-## Context and memory
+Compatibility can depend on architecture, chat template, tool use, context behavior and memory requirements.
 
-The effective memory requirement depends on model size, quantization, context length, KV-cache choices, GPU-layer placement and other tuning settings. AI Director therefore does not publish a single RAM/VRAM number that is valid for every discovered GGUF.
+## Memory and context
 
-The application exposes context and tuning controls, but values beyond what a model/runtime can support can fail at startup or exhaust system/GPU memory.
+RAM/VRAM needs depend on model size, quantization, context length, KV-cache settings, GPU-layer placement and other tuning choices. There is no single memory requirement that applies to every GGUF model.
+
+If startup fails after increasing context or other tuning values, reduce those settings and retry.
 
 ## Obtaining models
 
-Models can come from repositories or model hosts such as Hugging Face, provided the files are compatible GGUFs and comply with their own licenses. AI Director does not imply compatibility with every model available from any host.
-
-Keep model license terms with the model itself; the AI Director Apache-2.0 license does not relicense model weights.
+Use GGUF files from a source you trust and follow the model's own license. AI Director's Apache-2.0 license does not relicense model weights.

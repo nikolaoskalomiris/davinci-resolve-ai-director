@@ -1,31 +1,31 @@
 # FFmpeg
 
-FFmpeg is an external optional dependency. It is **not bundled** into AI Director's managed runtime.
+FFmpeg is optional and is **not bundled** with AI Director.
 
-AI Director can run with FFmpeg disabled, but FFmpeg-backed media operations are unavailable in that mode. Configure FFmpeg if you want the full offline media feature set.
+AI Director can run without it, but FFmpeg-backed media operations will be unavailable.
 
-## Configure an existing FFmpeg installation
+## Configure FFmpeg
 
-In AI Director Settings, select an external FFmpeg installation. The current source requires:
+In AI Director Settings, select a compatible FFmpeg installation.
 
-- an absolute path to `ffmpeg.exe`;
-- an absolute path to `ffprobe.exe`;
-- both executables to come from the same directory.
+AI Director expects:
 
-AI Director probes the selected pair before enabling it. The probe checks that both executables run, that their versions can be identified and are from the same major release, and that the FFmpeg build exposes the filters/decoders/encoders/formats required by the application.
+- `ffmpeg.exe` and `ffprobe.exe`;
+- both executables in the same directory;
+- both executables to run successfully and expose the capabilities AI Director needs.
 
-AI Director also records SHA-256 identities for the selected executables in the runtime status it passes to its managed backend.
+The application validates the pair before enabling it.
 
-## Recommended download page
+## Getting FFmpeg
 
-The current application can open:
+AI Director can open:
 
 `https://www.gyan.dev/ffmpeg/builds/`
 
-This is an external website and FFmpeg remains separately licensed. You may instead select a compatible FFmpeg/FFprobe pair already present on your machine.
+This is an external website. You may instead use another compatible FFmpeg/FFprobe pair already installed on your machine.
 
 ## Licensing
 
-FFmpeg's own project states that FFmpeg is normally licensed under LGPL 2.1-or-later, while enabling certain optional GPL-covered parts makes the resulting FFmpeg build GPL 2-or-later. Follow the license of the exact third-party build you download.
+FFmpeg is separately licensed. Follow the license terms of the exact build you use.
 
-See [../../THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md).
+See [Third-Party Components and Notices](../../THIRD_PARTY_NOTICES.md).
