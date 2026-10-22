@@ -4,7 +4,15 @@ DaVinci Resolve AI Director is a Windows desktop companion for DaVinci Resolve b
 
 AI Director is **local-first**: the normal model-inference path runs on the user's machine through bundled llama.cpp-derived runtime components. It does not require a paid hosted inference subscription or tie the user to one cloud model vendor.
 
-> **Release status:** engineering authority **0.3.25** is accepted in the repository. Official public binaries are distributed only through this repository's GitHub Releases. Until the first GitHub Release is published, development mirrors and copied installers are not public release authority.
+> **Current release:** **0.3.25** is published as an **unsigned** [GitHub Release](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/releases/tag/0.3.25). Verify the published SHA-256 values before running either installer. Post-publication Gate 6D reproducibility verification remains pending and does not change the immutable `0.3.25` tag or accepted release-artifact authority.
+
+<table>
+  <tr>
+    <td>
+      <img src="docs/assets/AI-Director-Main-Window-0.3.25.png" width="760" alt="DaVinci Resolve AI Director 0.3.25 main window">
+    </td>
+  </tr>
+</table>
 
 ## Supported platform
 
@@ -34,19 +42,25 @@ RAM, VRAM and storage needs vary substantially with model size, quantization and
 
 ## Installation
 
-The main release artifact is named:
+Download only from the [0.3.25 GitHub Release](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/releases/tag/0.3.25).
 
-`DaVinci Resolve AI Director Setup <version>.exe`
+GitHub exposes the current main installer as:
+
+`DaVinci.Resolve.AI.Director.Setup.0.3.25.exe`
+
+and the separate Resolve launcher installer as:
+
+`DaVinci.Resolve.AI.Director.Integration.Setup.0.3.25.exe`
+
+The accepted build-artifact names use spaces rather than periods; GitHub canonicalized the uploaded Release filenames. `RELEASE-MANIFEST-0.3.25.json` records both identities, and `SHA256SUMS-0.3.25.txt` uses the actual downloadable GitHub filenames.
 
 The main installer presents assisted options for the Resolve Workflow Integration launcher and a desktop shortcut. The Resolve Integration option is enabled by default; if selected, Windows prompts for elevation only when the separate machine-scoped integration installer runs. The core AI Director application remains a current-user install.
 
-A separate artifact is also produced for the Resolve launcher:
-
-`DaVinci Resolve AI Director Integration Setup <version>.exe`
-
 **Supported upgrade procedure for the first public release line:** uninstall the previous AI Director application before installing a newer release. If the Resolve Integration is installed, uninstall its separate Windows entry as well and reinstall it from the new release. In-place/dirty upgrade is not currently a supported release path because it has not proven reliable replacement of all managed runtime/backend files.
 
-Read [docs/user/INSTALLATION.md](docs/user/INSTALLATION.md) before installing, especially if the release is unsigned.
+The 0.3.25 installers are intentionally unsigned. Windows SmartScreen may show an unknown-publisher or unrecognized-app warning. Verify the GitHub origin and published SHA-256 before choosing to continue.
+
+Read [docs/user/INSTALLATION.md](docs/user/INSTALLATION.md) before installing.
 
 ## Local models
 
@@ -85,12 +99,13 @@ The accepted 0.3.25 public-source build path bootstraps its project-owned tools 
 
 The shipping CUDA runtime DLLs come from pinned official NVIDIA CUDA 13.3.1 redistributable archives. The machine CUDA Toolkit remains an external compiler/inspection prerequisite and is **not** the shipping CUDA payload source.
 
-The final release reproducibility gate is still a literal fresh checkout of the published/tagged repository followed by plain `BUILD.cmd` with no pre-existing generated inputs/toolchain, private credentials, installed-product dependency, or continuity state.
+Post-publication Gate 6D remains the final first-release reproducibility proof: a literal fresh anonymous clone of exact tag `0.3.25` must complete plain `BUILD.cmd` with no pre-existing generated inputs/toolchain, private credentials, installed-product dependency, or continuity state, followed by `CHECK-STATE.cmd` and artifact-equivalence verification.
 
 See [docs/build/BUILDING.md](docs/build/BUILDING.md).
 
 ## Documentation
 
+- [Project Wiki](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/wiki)
 - [Installation](docs/user/INSTALLATION.md)
 - [Models](docs/user/MODELS.md)
 - [FFmpeg](docs/user/FFMPEG.md)

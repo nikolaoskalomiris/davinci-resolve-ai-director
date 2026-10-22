@@ -13,4 +13,4 @@ The release build creates Direct and Upstream from source, then assembles a fres
 
 The Resolve launcher does not contain a second desktop application/runtime.
 
-See repository `docs/architecture/ARCHITECTURE.md` for the full component and build/update boundaries.
+See [Architecture](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/architecture/ARCHITECTURE.md) in the repository for the full component and build/update boundaries.

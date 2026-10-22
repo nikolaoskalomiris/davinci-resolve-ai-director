@@ -8,4 +8,4 @@ For the first public release line, uninstall the previous Resolve Integration be
 
 If Resolve was already open when the launcher was installed or updated, restart Resolve.
 
-See repository `docs/user/RESOLVE_INTEGRATION.md` for scope and uninstall ownership details.
+See [Resolve Integration](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/RESOLVE_INTEGRATION.md) in the repository for scope and uninstall ownership details.

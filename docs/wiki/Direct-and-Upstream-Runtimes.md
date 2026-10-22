@@ -6,4 +6,4 @@
 
 Both lanes share the product's CUDA runtime boundary but have separate source/provenance identities. Clean source builds construct both server lanes from source; shipping shared-CUDA DLLs are extracted from pinned official NVIDIA redistributable archives.
 
-See repository `docs/user/RUNTIMES.md` for the exact source identities and ownership rules.
+See [Runtimes](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/RUNTIMES.md) in the repository for the exact source identities and ownership rules.

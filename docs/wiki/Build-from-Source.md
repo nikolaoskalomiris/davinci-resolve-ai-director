@@ -6,6 +6,6 @@ Plain `BUILD.cmd` can bootstrap the project-owned/downloaded inputs from an othe
 
 Shipping CUDA runtime DLLs come from pinned official NVIDIA CUDA 13.3.1 redistributable archives, not from the machine CUDA Toolkit.
 
-The final first-release reproducibility proof is Gate 6D after publication/tagging: a literal fresh public checkout must complete plain `BUILD.cmd` without pre-existing `_inputs`, `_toolchain`, private credentials/history/continuity, accepted Builder state or installed-product dependency.
+Post-publication Gate 6D remains the final first-release reproducibility proof: a literal fresh anonymous clone of exact tag `0.3.25` must complete plain `BUILD.cmd` without pre-existing `_inputs`, `_toolchain`, private credentials/history/continuity, accepted Builder state or installed-product dependency, followed by `CHECK-STATE.cmd` and artifact-equivalence verification.
 
-The authoritative technical procedure is repository `docs/build/BUILDING.md`.
+The authoritative technical procedure is [Build from Source](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/build/BUILDING.md).

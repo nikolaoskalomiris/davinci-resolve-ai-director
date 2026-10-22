@@ -12,4 +12,4 @@ Common checks:
 - Upstream update rejected: preserve backup/rejected state; a safe rollback is an expected failure-handling path, not evidence that accepted runtime authority changed.
 - Source build starts with no `_inputs` or `_toolchain`: that is valid; plain `BUILD.cmd` bootstraps project-owned/downloaded inputs before validating the external compiler/toolkit prerequisites.
 
-See repository `docs/user/TROUBLESHOOTING.md` for detailed guidance.
+See [Troubleshooting](https://github.com/nikolaoskalomiris/davinci-resolve-ai-director/blob/main/docs/user/TROUBLESHOOTING.md) in the repository for detailed guidance.
