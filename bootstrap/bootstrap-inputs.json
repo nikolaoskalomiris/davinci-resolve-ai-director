@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "id": "AI-Director-Builder-Bootstrap-Inputs-v1",
+  "product": "DaVinci Resolve AI Director",
+  "platform": "windows-x64",
+  "normal_user_manual_toolchain_install_required": true,
+  "public_runtime_asset_urls_bound": true,
+  "inputs": [
+    {
+      "id": "python-3.11.9-embeddable-x64",
+      "kind": "official_zip_extract",
+      "version": "3.11.9",
+      "url": "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embeddable-amd64.zip",
+      "archive_name": "python-3.11.9-embeddable-amd64.zip",
+      "bytes": 11243893,
+      "sha256": "33B448F95FECB7C6F802157DBD5E6B40A2AD9BFC8B95CA634A06BA4073AD1AC0",
+      "destination": "_toolchain/Python/3.11.9",
+      "extract_mode": "zip_flat",
+      "postcheck": {
+        "python_version": "Python 3.11.9",
+        "clean_pth_lines": [
+          "python311.zip",
+          "."
+        ]
+      }
+    },
+    {
+      "id": "node-24.18.0-win-x64",
+      "kind": "official_zip_extract",
+      "version": "24.18.0",
+      "url": "https://nodejs.org/dist/v24.18.0/node-v24.18.0-win-x64.zip",
+      "archive_name": "node-v24.18.0-win-x64.zip",
+      "bytes": 37176245,
+      "sha256": "0AE68406B42D7725661DA979B1403EC9926DA205C6770827F33AAC9D8F26E821",
+      "destination": "_toolchain/Node/24.18.0",
+      "extract_mode": "zip_single_root",
+      "archive_root": "node-v24.18.0-win-x64",
+      "postcheck": {
+        "node_version": "v24.18.0",
+        "npm_version": "11.16.0",
+        "file_count": 1984,
+        "tree_bytes": 105728964
+      }
+    },
+    {
+      "id": "electron-36.3.2-win32-x64",
+      "kind": "official_archive",
+      "version": "36.3.2",
+      "url": "https://github.com/electron/electron/releases/download/v36.3.2/electron-v36.3.2-win32-x64.zip",
+      "archive_name": "electron-v36.3.2-win32-x64.zip",
+      "bytes": 121801429,
+      "sha256": "5475DC725D50C9CEE12C0D56E1FD093C3BAD75E9DFAFD9753FDDC3A085532A37",
+      "destination_file": "_toolchain/Archives/electron-v36.3.2-win32-x64.zip"
+    },
+    {
+      "id": "nsis-3.0.4.1",
+      "kind": "official_archive",
+      "version": "3.0.4.1",
+      "url": "https://github.com/electron-userland/electron-builder-binaries/releases/download/nsis-3.0.4.1/nsis-3.0.4.1.7z",
+      "archive_name": "nsis-3.0.4.1.7z",
+      "bytes": 1287512,
+      "sha256": "9877DF902530F96357D13A7A31AE2B9DF67F48B11FFC9A1700A7C961574EC5FA",
+      "destination_file": "_toolchain/Archives/nsis-3.0.4.1.7z"
+    },
+    {
+      "id": "nsis-resources-3.4.1",
+      "kind": "official_archive",
+      "version": "3.4.1",
+      "url": "https://github.com/electron-userland/electron-builder-binaries/releases/download/nsis-resources-3.4.1/nsis-resources-3.4.1.7z",
+      "archive_name": "nsis-resources-3.4.1.7z",
+      "bytes": 730800,
+      "sha256": "593A9A92EF958321293AC6A2EE61E64BF1BD543142A5BD6B3D310709CC924103",
+      "destination_file": "_toolchain/Archives/nsis-resources-3.4.1.7z"
+    },
+    {
+      "id": "7zip-electron-builder-1.0.0-win-x64",
+      "kind": "official_archive",
+      "version": "1.0.0",
+      "url": "https://github.com/electron-userland/electron-builder-binaries/releases/download/7zip%401.0.0/7zip-win-x64.tar.gz",
+      "archive_name": "7zip-win-x64.tar.gz",
+      "bytes": 491982,
+      "sha256": "BE071F15BD6DA2F78FE81C6DDEF2009B0C4D8A51F36B780CB806C7E6DF95E1B3",
+      "destination_file": "_toolchain/Archives/7zip-win-x64.tar.gz"
+    },
+    {
+      "id": "nvidia-cuda-cudart-13.3.1-windows-x86_64",
+      "kind": "official_archive",
+      "version": "13.3.1 / cuda_cudart 13.3.29",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/windows-x86_64/cuda_cudart-windows-x86_64-13.3.29-archive.zip",
+      "archive_name": "cuda_cudart-windows-x86_64-13.3.29-archive.zip",
+      "bytes": 2589792,
+      "sha256": "1FEB7DD266813FFE8DBC24E115183A5AC35A4795C8D34ACA0DF85AB616B64D9C",
+      "destination_file": "_inputs/Shared-CUDA/CUDA13.3.1/Archives/cuda_cudart-windows-x86_64-13.3.29-archive.zip",
+      "release_manifest_url": "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.3.1.json",
+      "license": "CUDA Toolkit",
+      "redistributable_members": [
+        {
+          "archive_path": "cuda_cudart-windows-x86_64-13.3.29-archive/bin/x64/cudart64_13.dll",
+          "shipping_name": "cudart64_13.dll",
+          "bytes": 551024,
+          "sha256": "B00CA6F53699120DA815BF3E06E2E4285FAE2F201235B883DCBB50EEC51E2A2A"
+        }
+      ]
+    },
+    {
+      "id": "nvidia-libcublas-13.3.1-windows-x86_64",
+      "kind": "official_archive",
+      "version": "13.3.1 / libcublas 13.6.0.2",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/libcublas/windows-x86_64/libcublas-windows-x86_64-13.6.0.2-archive.zip",
+      "archive_name": "libcublas-windows-x86_64-13.6.0.2-archive.zip",
+      "bytes": 393706755,
+      "sha256": "62E9FA30560C8F0A28E0CDCF9D6FC1FED347BCFAB8847239B9AE1FDC1D86408A",
+      "destination_file": "_inputs/Shared-CUDA/CUDA13.3.1/Archives/libcublas-windows-x86_64-13.6.0.2-archive.zip",
+      "release_manifest_url": "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.3.1.json",
+      "license": "CUDA Toolkit",
+      "redistributable_members": [
+        {
+          "archive_path": "libcublas-windows-x86_64-13.6.0.2-archive/bin/x64/cublas64_13.dll",
+          "shipping_name": "cublas64_13.dll",
+          "bytes": 52697712,
+          "sha256": "8C6BAC24474AF29627EC96500025A5D410A1B7E8FFA00E1FE13B1781FC6B3DDC"
+        },
+        {
+          "archive_path": "libcublas-windows-x86_64-13.6.0.2-archive/bin/x64/cublasLt64_13.dll",
+          "shipping_name": "cublasLt64_13.dll",
+          "bytes": 463655536,
+          "sha256": "E323ABD89E0F03C1DB91A09D7AEB1928DE08E1F86192CC713B335FEFE3E368A9"
+        }
+      ]
+    },
+    {
+      "id": "runtime-base-CUDA13-Native-Base-v3",
+      "kind": "ai_director_release_asset",
+      "version": "CUDA13-Native-Base-v3",
+      "url": "https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v1/AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z",
+      "archive_name": "RUNTIME-BASE.7z",
+      "bytes": 94999083,
+      "sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+      "destination_file": "_inputs/Runtime-Bases/CUDA13-Native-Base-v3/RUNTIME-BASE.7z",
+      "release_repository": "nikolaoskalomiris/llama-cpp-flashnext-direct",
+      "release_tag": "builder-inputs-v1",
+      "asset_name": "AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z",
+      "asset_root_relative_path": "AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z"
+    }
+  ],
+  "public_repository_layout": "PUBLIC_SOURCE_REPOSITORY_V1",
+  "system_toolchain_installation_mode": "EXTERNAL_MACHINE_PREREQUISITES_NOT_AUTO_INSTALLED",
+  "system_toolchain_validator": "build/system-toolchain/verify_system_toolchain.py",
+  "system_toolchain_prerequisites": {
+    "platform": "Windows x64",
+    "visual_studio_product": "Visual Studio 2022 Build Tools",
+    "msvc_toolset": "14.44.35207",
+    "windows_sdk": "10.0.26100.0",
+    "cuda_toolkit": "13.3",
+    "nvcc": "V13.3.73",
+    "validation": "STRICT_PATH_AND_SHA256_FROM_DIRECT_AND_UPSTREAM_BUILD_CONTRACTS",
+    "automatic_installation": false
+  },
+  "shared_cuda_runtime_lane": {
+    "id": "CUDA13.3.1-Dual-Shared-v2",
+    "bootstrap_source": "NVIDIA_OFFICIAL_REDIST_13.3.1",
+    "release_manifest_url": "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.3.1.json",
+    "installed_root": "AIDirector/Common/Runtime/CUDA/13.3",
+    "ordinary_upstream_update_owns_shared_cuda": false,
+    "compiler_toolkit_is_shipping_runtime_source": false
+  }
+}

@@ -1,0 +1,773 @@
+{
+    "schema_version":  1,
+    "generated_at":  "2026-09-24T23:15:23.6958886+03:00",
+    "python_version":  "3.11.9",
+    "root":  "C:\\AI\\AIDirector\\DaVinciResolveAIDirector\\Runtime\\Python\\3.11.9",
+    "files":  [
+                  {
+                      "path":  "__install__.json",
+                      "sha256":  "2A963E589F8C70D461125D27A12E1F37484209ABA20F0E91462FBF2690A279B2",
+                      "size_bytes":  1767
+                  },
+                  {
+                      "path":  "_asyncio.pyd",
+                      "sha256":  "746BC8FA88282AFE19DC60E426CC0A75BEA3BD137CCA06A0B57A30BD31459403",
+                      "size_bytes":  65304
+                  },
+                  {
+                      "path":  "_bz2.pyd",
+                      "sha256":  "00B8CA9A338D2B47285C9E56D6D893DB2A999B47216756F18439997FB80A56E3",
+                      "size_bytes":  84760
+                  },
+                  {
+                      "path":  "_ctypes.pyd",
+                      "sha256":  "C148292328F0AAB7863AF82F54F613961E7CB95B7215F7A81CAFAF45BD4C42B7",
+                      "size_bytes":  124696
+                  },
+                  {
+                      "path":  "_decimal.pyd",
+                      "sha256":  "980A63F2B39CF16910F44384398E25F24482346A482ADDB00DE42555B17D4278",
+                      "size_bytes":  255768
+                  },
+                  {
+                      "path":  "_elementtree.pyd",
+                      "sha256":  "02E30B6A2BEE5BE5336E40A9C89575603051BDE86F9C9CDC78B7FA7D9B7BD1F0",
+                      "size_bytes":  128792
+                  },
+                  {
+                      "path":  "_hashlib.pyd",
+                      "sha256":  "87DD0C858620287454FD6D31D52B6A48EDDBB2A08E09E8B2D9FDB0B92200D766",
+                      "size_bytes":  65304
+                  },
+                  {
+                      "path":  "_lzma.pyd",
+                      "sha256":  "F5E01B516C2C23035F7703E23569DEC26C5616C05A929B2580AE474A5C6722C5",
+                      "size_bytes":  159512
+                  },
+                  {
+                      "path":  "_msi.pyd",
+                      "sha256":  "0F876C25188D1DDE26EB852251439A6EC8EDC1BC921BE026F819EEB8686DB2AF",
+                      "size_bytes":  44824
+                  },
+                  {
+                      "path":  "_multiprocessing.pyd",
+                      "sha256":  "975C1947798E3C39898C86675CA1EB68249F77361F41F172F9800275227213B9",
+                      "size_bytes":  34584
+                  },
+                  {
+                      "path":  "_overlapped.pyd",
+                      "sha256":  "CA106E4DFDEAFEABF9E98956D3D8D0CB73E109F1A96F1A7E35BC47DBD7C7E164",
+                      "size_bytes":  51480
+                  },
+                  {
+                      "path":  "_queue.pyd",
+                      "sha256":  "3F8E7E6AA13B417ACC78B63434FB1144E6319A010A9FC376C54D6E69B638FE4C",
+                      "size_bytes":  32024
+                  },
+                  {
+                      "path":  "_socket.pyd",
+                      "sha256":  "A19E3C7C03EF1B5625790B1C9C42594909311AB6DF540FBF43C6AA93300AB166",
+                      "size_bytes":  79640
+                  },
+                  {
+                      "path":  "_sqlite3.pyd",
+                      "sha256":  "FF6A2A2F38B21B7784F97D604C99961D8C07EF455F7908110A4E893835D42B76",
+                      "size_bytes":  120600
+                  },
+                  {
+                      "path":  "_ssl.pyd",
+                      "sha256":  "BA5388D6A6557D431E086734A3323621DC447F63BA299B0A815E5837CF869678",
+                      "size_bytes":  178456
+                  },
+                  {
+                      "path":  "_uuid.pyd",
+                      "sha256":  "E6AA7F1637E211251C9D6F467203B2B6D85E5BC2D901699F2A55AF637FA89250",
+                      "size_bytes":  25368
+                  },
+                  {
+                      "path":  "_zoneinfo.pyd",
+                      "sha256":  "7E7B4157E401F8281FD85B68F2E21C828BF739C91416B2824DD22CB385EEF819",
+                      "size_bytes":  45848
+                  },
+                  {
+                      "path":  "Lib/site-packages/ada92cb5d92a588d1b93__mypyc.cp311-win_amd64.pyd",
+                      "sha256":  "FC17EB621ECF2325E3C2D7501D3EE2C3848E3C7FEC7027FDA7C7FA1782874743",
+                      "size_bytes":  221696
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/__init__.py",
+                      "sha256":  "7A52E5F4205F9B3D12A31898CEAA7E3F6837D19CC230700BCAE1A9D91D1486C1",
+                      "size_bytes":  94
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/__main__.py",
+                      "sha256":  "C410688FDD394D45812D118034E71FEE88BA7BEDDD30FE1C1281BD3B232CD758",
+                      "size_bytes":  243
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/cacert.pem",
+                      "sha256":  "9CC2A774B5198DCFF14D9BE1E66091F538975D867CE029A96BCE15A55DFD730F",
+                      "size_bytes":  240216
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/core.py",
+                      "sha256":  "5C55F2727746E697F7EDAC9E17C377D8752E0DA7ECCA191531B3B80403D61DAD",
+                      "size_bytes":  3394
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/py.typed",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "size_bytes":  0
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/tests/__init__.py",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "size_bytes":  0
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi/tests/test_certify.py",
+                      "sha256":  "7C179D1EDF37F7E912B133663735FB46C6338D5D0E5F8915D11C3BC287D227B8",
+                      "size_bytes":  467
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi-2026.7.22.dist-info/licenses/LICENSE",
+                      "sha256":  "E93716DA6B9C0D5A4A1DF60FE695B370F0695603D21F6F83F053E42CFC10CAF7",
+                      "size_bytes":  989
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi-2026.7.22.dist-info/METADATA",
+                      "sha256":  "EF5AF1638FBB23676AC3C5777DFCFC2CD9C348FE4172ED5BA3D277655B248090",
+                      "size_bytes":  2474
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi-2026.7.22.dist-info/RECORD",
+                      "sha256":  "FFBAAAA116C13B3C0337A451C316AAB71C19AEC40B67F4FC971E4685565BDDC5",
+                      "size_bytes":  945
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi-2026.7.22.dist-info/top_level.txt",
+                      "sha256":  "28CBB8BD409FB232EB90F6D235D81D7A44BEA552730402453BFFE723C345EBE5",
+                      "size_bytes":  8
+                  },
+                  {
+                      "path":  "Lib/site-packages/certifi-2026.7.22.dist-info/WHEEL",
+                      "sha256":  "2B6EB4118CE7CD7B09601406AA623C553C4476265836F0D9C16F5C061F7EFCC0",
+                      "size_bytes":  91
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/__init__.py",
+                      "sha256":  "D0D4FC3078BB48AAB78EE32A61F39DAE4CE38AC2B42FBDE59DE3471F8A9A500B",
+                      "size_bytes":  1638
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/__main__.py",
+                      "sha256":  "DAC8FF052E87D2C536E42D5B32ACFD0D5C1AEA438AF657214846D253EFE2BBB3",
+                      "size_bytes":  115
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/api.py",
+                      "sha256":  "BA7DB5C1F08FC03A3BC79A6FB45AB94A10855716A969BBDD98D0956E9C5CD840",
+                      "size_bytes":  43390
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/cd.cp311-win_amd64.pyd",
+                      "sha256":  "0FB7F617FC9961BD11EA78666D0252A726F6F5C4BA0E2D432F965D1EFC320169",
+                      "size_bytes":  10752
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/cd.py",
+                      "sha256":  "F5B50BB7ECB028ED2F769AC02757B6320ABDD4AA30E155125E480F15C28DB8DB",
+                      "size_bytes":  16447
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/cli/__init__.py",
+                      "sha256":  "77D314C7ED55FEA0F7C7D8A0232E094F8A02E42534CA3BA593B4326567911618",
+                      "size_bytes":  144
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/cli/__main__.py",
+                      "sha256":  "1A29E6B4A0D8D75B16F4FE7DDA781CFE0F8C159E76008481655348F693551887",
+                      "size_bytes":  12312
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/constant.py",
+                      "sha256":  "7FA55DF1E89EB7F38807709E7ADB23184008F86E5262FFCD271CE125C4462B5A",
+                      "size_bytes":  46679
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/legacy.py",
+                      "sha256":  "8D5A1916B9FC14B890F4B68DB9A715E72189A854AA067430A65F035252649BDB",
+                      "size_bytes":  2730
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/md.cp311-win_amd64.pyd",
+                      "sha256":  "C5C39F8D3C18105B244A19518C4749E41F418E7DD5B1885B0C019E25E6C8B61E",
+                      "size_bytes":  10752
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/md.py",
+                      "sha256":  "4F2900C5655FBAC31ECE41C00C8B96255AE672FC37FD334E3BDA57413E7E2149",
+                      "size_bytes":  33643
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/models.py",
+                      "sha256":  "A32DC8B7CC24BE621464A9B627BE31D04E94A47DEE6D6F91000C555F75D69A91",
+                      "size_bytes":  13200
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/py.typed",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "size_bytes":  0
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/utils.py",
+                      "sha256":  "D18891FE01F93BACFF6362E7A7D935FEACAF325ED89930F446B5C6F30B0FB295",
+                      "size_bytes":  13992
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer/version.py",
+                      "sha256":  "00BB3AE446AA8A406632D70B60E1C279C1CB82088E0AD5006BF79DA012DB3FBB",
+                      "size_bytes":  123
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer-3.4.9.dist-info/entry_points.txt",
+                      "sha256":  "0034932AB91767786174E5458BA0DC5041D0452D317F10C813FA44CF8C0B2170",
+                      "size_bytes":  65
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer-3.4.9.dist-info/licenses/LICENSE",
+                      "sha256":  "18577485D3704F1A479DED8E573C0976CFED315FD2FD17983FA988DA4C2F70D1",
+                      "size_bytes":  1092
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer-3.4.9.dist-info/METADATA",
+                      "sha256":  "83A2993C753CC6098985F8A75286025A01E96453403284CE25E3FEF7665472E1",
+                      "size_bytes":  42505
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer-3.4.9.dist-info/RECORD",
+                      "sha256":  "EF740205A2E72220BAD0749B1FC36AE4AFD9A300B4BC39A157C809A9E9794C8A",
+                      "size_bytes":  1974
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer-3.4.9.dist-info/top_level.txt",
+                      "sha256":  "CBAE597FF18BB39147B1C187CDC51318095D5DCA799845576E1F0CA34665996B",
+                      "size_bytes":  47
+                  },
+                  {
+                      "path":  "Lib/site-packages/charset_normalizer-3.4.9.dist-info/WHEEL",
+                      "sha256":  "0B81650649FEB673233BD9F4DDAC78C902452A1D8BF79CF7362558225EEDF1C6",
+                      "size_bytes":  101
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/__init__.py",
+                      "sha256":  "30FA8D0CB65B5EA19A35D5F1005862A853CA1105E3BB68CD42109ECBAFB97893",
+                      "size_bytes":  868
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/__main__.py",
+                      "sha256":  "E0930AEBA5A3E2E2D94CA6C5FAC4F72C0C4EB2BE9BBA283BECF98E909091471C",
+                      "size_bytes":  83
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/cli.py",
+                      "sha256":  "B30A892CC35CF14CECEB42B388DA5B5A71EEAA51B75914302526E8E27F310C0A",
+                      "size_bytes":  4139
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/codec.py",
+                      "sha256":  "2516E8F9FEE91242DD59E887F3D67BD94478541621BCA0C5AD005E357EAC4431",
+                      "size_bytes":  5040
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/compat.py",
+                      "sha256":  "01EA40DFD71E447C647C73F8D7E16F296E4A8BE7F83DF519F7445432508D766A",
+                      "size_bytes":  1353
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/core.py",
+                      "sha256":  "49F3ABD713B73E8134443631EDB31C8809E38B28C93DB3F0FFDDC007921460EC",
+                      "size_bytes":  24685
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/idnadata.py",
+                      "sha256":  "01FFA6A3C5819A48402BA4F25CA3901FCF0E5F49903432AD74BED45AD429A699",
+                      "size_bytes":  44862
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/intranges.py",
+                      "sha256":  "838F6C70B4A4A89B4084B98E3836BB8551EB8928E66FAD2D893B04A287097412",
+                      "size_bytes":  1851
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/package_data.py",
+                      "sha256":  "4DE23DE04A8014015A5DF049C2C38F50C2E7DBDEBDBA2ACF6BE0DA79A71E0325",
+                      "size_bytes":  21
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/py.typed",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "size_bytes":  0
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna/uts46data.py",
+                      "sha256":  "8EE8CDCF942A58C7097FE5D82EFE17D6306F6F9165234B7AF9ED6620BB206CF9",
+                      "size_bytes":  234325
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna-3.18.dist-info/entry_points.txt",
+                      "sha256":  "EC7DE718E1DAA778E72C4E5EEEAED8C2BF55ABC6B107B5888F9F82FF8376BE1C",
+                      "size_bytes":  38
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna-3.18.dist-info/licenses/LICENSE.md",
+                      "sha256":  "1A9A4F0E3D479A27240DDD59A9137A66AB4A0F9DFDC8CA6188CC0BFD85187F04",
+                      "size_bytes":  1541
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna-3.18.dist-info/METADATA",
+                      "sha256":  "46DFE6E5AC462D0F680ECD9ABCF66E829B6A2334824B4D9E3979B31135CAF281",
+                      "size_bytes":  6119
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna-3.18.dist-info/RECORD",
+                      "sha256":  "4FE1429ACFF53C0B0D685FAAECF45A6D605947479FAD5B16B32AF928351C5513",
+                      "size_bytes":  1169
+                  },
+                  {
+                      "path":  "Lib/site-packages/idna-3.18.dist-info/WHEEL",
+                      "sha256":  "1B68144734C4B66791F27ADD5D425F3620775585718A03D0F9B110BA3A4D88DB",
+                      "size_bytes":  82
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/__init__.py",
+                      "sha256":  "311157E7FA4AA9166C827D5237E6FD694EEB5CA549EE40E2E90F89F21ABCD56E",
+                      "size_bytes":  5922
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/__version__.py",
+                      "sha256":  "ABBA90670B0370A3DC40D97C2DEA46A35D4BEC941FF10D7C3CF3098EF04A17F9",
+                      "size_bytes":  435
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/_internal_utils.py",
+                      "sha256":  "4C7D8D132C9898FC7D715E473F3AC74785DDC4AB96D2C9240F87835DC6D981FF",
+                      "size_bytes":  1542
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/_types.py",
+                      "sha256":  "D06DF79F54A279C0CC3FAEC596C446246D5AD14EDFD529EB328DEFBD62A44A89",
+                      "size_bytes":  5838
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/adapters.py",
+                      "sha256":  "647EABD4453DE232AA40B55FF033D6F19778910B7E7069C51FDF63076FC77493",
+                      "size_bytes":  28064
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/api.py",
+                      "sha256":  "4D15480AC046F089209798E8650476EF4A28EBE6F81B400758F8EF42EC6B5509",
+                      "size_bytes":  7152
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/auth.py",
+                      "sha256":  "E93951A552D4C3C5FD9B84A5E1D49B03CAABA4723C4FF112DA6053600EC85A65",
+                      "size_bytes":  12233
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/certs.py",
+                      "sha256":  "FD9C6B83359CEF90FF6C4EEEAB8DCC2388DA382EBCA7D00A499B3C0B434A87E4",
+                      "size_bytes":  430
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/compat.py",
+                      "sha256":  "5D79BA289690B5015044341A1F7BC7D24134FC13A2DB3EFCF852515BF9AA18B4",
+                      "size_bytes":  2465
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/cookies.py",
+                      "sha256":  "0A1CE6140F2B9420522C5080E356E689FA796C2522F55CA10826F5ED8E0A723C",
+                      "size_bytes":  21549
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/exceptions.py",
+                      "sha256":  "C5E18F3352454968E337BB3056F0867DF2F37C0A0D2C1A77DC05E7E0B3C0411B",
+                      "size_bytes":  4564
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/help.py",
+                      "sha256":  "723519BB1884DA18D84F6B2FB78F7EBF7FB57F732070B6025AE071DAC6A2D179",
+                      "size_bytes":  4210
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/hooks.py",
+                      "sha256":  "EBD8A02475D31A0E473A8F553E9501FF43645B9563885AD52844E7A63F0D76AB",
+                      "size_bytes":  1138
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/models.py",
+                      "sha256":  "D1BC0D990ABF5D5EBEE05F890911B4363FADF2D5264B686A963DF47C529B6ACE",
+                      "size_bytes":  41783
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/packages.py",
+                      "sha256":  "FE0D2067AF355320252874631FA91A9DB6A8C71D9E01BEAACDC5E2383C932287",
+                      "size_bytes":  904
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/py.typed",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "size_bytes":  0
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/sessions.py",
+                      "sha256":  "96FBB30BBBF06A59A5268D13B57885149756AA3F31695B5C15E41DD7BB2F67A6",
+                      "size_bytes":  34248
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/status_codes.py",
+                      "sha256":  "1950F47C89CF18019787E07D8CE48F66D6B38E622F7D94D70A90247FEE6C040E",
+                      "size_bytes":  4351
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/structures.py",
+                      "sha256":  "BA9460C39078F25E6F1D2A24AC941AC6F8D2EE97197FA8C8D0C262D8A1E67A02",
+                      "size_bytes":  4134
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests/utils.py",
+                      "sha256":  "657FD02343B2586BBD138A4EC0F03CEEB7610C2712F96AC54F28A708BF7D079C",
+                      "size_bytes":  36322
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests-2.34.2.dist-info/licenses/LICENSE",
+                      "sha256":  "09E8A9BCEC8067104652C168685AB0931E7868F9C8284B66F5AE6EDAE5F1130B",
+                      "size_bytes":  10142
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests-2.34.2.dist-info/licenses/NOTICE",
+                      "sha256":  "F5110972DEDAD2B4E9D314518DAF3B7D72D6E02E499ACD802181DE6F74571DCC",
+                      "size_bytes":  38
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests-2.34.2.dist-info/METADATA",
+                      "sha256":  "8C384BA3E979480FAAE2859D3C5E6C1276DD2C3616E322E124D52C8CFC556F27",
+                      "size_bytes":  4806
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests-2.34.2.dist-info/RECORD",
+                      "sha256":  "6C12F50645E5A7F6080E69EB18A4B7BD52329BE9CB47F8BC29B62B24B303C89C",
+                      "size_bytes":  2027
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests-2.34.2.dist-info/top_level.txt",
+                      "sha256":  "7CC4959877DBE6B6C63A8EB1BFE3BFB545FA8FE5B28B1B2C13E4A7C1C0D1C4D4",
+                      "size_bytes":  9
+                  },
+                  {
+                      "path":  "Lib/site-packages/requests-2.34.2.dist-info/WHEEL",
+                      "sha256":  "69E6228A0D35958183CC1812F07C565CE837B95EB51BD8A33ACBA9FA4F68D6C9",
+                      "size_bytes":  91
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/__init__.py",
+                      "sha256":  "24CA35B60D67215D40789DAF10D0BF4F17E5D1EE61E86CE5F43195935AD645BA",
+                      "size_bytes":  6979
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/_base_connection.py",
+                      "sha256":  "1F37121077B1803AD152BEB48CD9E20762908DDC3DED279D0F996E45F1ED0978",
+                      "size_bytes":  5580
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/_collections.py",
+                      "sha256":  "68E566DA62A296FBAF4F579F006B6403BA62EB90B5342DC725FA45C6F6014BC0",
+                      "size_bytes":  17522
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/_request_methods.py",
+                      "sha256":  "802785F3948EFD45385A83F0607228CFFB70F9E33F1153A42C5A7C385B02EC30",
+                      "size_bytes":  9931
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/_version.py",
+                      "sha256":  "FA032B2A1B0F88E8F45F351ECD515AE7D7754BA4204222A0413E601A0C8CF3EC",
+                      "size_bytes":  520
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/connection.py",
+                      "sha256":  "668B37AB12835BDF8643A695A9F050551339B280742231F163FC575A925A1532",
+                      "size_bytes":  42786
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/connectionpool.py",
+                      "sha256":  "B0616775D5D8C25C7B282E0908FD602AF74D18B34AF984C22437460021A3DD8F",
+                      "size_bytes":  44164
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/__init__.py",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "size_bytes":  0
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/emscripten/__init__.py",
+                      "sha256":  "C325EF7BCAE6A97EECD8AA91401C43E56978F23CD63E7E7ED6EFD7A100442D57",
+                      "size_bytes":  836
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/emscripten/connection.py",
+                      "sha256":  "822125B01A14B0A55445B6736FC182AC99AA5B6DD79EF8F668DC90545E36B258",
+                      "size_bytes":  8960
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/emscripten/emscripten_fetch_worker.js",
+                      "sha256":  "CF5937CD9E3F84329DDFEB4DEF0CF3F0B1E31C2DA9C4DFEEBBC07793D0FD0377",
+                      "size_bytes":  3677
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/emscripten/fetch.py",
+                      "sha256":  "E7171DFBEBE217165DDA7072D1A2BBDDDB49F53B21D7261953F4945F09F089B9",
+                      "size_bytes":  23520
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/emscripten/request.py",
+                      "sha256":  "98BDBCB33CB52AF137349856A2BE633666ABA7C830A650D4FBB8301996398344",
+                      "size_bytes":  566
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/emscripten/response.py",
+                      "sha256":  "083A58D0616896E47723110290CDA01F9B837D80CCD042F5156AFB07BEB0B603",
+                      "size_bytes":  9719
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/pyopenssl.py",
+                      "sha256":  "5D963E433C93EECF1DE37AA2B00E28F9E49960178890FC8131986D8F69242D9B",
+                      "size_bytes":  19734
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/contrib/socks.py",
+                      "sha256":  "AD2BA495F85AE3EBEDA3EF2A48B8523E67F996644F218BAA740C4A7BD6E0D910",
+                      "size_bytes":  7639
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/exceptions.py",
+                      "sha256":  "8503C7A2AA38CB0E3A7AC3525647225505D5520031580825B21E8C6F242D6BE4",
+                      "size_bytes":  9945
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/fields.py",
+                      "sha256":  "6862C5015669554F856C996596F7B8021834FA91FD659050D88CFB95FA648E43",
+                      "size_bytes":  10801
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/filepost.py",
+                      "sha256":  "53C78D67E9A928A1E1AE56C7104893C7180AD7A21E8E111AEEECF8DB2A80FDD2",
+                      "size_bytes":  2388
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/http2/__init__.py",
+                      "sha256":  "C73AC0487ED1E4035190F24EA2DE651A70133AADCA2AEC97CC8E36ADC9F09AAB",
+                      "size_bytes":  1741
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/http2/connection.py",
+                      "sha256":  "6C7307E9F36F6ADC173EB2AAADC9FBE32037A5459CA8F0E9A672B52DC2826CFF",
+                      "size_bytes":  12578
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/http2/probe.py",
+                      "sha256":  "9E7024A9B8406A43A217BE6BCFB5B4B9D677F047A1FEE0FC7E357BE0DEF71442",
+                      "size_bytes":  3014
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/poolmanager.py",
+                      "sha256":  "734AE1D2B7140B5B79B431AE51E188800CE512B6AC3CEC16C0B881EBB957F293",
+                      "size_bytes":  23895
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/py.typed",
+                      "sha256":  "51A0AE3C56B71FC5006A46EDFB91BC48F69C95D4CE1AF26FD7CA4F8D42798036",
+                      "size_bytes":  93
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/response.py",
+                      "sha256":  "F525F806491DA0B82CC759DEEA1A6DFB93E772B9C3CCFCDEA82D4369285273E3",
+                      "size_bytes":  53219
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/__init__.py",
+                      "sha256":  "FAA792D1071E8AF6B3BC110A0CD142008FBA00271D0CE1384CCBE8ED22CD9404",
+                      "size_bytes":  1001
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/connection.py",
+                      "sha256":  "2633BBDB69731E5CCB5CF4E4AFD65605D86C7979CC5633126F50C92D5AD74A74",
+                      "size_bytes":  4444
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/proxy.py",
+                      "sha256":  "B1E3FCF90E41E9B07474CB703E3F98719650DF4BC7B8BA91BBEB48D096767F3B",
+                      "size_bytes":  1148
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/request.py",
+                      "sha256":  "8ADA670BCBA0EC3E2755F0E6194091325824011510D77AFF5CCC529F34F09A91",
+                      "size_bytes":  8363
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/response.py",
+                      "sha256":  "BD013ADFDBA81218F5BE98C4771BB994D22124249466477BA6A965508D0164E0",
+                      "size_bytes":  3374
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/retry.py",
+                      "sha256":  "D989D25FEFC579C312843EB5331E6CEBC274FDBB541D9AEB73F064155452D4FE",
+                      "size_bytes":  19577
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/ssl_.py",
+                      "sha256":  "3AA7B7AC88545377B7195819A1BDA1C6647C43464386B84448F94F3FF18B6954",
+                      "size_bytes":  17742
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/ssl_match_hostname.py",
+                      "sha256":  "16DE38289CD3CC632629F7FF6573FDD658B65785A19AF132D7A3CA05CBF8BD99",
+                      "size_bytes":  5479
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/ssltransport.py",
+                      "sha256":  "133E0EF2947FBD3F1D6A7FC5BEA0584BA7600DF05710C7D57EBCDC754A167E2E",
+                      "size_bytes":  8847
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/timeout.py",
+                      "sha256":  "E1E4F5155799654EE1EE6603D49AB639735EE1FC5E91D36F868594919BAC4690",
+                      "size_bytes":  10346
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/url.py",
+                      "sha256":  "59187E4CC617A2C9A0A7C9BC953E07E6CA681F0E7252395C3027D4E77024A00B",
+                      "size_bytes":  15205
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/util.py",
+                      "sha256":  "8F795B64AD633F28B00F7E13F08809CDD5846554FEE04FB4BD82098BD52378D0",
+                      "size_bytes":  1146
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3/util/wait.py",
+                      "sha256":  "FE987C22B511DECA8FAA2D0EA29420254947E30CE419E3390A2C80ED7186B662",
+                      "size_bytes":  4423
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3-2.7.0.dist-info/licenses/LICENSE.txt",
+                      "sha256":  "130E3A64D5FDD5D096A752694634A7D9DF284469DE86E5732100268041E3D686",
+                      "size_bytes":  1093
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3-2.7.0.dist-info/METADATA",
+                      "sha256":  "66147856D30BBB6BED01C6CE3326D0F48D84ED5F286AC177633A1486B82EACE5",
+                      "size_bytes":  6852
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3-2.7.0.dist-info/RECORD",
+                      "sha256":  "4100397EB65D69FFBFCABFE99373CB59AB2B7C0261ABF9A5BDFB2F263BAEF787",
+                      "size_bytes":  3450
+                  },
+                  {
+                      "path":  "Lib/site-packages/urllib3-2.7.0.dist-info/WHEEL",
+                      "sha256":  "41C708C5ADBA6E097513AB8CCB9F1D7865A2FB469E22491A9E01DCC64DA459FC",
+                      "size_bytes":  87
+                  },
+                  {
+                      "path":  "libcrypto-3.dll",
+                      "sha256":  "05FE080EAB7FC535C51E10C1BD76A2F3E6217F9C91A25034774588881C3F99DE",
+                      "size_bytes":  5191960
+                  },
+                  {
+                      "path":  "libffi-8.dll",
+                      "sha256":  "EFF52743773EB550FCC6CE3EFC37C85724502233B6B002A35496D828BD7B280A",
+                      "size_bytes":  39696
+                  },
+                  {
+                      "path":  "libssl-3.dll",
+                      "sha256":  "2E9FBCD8F7FDC13A5179533239811456554F2B3AA2FB10E1B17BE0DF81C79006",
+                      "size_bytes":  787224
+                  },
+                  {
+                      "path":  "LICENSE.txt",
+                      "sha256":  "E502C6B880FF58D614901495A9009C136539CD0B1E2A2ABB8FC00B934C203419",
+                      "size_bytes":  36874
+                  },
+                  {
+                      "path":  "pyexpat.pyd",
+                      "sha256":  "C7C7564F7F874FB660A46384980A2CF28BC3E245CA83628A197CCF861EAB5560",
+                      "size_bytes":  199448
+                  },
+                  {
+                      "path":  "python.cat",
+                      "sha256":  "AA9BCFE5C4D8D1285EEB997539899DA49987640E4DE2FE300D8C1422381CFA27",
+                      "size_bytes":  643161
+                  },
+                  {
+                      "path":  "python.exe",
+                      "sha256":  "5F7B89A612C9B8AF1D6456CDFCD1DBE5CA630849E79AEBCED9BEE9A6694952EC",
+                      "size_bytes":  103192
+                  },
+                  {
+                      "path":  "python3.dll",
+                      "sha256":  "DB84BC052CFB121FE4DB36242BA5F1D2C031B600EF5D8D752CF25B7C02B6BAC6",
+                      "size_bytes":  67352
+                  },
+                  {
+                      "path":  "python311._pth",
+                      "sha256":  "AE51FF47793D7E531C270A258C2C2FD883BBC299AC69FB662E5ACEFBFD7B755B",
+                      "size_bytes":  34
+                  },
+                  {
+                      "path":  "python311.dll",
+                      "sha256":  "0817A2A657A24C0D5FBB60DF56960F42FC66B3039D522EC952DAB83E2D869364",
+                      "size_bytes":  5800216
+                  },
+                  {
+                      "path":  "python311.zip",
+                      "sha256":  "197D242243962155B439BB3A2DF534E14FDCDC0E5849EC99E7F30C7E1217808E",
+                      "size_bytes":  4279639
+                  },
+                  {
+                      "path":  "pythonw.exe",
+                      "sha256":  "D5355E1DE2A5195DCCB1BA524B146AA7705BE71AF18D876819756838251B37B3",
+                      "size_bytes":  101656
+                  },
+                  {
+                      "path":  "select.pyd",
+                      "sha256":  "BAE0974390945520EB99AB32486C6A964691F8F4A028AC408D98FA8FB0DB7D90",
+                      "size_bytes":  30488
+                  },
+                  {
+                      "path":  "sqlite3.dll",
+                      "sha256":  "314BBA62F4A1628B986AFC94C09DC29CDAF08210EAE469440FBF46BCDB86D3FD",
+                      "size_bytes":  1540888
+                  },
+                  {
+                      "path":  "unicodedata.pyd",
+                      "sha256":  "37C68617FA02A2CADCED17EF724E2D450EF12A8A37215DA789A4679FDE1C5C02",
+                      "size_bytes":  1140504
+                  },
+                  {
+                      "path":  "vcruntime140.dll",
+                      "sha256":  "4D292623516F65C80482081E62D5DADB759DC16E851DE5DB24C3CBB57B87DB83",
+                      "size_bytes":  119192
+                  },
+                  {
+                      "path":  "vcruntime140_1.dll",
+                      "sha256":  "A113F192195F245F17389E6ECBED8005990BCB2476DDAD33F7C4C6C86327AFE5",
+                      "size_bytes":  49528
+                  },
+                  {
+                      "path":  "winsound.pyd",
+                      "sha256":  "B79C9BD9114B7F243F5A80FFD2DE5C5942FC64CEEC4A52A048BB4A07848B9239",
+                      "size_bytes":  31512
+                  }
+              ]
+}

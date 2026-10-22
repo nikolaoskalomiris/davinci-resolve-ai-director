@@ -1,0 +1,288 @@
+{
+  "schema": "ai-director-direct-source-build-contract/v1",
+  "contract_revision": "1.0",
+  "created_date": "2026-10-20",
+  "purpose": "Canonical AI Director Direct Windows x64 CUDA 13.3 source-build contract for the first public release. Direct prebuilt server binaries are comparison/release authority only and are forbidden as normal clean-build inputs.",
+  "source_authority": {
+    "repository": "nikolaoskalomiris/llama-cpp-flashnext-direct",
+    "accepted_commit": "c8f321699adbd0035c8c755bdefcb4182705262b",
+    "accepted_tree": "a17cf64683bc6877e2dbc4e0b4ef8933106257fb",
+    "accepted_rev_count": 3,
+    "accepted_short_head": "c8f321699",
+    "maintenance_branch": "sor/qwen38-direct-windows-fixed",
+    "maintenance_head": "2076e0af4ee4fe067e8f80b7c5a9cff9c010edcf",
+    "maintenance_tree": "93f5c424266ad753d18c4952c0d175320c8277fc",
+    "maintenance_contract_path": "aidirector/direct-build-contract-v1.json",
+    "maintenance_contract_blob_sha1": "a1dc5e32d113cb21ec030776c8fe659356133b05",
+    "maintenance_builder_blob_sha1": "c04427a704e713b658036a7ccd38523b59ad6673",
+    "maintenance_verifier_blob_sha1": "e3dbadd1725cabcd6636b105644579698549afa4",
+    "maintenance_workflow_blob_sha1": "eefb997d80299b4fd73d44c688fa9cf6f4496fb4",
+    "public_gate_requirement": "Repository must be publicly readable before Gate 6D; BUILD.cmd must pin immutable accepted_commit/accepted_tree rather than a mutable branch."
+  },
+  "runtime_contract": {
+    "runtime_stack_id": "CUDA13.3.1-Dual-Shared-v2",
+    "install_root": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699",
+    "source_mode": "exact-source",
+    "accepted_lazy_mode": "on-direct",
+    "supported_sms": [
+      "75",
+      "80",
+      "86",
+      "89",
+      "90",
+      "120a",
+      "121a"
+    ],
+    "shared_cuda_runtime_is_separate": true
+  },
+  "toolchain": {
+    "platform": "Windows x64",
+    "msvc_toolset": "14.44.35207",
+    "windows_sdk": "10.0.26100.0",
+    "cuda_toolkit": "13.3",
+    "nvcc": "V13.3.73",
+    "tools": {
+      "cmake.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
+        "sha256": "6FE2E6431B45CF32B9B2F3E50A8EFAE046A2366EB34D0FB36DA027CF56102AEC",
+        "identity": "3.31.6-msvc6"
+      },
+      "ninja.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja\\ninja.exe",
+        "sha256": "FF29BCB5F547174BAE6B73C84278CCE9B674E8EBC2F3C3926AB21030B33F34B8",
+        "identity": "1.12.1"
+      },
+      "cl.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+        "sha256": "FE251EF50A1545B1B0835EE17B1E785459712B38D79E45B5C1D3D28970A36619",
+        "identity": "19.44.35229"
+      },
+      "link.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\link.exe",
+        "sha256": "A364AF801A8539E4324D9489313DBF001D959128451FC99A27B24676BBAC058F",
+        "identity": "14.44.35229.0"
+      },
+      "lib.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\lib.exe",
+        "sha256": "FDE148A275981855689C45F932DDA56B10DC9289A0290826A0FB93478DA34929",
+        "identity": "14.44.35229.0"
+      },
+      "rc.exe": {
+        "path": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\rc.exe",
+        "sha256": "65DB0D7B4F10BA0F55973FD9356543A556DA9EC1C777A0C05F05A0329C8A100A",
+        "identity": "Windows SDK 10.0.26100.0"
+      },
+      "mt.exe": {
+        "path": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\mt.exe",
+        "sha256": "FB1AB75294B78619BD6AC8CADF30CB95BEFBC7324703CBE2654EF800DDD2BF4D",
+        "identity": "Windows SDK 10.0.26100.0"
+      },
+      "vcvars64.bat": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat",
+        "sha256": "6B516D8FCF543C14B2D861E1F45661E0029230FE0DC48E86CE78522801822209",
+        "identity": "invoke -vcvars_ver=14.44"
+      },
+      "nvcc.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.exe",
+        "sha256": "92D993C6E7025E1597D0D895E65E8658F5F1D41576A477656647A7EECE2CD35F",
+        "identity": "V13.3.73 / compiler.38244171_0"
+      },
+      "nvcc.profile": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.profile",
+        "sha256": "786C422E4251B936D4B809C0D6192C49A364250F305C9EF11BDE867E2CFF5826",
+        "identity": "CUDA 13.3 profile"
+      },
+      "cicc.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\nvvm\\bin\\cicc.exe",
+        "sha256": "8CCA41451B25328A8A923254E6A6A52093FF7155A1EDEADA880C2C1632EEF5F9",
+        "identity": "CUDA 13.3 internal compiler"
+      },
+      "ptxas.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\ptxas.exe",
+        "sha256": "86B2FF48655C55F1547EDC59B503D39A62AA5C71745B7ECF6BE526C29AF0B693",
+        "identity": "CUDA 13.3"
+      },
+      "nvlink.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvlink.exe",
+        "sha256": "5F51CCEF446A7C0009293BB61C9E4B24112474DF454BAA1C4408303913F0473B",
+        "identity": "CUDA 13.3"
+      },
+      "fatbinary.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\fatbinary.exe",
+        "sha256": "7AC13247EDD275418AC8D8F4DD41AE1900A52B58B4F289A55956DDA3AC613715",
+        "identity": "CUDA 13.3"
+      }
+    }
+  },
+  "environment": {
+    "vcvars_argument": "-vcvars_ver=14.44",
+    "required_absent": [
+      "CL",
+      "_CL_",
+      "NVCC_PREPEND_FLAGS",
+      "NVCC_APPEND_FLAGS",
+      "CUDAARCHS",
+      "CMAKE_CUDA_ARCHITECTURES"
+    ],
+    "required_set": {
+      "CUDA_PATH": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3",
+      "CUDACXX": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.exe"
+    },
+    "ccache_executable_policy": "ABSENT"
+  },
+  "configure": {
+    "generator": "Ninja",
+    "cache": {
+      "BUILD_SHARED_LIBS": "ON",
+      "BUILD_TESTING": "ON",
+      "CMAKE_BUILD_TYPE": "Release",
+      "FETCHCONTENT_FULLY_DISCONNECTED": "ON",
+      "GGML_BACKEND_DL": "ON",
+      "GGML_CCACHE": "ON",
+      "GGML_CPU": "ON",
+      "GGML_CPU_ALL_VARIANTS": "ON",
+      "GGML_CUDA": "ON",
+      "GGML_CUDA_COMPRESSION_MODE": "size",
+      "GGML_CUDA_FA": "ON",
+      "GGML_CUDA_GRAPHS": "ON",
+      "GGML_CUDA_NCCL": "ON",
+      "GGML_NATIVE": "OFF",
+      "GGML_OPENMP": "ON",
+      "GGML_OPENMP_FETCH": "OFF",
+      "LLAMA_BUILD_COMMON": "ON",
+      "LLAMA_BUILD_EXAMPLES": "ON",
+      "LLAMA_BUILD_IS_DEV": "ON",
+      "LLAMA_BUILD_MTMD": "OFF",
+      "LLAMA_BUILD_SERVER": "ON",
+      "LLAMA_BUILD_TESTS": "ON",
+      "LLAMA_BUILD_TOOLS": "ON",
+      "LLAMA_BUILD_UI": "OFF",
+      "LLAMA_OPENSSL": "ON",
+      "LLAMA_USE_PREBUILT_UI": "OFF",
+      "OPENSSL_NO_ASM": "ON"
+    },
+    "must_be_absent_from_cache": [
+      "CMAKE_CUDA_ARCHITECTURES"
+    ],
+    "expected_cache_after_configure": {
+      "BUILD_SHARED_LIBS": "ON",
+      "BUILD_TESTING": "ON",
+      "CMAKE_BUILD_TYPE": "Release",
+      "FETCHCONTENT_FULLY_DISCONNECTED": "ON",
+      "GGML_BACKEND_DL": "ON",
+      "GGML_CCACHE": "ON",
+      "GGML_CPU": "ON",
+      "GGML_CPU_ALL_VARIANTS": "ON",
+      "GGML_CUDA": "ON",
+      "GGML_CUDA_COMPRESSION_MODE": "size",
+      "GGML_CUDA_FA": "ON",
+      "GGML_CUDA_GRAPHS": "ON",
+      "GGML_CUDA_NCCL": "ON",
+      "GGML_NATIVE": "OFF",
+      "GGML_OPENMP": "ON",
+      "GGML_OPENMP_FETCH": "OFF",
+      "LLAMA_BUILD_COMMON": "ON",
+      "LLAMA_BUILD_EXAMPLES": "ON",
+      "LLAMA_BUILD_IS_DEV": "ON",
+      "LLAMA_BUILD_MTMD": "OFF",
+      "LLAMA_BUILD_SERVER": "ON",
+      "LLAMA_BUILD_TESTS": "ON",
+      "LLAMA_BUILD_TOOLS": "ON",
+      "LLAMA_BUILD_UI": "OFF",
+      "LLAMA_OPENSSL": "ON",
+      "LLAMA_USE_PREBUILT_UI": "OFF",
+      "OPENSSL_NO_ASM": "ON",
+      "GGML_LTO": "OFF"
+    },
+    "network_policy": "No dependency download is part of the recipe. FETCHCONTENT_FULLY_DISCONNECTED=ON and both UI provisioning paths are OFF; this does not claim an OS-level network sandbox.",
+    "source_path_policy": "Any clean detached checkout at accepted_commit/accepted_tree is functionally valid. Historical accepted byte identity also depended on an embedded historical source path and is not required for ordinary source builds."
+  },
+  "shipping_policy": {
+    "exact_file_count": 17,
+    "copy_only_allowlisted_files": true,
+    "accepted_hash_match_is_recorded_not_required": true,
+    "official_replacement_requires_separate_acceptance": true
+  },
+  "shipping_set": [
+    {
+      "name": "ggml.dll",
+      "accepted_historical_sha256": "180343C28F283828FEB535D161C192E3750A73E0F1FE97DDC220EC253639DB71"
+    },
+    {
+      "name": "ggml-base.dll",
+      "accepted_historical_sha256": "B35E7122818248CC150C9EE9091922AC450F56ED5CB957964AA9E078A07F6B67"
+    },
+    {
+      "name": "ggml-cpu-alderlake.dll",
+      "accepted_historical_sha256": "961E0A6FB5F5880992DD112FB0BC6D2D9A9FDAC952CEDFAA46FF2777201B6424"
+    },
+    {
+      "name": "ggml-cpu-cannonlake.dll",
+      "accepted_historical_sha256": "C37E3CECC5C60EA98AC3687FEF55C5D21B648E5F144B952564C380EF4C1E9486"
+    },
+    {
+      "name": "ggml-cpu-cascadelake.dll",
+      "accepted_historical_sha256": "6FA15806B72245C5B6C554C23AFF1D94BADBBB578DB7F671F4C702620218C174"
+    },
+    {
+      "name": "ggml-cpu-haswell.dll",
+      "accepted_historical_sha256": "E0B7CAD2076DFF18197A90914D01761D96C3D01D4930E7E8AA5DB98F9FC11D90"
+    },
+    {
+      "name": "ggml-cpu-icelake.dll",
+      "accepted_historical_sha256": "D103D86CE22D19554FD9B5AFC10DD3B3FE5056530119431AEB64C367D7F479FB"
+    },
+    {
+      "name": "ggml-cpu-sandybridge.dll",
+      "accepted_historical_sha256": "E82F43F2373692FDA3F7A2127CF1F7A95D70B78E61CC43712FC4801A3B1F1B5F"
+    },
+    {
+      "name": "ggml-cpu-skylakex.dll",
+      "accepted_historical_sha256": "FD20B85E7E98627D8781F67E882A643AAC9613B3D7D35DF734F528B376C7BA23"
+    },
+    {
+      "name": "ggml-cpu-sse42.dll",
+      "accepted_historical_sha256": "FAB0B4AE2300C81FB6A964D66BBEF3A47F8D514CDEE705040D048B05A73158D8"
+    },
+    {
+      "name": "ggml-cpu-x64.dll",
+      "accepted_historical_sha256": "074D8944B9A82A1EF96281826DED15292E6273600901D62D043E9F81D214484B"
+    },
+    {
+      "name": "ggml-cuda.dll",
+      "accepted_historical_sha256": "F2CB980234AADB8E2D2E5EF9AF2BD30CA8C91EBAC70C7E92DB7E46EAD5266657"
+    },
+    {
+      "name": "llama.dll",
+      "accepted_historical_sha256": "86FC1C563F19FD25F3BF98EE37F41A61B7C101E22CC4D3DC1DF61B9F81FE76E5"
+    },
+    {
+      "name": "llama-common.dll",
+      "accepted_historical_sha256": "859142FAD34404D4CAF02519E6BB06F6A79314E74E0DD21B6008DA1E4F4B08BE"
+    },
+    {
+      "name": "llama-server.exe",
+      "accepted_historical_sha256": "0181F7FDAA10AB00BC71CED252EF87473675760D364A5708C08034E6FDB26C27"
+    },
+    {
+      "name": "llama-server-impl.dll",
+      "accepted_historical_sha256": "B78536E9430405273D4905F60F469BC6A65358B2B56CE53275D50857118EFD67"
+    },
+    {
+      "name": "mtmd.dll",
+      "accepted_historical_sha256": "757A021932EC249B3254F542956D723D89F4D3602B6E5E207CA275C723E25243"
+    }
+  ],
+  "clean_build_policy": {
+    "prebuilt_direct_as_input": false,
+    "installed_product_as_input": false,
+    "maintainer_C_AI_dependency": false,
+    "source_checkout_at_immutable_commit": true,
+    "shared_cuda_is_packaged_separately": true
+  },
+  "forensic_boundary": {
+    "non_cuda_16": "reproducible_to_timestamp_only_under_historical_path_recipe",
+    "ggml_cuda": "first_release_provenance_closed__cicc_nondeterminism_localized",
+    "accepted_historical_bytes_remain_release_authority": true
+  }
+}

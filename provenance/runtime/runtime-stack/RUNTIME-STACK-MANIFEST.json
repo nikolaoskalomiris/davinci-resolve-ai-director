@@ -1,0 +1,314 @@
+{
+  "schema_version": 2,
+  "runtime_stack_id": "CUDA13.3.1-Dual-Shared-v2",
+  "runtime_line": "cuda13",
+  "toolkit_line": "13.3",
+  "toolkit_version": "13.3.1",
+  "support_policy_id": "CUDA13-SM75Plus-v2",
+  "managed_mcp_mutation": false,
+  "driver_policy": {
+    "vendor": "nvidia",
+    "platform": "windows",
+    "minimum_driver_major": 580,
+    "compatibility_basis": "CUDA_13_MINOR_VERSION_COMPATIBILITY"
+  },
+  "gpu_policy": {
+    "minimum_sm": 75,
+    "supported_sms": [
+      "75",
+      "80",
+      "86",
+      "89",
+      "90",
+      "120a",
+      "121a"
+    ]
+  },
+  "cuda": {
+    "install_root": "AIDirector/Common/Runtime/CUDA/13.3",
+    "runtime_line": "cuda13",
+    "toolkit_line": "13.3",
+    "toolkit_version": "13.3.1"
+  },
+  "direct": {
+    "install_root": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699",
+    "source_mode": "exact-source",
+    "source_ref": "c8f321699adbd0035c8c755bdefcb4182705262b",
+    "source_commit": "c8f321699adbd0035c8c755bdefcb4182705262b",
+    "source_tree": "a17cf64683bc6877e2dbc4e0b4ef8933106257fb",
+    "supported_sms": [
+      "75",
+      "80",
+      "86",
+      "89",
+      "90",
+      "120a",
+      "121a"
+    ],
+    "accepted_lazy_mode": "on-direct"
+  },
+  "upstream": {
+    "install_root": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current",
+    "source_mode": "source-successor",
+    "source_ref": "b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d",
+    "source_commit": "b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d",
+    "source_tree": "edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+    "accepted_predecessor_ref": "b11160-mix-a6922cc",
+    "accepted_predecessor_commit": "a3c12db9dfc9a5bdf93df199ec370e9faf117c69",
+    "reconstruction_recipe": "b11160+13-pin-a6922cc-reconstructed",
+    "supported_sms": [
+      "75",
+      "80",
+      "86",
+      "89",
+      "90",
+      "120a",
+      "121a"
+    ],
+    "accepted_lazy_mode": "off",
+    "ownership": "UPSTREAM_ONLY_TRANSACTIONAL_UPDATER_V2",
+    "update_policy": {
+      "enabled": true,
+      "repository": "unslothai/llama.cpp",
+      "bundle_profile": "cuda13-portable",
+      "runtime_line": "cuda13",
+      "toolkit_line": "13.3",
+      "compatibility_scope": "LOCAL_GPU_AND_STACK_CONTRACT",
+      "shared_cuda_root": "AIDirector/Common/Runtime/CUDA/13.3",
+      "seed_marker": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/UNSLOTH_PREBUILT_INFO.json"
+    }
+  },
+  "install_marker": "AIDirector/DaVinciResolve/Runtime/Stacks/CUDA13.3.1-Dual-Shared-v2/RUNTIME-STACK-MANIFEST.json",
+  "payload_files": [
+    {
+      "source": "payload/cuda/cudart64_13.dll",
+      "target": "AIDirector/Common/Runtime/CUDA/13.3/cudart64_13.dll",
+      "sha256": "B00CA6F53699120DA815BF3E06E2E4285FAE2F201235B883DCBB50EEC51E2A2A"
+    },
+    {
+      "source": "payload/cuda/cublas64_13.dll",
+      "target": "AIDirector/Common/Runtime/CUDA/13.3/cublas64_13.dll",
+      "sha256": "8C6BAC24474AF29627EC96500025A5D410A1B7E8FFA00E1FE13B1781FC6B3DDC"
+    },
+    {
+      "source": "payload/cuda/cublasLt64_13.dll",
+      "target": "AIDirector/Common/Runtime/CUDA/13.3/cublasLt64_13.dll",
+      "sha256": "E323ABD89E0F03C1DB91A09D7AEB1928DE08E1F86192CC713B335FEFE3E368A9"
+    },
+    {
+      "source": "payload/direct/ggml.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml.dll",
+      "sha256": "180343C28F283828FEB535D161C192E3750A73E0F1FE97DDC220EC253639DB71"
+    },
+    {
+      "source": "payload/direct/ggml-base.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-base.dll",
+      "sha256": "B35E7122818248CC150C9EE9091922AC450F56ED5CB957964AA9E078A07F6B67"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-alderlake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-alderlake.dll",
+      "sha256": "961E0A6FB5F5880992DD112FB0BC6D2D9A9FDAC952CEDFAA46FF2777201B6424"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-cannonlake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-cannonlake.dll",
+      "sha256": "C37E3CECC5C60EA98AC3687FEF55C5D21B648E5F144B952564C380EF4C1E9486"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-cascadelake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-cascadelake.dll",
+      "sha256": "6FA15806B72245C5B6C554C23AFF1D94BADBBB578DB7F671F4C702620218C174"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-haswell.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-haswell.dll",
+      "sha256": "E0B7CAD2076DFF18197A90914D01761D96C3D01D4930E7E8AA5DB98F9FC11D90"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-icelake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-icelake.dll",
+      "sha256": "D103D86CE22D19554FD9B5AFC10DD3B3FE5056530119431AEB64C367D7F479FB"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-sandybridge.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-sandybridge.dll",
+      "sha256": "E82F43F2373692FDA3F7A2127CF1F7A95D70B78E61CC43712FC4801A3B1F1B5F"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-skylakex.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-skylakex.dll",
+      "sha256": "FD20B85E7E98627D8781F67E882A643AAC9613B3D7D35DF734F528B376C7BA23"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-sse42.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-sse42.dll",
+      "sha256": "FAB0B4AE2300C81FB6A964D66BBEF3A47F8D514CDEE705040D048B05A73158D8"
+    },
+    {
+      "source": "payload/direct/ggml-cpu-x64.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-x64.dll",
+      "sha256": "074D8944B9A82A1EF96281826DED15292E6273600901D62D043E9F81D214484B"
+    },
+    {
+      "source": "payload/direct/ggml-cuda.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cuda.dll",
+      "sha256": "F2CB980234AADB8E2D2E5EF9AF2BD30CA8C91EBAC70C7E92DB7E46EAD5266657"
+    },
+    {
+      "source": "payload/direct/llama.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama.dll",
+      "sha256": "86FC1C563F19FD25F3BF98EE37F41A61B7C101E22CC4D3DC1DF61B9F81FE76E5"
+    },
+    {
+      "source": "payload/direct/llama-common.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama-common.dll",
+      "sha256": "859142FAD34404D4CAF02519E6BB06F6A79314E74E0DD21B6008DA1E4F4B08BE"
+    },
+    {
+      "source": "payload/direct/llama-server.exe",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama-server.exe",
+      "sha256": "0181F7FDAA10AB00BC71CED252EF87473675760D364A5708C08034E6FDB26C27"
+    },
+    {
+      "source": "payload/direct/llama-server-impl.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama-server-impl.dll",
+      "sha256": "B78536E9430405273D4905F60F469BC6A65358B2B56CE53275D50857118EFD67"
+    },
+    {
+      "source": "payload/direct/mtmd.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/mtmd.dll",
+      "sha256": "757A021932EC249B3254F542956D723D89F4D3602B6E5E207CA275C723E25243"
+    },
+    {
+      "source": "payload/upstream/ggml.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml.dll",
+      "sha256": "2C51A9473F519D964C89EC7B34092354BC5393DF7510FFE447E114A412AC2456"
+    },
+    {
+      "source": "payload/upstream/ggml-base.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-base.dll",
+      "sha256": "19C37B8145E014A7587F74247D145CDF5EBDD4E9F7E340F17941CFB217E5390D"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-alderlake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-alderlake.dll",
+      "sha256": "1915E68B9542DA7711EFB7CDB915F839AB3009634CFB11FA92EE1EDE506752CF"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-cannonlake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-cannonlake.dll",
+      "sha256": "6E0BF54E98B1247C684D31F0D9206F870925F7BCDD8B7D808A48F8BF2DC72C67"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-cascadelake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-cascadelake.dll",
+      "sha256": "5A3403B77259052F122687ABF3C5DE447607AF2DED8404EF8BF26A776467DF1A"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-haswell.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-haswell.dll",
+      "sha256": "48EA50BD922A504A754C982E2442E822B3D6C81D9CCA3C2DF2D214323FF32DF3"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-icelake.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-icelake.dll",
+      "sha256": "D5CF9C67B3B1DE2EC2DB93D9D05803A76973462A53D91F2BC4F9B07FA4E1E8A0"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-sandybridge.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-sandybridge.dll",
+      "sha256": "5C465C3C577730AFE7D74EA53E81A3C90BD5E4718519953CE59E085381510C54"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-skylakex.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-skylakex.dll",
+      "sha256": "305319DB6CBB628C8EB06D89E1761CAF86E400F613703D42D859CCD6C1C5DB86"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-sse42.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-sse42.dll",
+      "sha256": "F3349EDF1D1C669DF48D0F6173E07AC021F173E884E44C75EEF6BF37225B072F"
+    },
+    {
+      "source": "payload/upstream/ggml-cpu-x64.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-x64.dll",
+      "sha256": "7AB01CA0F7DECE12394CBC6202FE1B0AB324E6C27E4FDB868CD9CCC83E0718E1"
+    },
+    {
+      "source": "payload/upstream/ggml-cuda.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cuda.dll",
+      "sha256": "ECD0524A247D0D39631203E289F3C82672011E4AE38ED04BEC6C01C373C613E4"
+    },
+    {
+      "source": "payload/upstream/llama.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama.dll",
+      "sha256": "87545E354687050856CC003B787394D1B7717BE8A64DE3599C4F4402C5D84BC0"
+    },
+    {
+      "source": "payload/upstream/llama-common.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama-common.dll",
+      "sha256": "7CA8BAB7DA7010287EF6F08C7BDA4FCFA95AE6007EBE49690F87BE14EEF1D246"
+    },
+    {
+      "source": "payload/upstream/llama-server.exe",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama-server.exe",
+      "sha256": "02B9327264869C8015EABFC85AE879680064DFBB8E9F09CC9FA125504CBCB1D6"
+    },
+    {
+      "source": "payload/upstream/llama-server-impl.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama-server-impl.dll",
+      "sha256": "A27D6D32E09F2DF42B6F01DF1D5B2F149C7F7640127F07B334DFA16D40F599A7"
+    },
+    {
+      "source": "payload/upstream/mtmd.dll",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/mtmd.dll",
+      "sha256": "F497D008C9B21A2FE63D52535AA60327D805D295485E462C9395B5D1887453E3"
+    },
+    {
+      "source": "payload/upstream/UNSLOTH_PREBUILT_INFO.json",
+      "target": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/UNSLOTH_PREBUILT_INFO.json",
+      "sha256": "46FBA3F8EB0DF27709ADBAB90BA12F6E2AFF19C6400CEEACB1AD11CF1DD83EC5"
+    }
+  ],
+  "required_install_targets": [
+    "AIDirector/Common/Runtime/CUDA/13.3/cudart64_13.dll",
+    "AIDirector/Common/Runtime/CUDA/13.3/cublas64_13.dll",
+    "AIDirector/Common/Runtime/CUDA/13.3/cublasLt64_13.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-base.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-alderlake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-cannonlake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-cascadelake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-haswell.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-icelake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-sandybridge.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-skylakex.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-sse42.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cpu-x64.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/ggml-cuda.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama-common.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama-server.exe",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/llama-server-impl.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699/mtmd.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-base.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-alderlake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-cannonlake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-cascadelake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-haswell.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-icelake.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-sandybridge.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-skylakex.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-sse42.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cpu-x64.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/ggml-cuda.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama-common.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama-server.exe",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/llama-server-impl.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/mtmd.dll",
+    "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Upstream/Current/UNSLOTH_PREBUILT_INFO.json"
+  ]
+}

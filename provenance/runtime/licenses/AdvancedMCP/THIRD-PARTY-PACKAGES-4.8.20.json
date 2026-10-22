@@ -1,0 +1,6 @@
+﻿{
+    "name":  "pg-pool",
+    "version":  "3.14.0",
+    "license":  "MIT",
+    "package_json":  "pg-pool/package.json"
+}

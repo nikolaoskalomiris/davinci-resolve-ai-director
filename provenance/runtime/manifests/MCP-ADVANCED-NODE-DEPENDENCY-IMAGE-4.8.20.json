@@ -1,0 +1,17 @@
+{
+    "schema_version":  1,
+    "status":  "IMMUTABLE_OFFLINE_DEPENDENCY_IMAGE",
+    "component":  "DaVinci Resolve Advanced MCP Node dependency image",
+    "managed_mcp_version":  "4.8.20",
+    "source_commit":  "6337d8cf706852854b601e3ce05d643a9366b905",
+    "product_node_version":  "24.18.0",
+    "product_npm_version":  "11.16.0",
+    "package_json_sha256":  "965D534783C98E5D04AFB3A613C2DB7131F7FB8B98C3C7893FA5EA6FA859E079",
+    "package_lock_sha256":  "7A051C3787CA117B884AC93A1C39D5CA5D668B46E375F94C5EFE526DD511F4F1",
+    "npm_install_contract":  "npm ci --omit=dev --omit=optional --no-audit --no-fund",
+    "optional_dependencies_omitted":  true,
+    "node_modules_tree_sha256":  "BAC9B93C9270009E09436EF6045CA5F4778AB739271B1E64508AC36D35E1459F",
+    "node_modules_file_count":  3969,
+    "network_required_for_activation":  false,
+    "expected_stdio_tools":  18
+}

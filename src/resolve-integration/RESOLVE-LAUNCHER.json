@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "launcher_id": "Resolve-Workflow-Launcher-v1.4",
+  "kind": "resolve-launcher",
+  "plugin_id": "com.aidirector.davinciresolve",
+  "accepted_from_version": "0.3.14",
+  "accepted_in_version": "0.3.15",
+  "source_manifest": "RESOLVE-LAUNCHER-MANIFEST.json",
+  "source_manifest_sha256": "595B3591127730107F4BFAE8965C16024043BDE318B42844D3C15B947E7638A9",
+  "scope": [
+    "Regenerate the separate machine-scoped DaVinci Resolve Workflow Integration launcher with the accepted NSIS 3.0.4.1 ProgramData binding contract",
+    "Correct child-file ACL provisioning by securing the empty owned plugin directory before payload creation and inheriting Users read/execute onto main.js, manifest.xml and the uninstaller",
+    "Reject recursive post-write icacls /inheritance:r /T behavior that can leave standard users unable to read launcher payload files",
+    "Preserve the accepted launcher main.js and manifest.xml payload bytes unchanged",
+    "Launch or foreground the current-user packaged standalone DaVinci Resolve AI Director executable",
+    "Keep the core AI Director Setup current-user and non-elevated with no ProgramData mutation",
+    "Do not ship WorkflowIntegration.node, a second application UI/runtime, MCP, updater, or Electron copy in the launcher",
+    "Sanitize inherited Resolve/Node/Python/CUDA host environment before detached standalone launch",
+    "Apply explicit ProgramData plugin ACLs: SYSTEM and Administrators full control, Users read/execute, directory inheritance removed, payload files inheriting those intended ACEs",
+    "Provide explicit elevated install and remove behavior through the separate Resolve Integration artifact",
+    "Bind launcher integration build to builder v2.5.4 pinned NSIS compiler-input, PE, machine-data-binding, and ACL-order static-audit contract"
+  ]
+}

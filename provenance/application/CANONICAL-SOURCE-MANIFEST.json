@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "id": "AI-Director-Canonical-Application-0.3.25-v1",
+  "product": "DaVinci Resolve AI Director",
+  "version": "0.3.25",
+  "source_authority": "CANONICAL",
+  "source_phase": "ACCEPTED_READY",
+  "file_count": 13,
+  "files": [
+    {
+      "path": "ProductPaths.js",
+      "sha256": "F4AB2D3D78A976F6F4E74FFF74E746C3115261B01A2E556F3BA9485178F18A68",
+      "bytes": 4663
+    },
+    {
+      "path": "ResolveUiStatusObserver.ps1",
+      "sha256": "DAA80220B3F8A730A7EE3946BD3EF51E1B161C0195778B9014FCB360F8D895F6",
+      "bytes": 10049
+    },
+    {
+      "path": "UpdateManager.js",
+      "sha256": "EE979324588DFD400DD4E9F9FF937D9C33FB509F5AEBFB26204D9FDD1B909ED8",
+      "bytes": 187999
+    },
+    {
+      "path": "build/electron-builder.config.cjs",
+      "sha256": "38EAE846266806E1CEA35455921ED5A004EA85089499995490374A172818D749",
+      "bytes": 404
+    },
+    {
+      "path": "build/installer.nsh",
+      "sha256": "E1D6DD4061A308B5EF13717C64FCF387710D5C0B07D0C53A7DADC3E4528AB9FE",
+      "bytes": 542
+    },
+    {
+      "path": "index.html",
+      "sha256": "D005712A75126376B94D67F21B8CF50E0621FC787DE46273753BD74403AE9E69",
+      "bytes": 21684
+    },
+    {
+      "path": "main.js",
+      "sha256": "89080AADD65477FE6A4BB26D088B01A9E69493A4C05242E15166F17A9B547CAB",
+      "bytes": 207802
+    },
+    {
+      "path": "markdown.js",
+      "sha256": "E25575DB23CE9A61E4514A8C0EB5CC34DE1706D8EBE1A840FDA0F8FB173D348E",
+      "bytes": 24466
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "8BB89A9E645D481093873F04829C0CECD95A33A62BBCDC180F17153C2135F182",
+      "bytes": 143754
+    },
+    {
+      "path": "package.json",
+      "sha256": "BCD2E91788543B9A2C1606E85C9B6289FE059362735CEC1077D4EA5E9D889619",
+      "bytes": 1609
+    },
+    {
+      "path": "preload.js",
+      "sha256": "8FA26DAE646B21E7524181B3D29F9431B6CB982E781A76C394AAC2AC1A6BDA14",
+      "bytes": 3275
+    },
+    {
+      "path": "renderer.js",
+      "sha256": "DEBB6AF6E73EC45B8DFF9E01CD26E298908E4560CF04E9898EA31C9F9513B3E5",
+      "bytes": 128813
+    },
+    {
+      "path": "styles.css",
+      "sha256": "9E382004A62F55F3374E7BB3DEA49E346D679BDE7FF53BA99FA2BA9653CC8C7B",
+      "bytes": 36414
+    }
+  ],
+  "active_application_overlay_composition": false
+}

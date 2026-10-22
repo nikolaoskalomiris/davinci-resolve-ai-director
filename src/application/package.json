@@ -1,0 +1,65 @@
+{
+  "name": "davinci-resolve-ai-director",
+  "version": "0.3.25",
+  "description": "DaVinci Resolve AI Director",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "pack:win": "electron-builder --win --x64 --dir",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "36.3.2",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.aidirector.davinciresolve",
+    "productName": "DaVinci Resolve AI Director",
+    "asar": true,
+    "npmRebuild": false,
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "markdown.js",
+      "ProductPaths.js",
+      "UpdateManager.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "ResolveUiStatusObserver.ps1",
+        "to": "ResolveUiStatusObserver.ps1"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": false,
+      "createStartMenuShortcut": true,
+      "createDesktopShortcut": false,
+      "shortcutName": "DaVinci Resolve AI Director",
+      "runAfterFinish": true,
+      "include": "build/installer.nsh",
+      "artifactName": "DaVinci Resolve AI Director Setup ${version}.${ext}",
+      "packElevateHelper": false
+    },
+    "copyright": "Copyright 2026 DaVinci Resolve AI Director"
+  },
+  "author": {
+    "name": "DaVinci Resolve AI Director"
+  }
+}

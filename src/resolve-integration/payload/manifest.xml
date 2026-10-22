@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BlackmagicDesign>
+    <Plugin>
+        <Id>com.aidirector.davinciresolve</Id>
+        <Name>DaVinci Resolve AI Director</Name>
+        <Version>0.3.13</Version>
+        <Description>Launches or foregrounds the standalone DaVinci Resolve AI Director application.</Description>
+        <FilePath>main.js</FilePath>
+    </Plugin>
+</BlackmagicDesign>

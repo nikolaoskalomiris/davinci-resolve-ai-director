@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "branding_id": "AI-Director-Brand-v3",
+  "kind": "branding-assets",
+  "source_manifest": "BRANDING-MANIFEST.json",
+  "source_manifest_sha256": "FAA82500EA1FE467D70F65B68699E50FDD6ED13A8B85C653B70D693F122C348C",
+  "scope": [
+    "Windows application executable icon stabilized for Windows shell rendering with 32bpp alpha at every declared ICO frame size",
+    "NSIS installer and uninstaller executable icon stabilized from the same Brand-v3 ICO",
+    "NSIS full-width 497x57 branded installer header carried forward byte-identically from Brand-v2",
+    "NSIS custom full-band header UI resource and centered Welcome to AI Director title carried forward byte-identically from Brand-v2",
+    "NSIS installer and uninstaller sidebar branding carried forward byte-identically from Brand-v2",
+    "Unified optional Resolve Integration options-page presentation and typography carried forward byte-identically from Brand-v2",
+    "PE project-publisher metadata stabilized for main application, main Setup, and Resolve Integration Setup"
+  ],
+  "lineage": {
+    "predecessor_branding_id": "AI-Director-Brand-v2",
+    "prepared_from_accepted_authority": "0.3.23",
+    "first_target_version": "0.3.24"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "purpose": "Generate the active MCP configuration after final LocalAppData roots are known.",
+  "roots": {
+    "base_root": "%LOCALAPPDATA%\\AIDirector",
+    "product_root": "%LOCALAPPDATA%\\AIDirector\\DaVinciResolve",
+    "managed_mcp_root": "%LOCALAPPDATA%\\davinci-resolve-mcp"
+  },
+  "contract": {
+    "mcp_python": "Runtime\\Python\\MCP\\3.11.9\\python.exe",
+    "node": "Runtime\\Node\\24.18.0\\node.exe",
+    "compound_entry": "src\\server.py",
+    "full_entry": "src\\server.py --full",
+    "advanced_entry": "bin\\davinci-resolve-advanced-mcp.mjs",
+    "timeout_ms": 120000
+  }
+}

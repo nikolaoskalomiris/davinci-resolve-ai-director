@@ -1,0 +1,119 @@
+{
+  "schema_version": 2,
+  "status": "SHIPPING_PORTABLE_SEED_PAYLOAD",
+  "product_name": "DaVinci Resolve AI Director",
+  "app_id": "com.aidirector.davinciresolve",
+  "intended_install_roots": {
+    "base_root": "%LOCALAPPDATA%\\AIDirector",
+    "product_root": "%LOCALAPPDATA%\\AIDirector\\DaVinciResolve",
+    "common_root": "%LOCALAPPDATA%\\AIDirector\\Common",
+    "settings_root": "%APPDATA%\\AIDirector\\DaVinciResolve",
+    "managed_mcp_root": "%LOCALAPPDATA%\\davinci-resolve-mcp"
+  },
+  "staged_validation_root": null,
+  "path_bound_files": [
+    "Payload\\LocalAppData\\AIDirector\\DaVinciResolve\\Runtime\\Python\\MCP\\3.11.9\\python311._pth",
+    "Payload\\LocalAppData\\AIDirector\\DaVinciResolve\\MCP\\vfx_mcp.json"
+  ],
+  "source_payload": {
+    "assembly_report_sha256": "D5278BA71797A91A54CBA64D61DDDB28065CFB08A8D8AA962D5707F116B90FB5",
+    "release_manifest_sha256": "F66BF975CFF513107EFED60B791039B3B834FC2FDC74E509CF379809DC245B1E"
+  },
+  "managed_mcp": {
+    "version": "4.10.4",
+    "commit": "8911bd24aee76894238924317a461005dd013d94"
+  },
+  "identity_policy": {
+    "product_owned_legacy_identity_hits": 0,
+    "third_party_provenance_exception": {
+      "scope": "Runtime\\MCP\\Advanced\\4.8.20\\node_modules\\better-sqlite3\\build",
+      "allowed_files": 21,
+      "reason": "Accepted immutable updater dependency image contains third-party better-sqlite3 build/debug provenance. It is not a product path or runtime identity and is retained byte-for-byte to preserve the updater contract."
+    }
+  },
+  "components": {
+    "common": {
+      "file_count": 4,
+      "total_bytes": 806729074,
+      "tree_digest_sha256": "C67729C931583F4C65E426B9C56972E0458C36E1B5408F8F5A791499463E11AC"
+    },
+    "backend": {
+      "file_count": 5,
+      "total_bytes": 137688,
+      "tree_digest_sha256": "7FC78288E8F84BBC07607659385D57D498A0E7D4FB3889B56B389FA35D4F6A2C"
+    },
+    "direct_llama": {
+      "file_count": 17,
+      "total_bytes": 211865088,
+      "tree_digest_sha256": "6A66C88C3A033DC70221F8054F0BA69248A5827D835B91E2F48A79B33E35D376"
+    },
+    "upstream_llama": {
+      "file_count": 50,
+      "total_bytes": 269235171,
+      "tree_digest_sha256": "0898EB25E3ECE32DC223C6F88C63BC3E6DD890CF58897E2B2354E6F50FF4DEEA"
+    },
+    "backend_python": {
+      "file_count": 153,
+      "total_bytes": 23376566,
+      "tree_digest_sha256": "F752F0C49CD81324FD882312D1BCEF2F22BB025AD5F513AD5DFDF84FBD429FD8"
+    },
+    "mcp_python": {
+      "file_count": 3068,
+      "total_bytes": 79713735,
+      "tree_digest_sha256": "667082DE958C9816AFA84E45780BBEF84BF7A16EAF06271232D7CF9692B2D205"
+    },
+    "node": {
+      "file_count": 1984,
+      "total_bytes": 105728964,
+      "tree_digest_sha256": "B95D7523E96D96658426B0E426E204E220DE6E333550ECFF3288271A179F7AC9"
+    },
+    "advanced_dependency_image": {
+      "file_count": 4649,
+      "total_bytes": 118148433,
+      "tree_digest_sha256": "13B6E9C99C3AAB7110D7235624A0D81011CAC76DA05709436B36A80DA26610E4"
+    },
+    "managed_mcp": {
+      "file_count": 5844,
+      "total_bytes": 76978745,
+      "tree_digest_sha256": "3CF8489AD20F1B223D02C0CB647FB8F23F20576B5D597A8626431B295DF7EE5E"
+    }
+  },
+  "generated_artifact_pruning": {
+    "pyc_removed": 453,
+    "direct_url_removed": 40,
+    "console_launcher_files_removed": 14,
+    "managed_mcp_better_sqlite3_build": {
+      "files_before": 68,
+      "files_after": 1,
+      "native_sha256": "F0268A4307D6E8901342AB7DD6B64E64E27AC5EF43FA72522FA9B8E5F050379C",
+      "removed": 67
+    }
+  },
+  "ffmpeg_bundled": false,
+  "models_bundled": false,
+  "source_staged_status": "STAGED_IDENTITY_REBASED_PRODUCT_PAYLOAD",
+  "shipping_path_binding": {
+    "status": "INSTALL_TIME_GENERATED",
+    "path_bound_files": [
+      "AIDirector\\DaVinciResolve\\Runtime\\Python\\MCP\\3.11.9\\python311._pth",
+      "AIDirector\\DaVinciResolve\\MCP\\vfx_mcp.json"
+    ],
+    "generator": "Generate-AIDirectorRuntimePaths.ps1",
+    "reason": "Per-user LocalAppData absolute paths are not embedded in the portable shipping payload.",
+    "accepted_source_release_manifest_sha256": "130903A50DC38B9BDE0254C71F583967700ECF6456C7603ED782CA18C193DDB2"
+  },
+  "successor_seed_promotion": {
+    "status": "CLEAN_4_10_4_BASELINE",
+    "from_managed_mcp_version": "4.8.22",
+    "to_managed_mcp_version": "4.10.4",
+    "source_commit": "8911bd24aee76894238924317a461005dd013d94",
+    "source_archive_sha256": "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6",
+    "live_accepted_contract_sha256": "3ED68C583E5DB9CA148A28C64C64F5459C6B3CDC7A4915BAE016262217D33765",
+    "strict_candidate_contract_sha256": "F6B4F585668499EDF2972961942F3C093FB1D874EF30CA320D0A07CBD99488F6",
+    "product_overlay_sha256": "E01116148EA0ECC1583F3484300228CA25AE2DB21321C7EC8499EC3A89D45391",
+    "advanced_dependency_lineage": "4.8.20 immutable image, accepted shipping-pruned node_modules",
+    "python_dependency_lineage": "3.11.9 immutable runtime, exact requirements match",
+    "historical_4_8_22_versioned_manifests_retained": false,
+    "runtime_generated_mcp_artifacts_retained": false
+  }
+}

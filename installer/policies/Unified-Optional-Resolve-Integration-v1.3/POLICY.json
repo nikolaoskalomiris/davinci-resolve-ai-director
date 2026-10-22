@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "policy_id": "Unified-Optional-Resolve-Integration-v1.3",
+  "kind": "release-policy",
+  "policy": "unified-assisted-install-options-v2",
+  "target_version": "0.3.21",
+  "supersedes": "Unified-Optional-Resolve-Integration-v1.2",
+  "status": "TARGET_CANDIDATE",
+  "scope": [
+    "main Setup assisted options page with default-checked Resolve Workflow Integration checkbox",
+    "main Setup assisted options page with default-checked desktop shortcut checkbox",
+    "desktop shortcut is custom-choice-owned; electron-builder automatic desktop shortcut remains disabled",
+    "installer details are visible by default and report five major installation stages",
+    "exact separate Resolve Integration Setup embedded byte-identically in main Setup",
+    "child-only runas elevation; core remains current-user non-elevated",
+    "no installation-directory chooser",
+    "unchecked fresh Resolve Integration install means core only",
+    "unchecked upgrade preserves existing Resolve Integration",
+    "full uninstall removes the custom desktop shortcut only after managed-state cleanup succeeds",
+    "separate Resolve Integration Setup remains release artifact"
+  ]
+}

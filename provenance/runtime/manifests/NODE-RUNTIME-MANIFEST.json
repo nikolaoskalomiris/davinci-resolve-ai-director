@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "component": "DaVinci Resolve AI Director product-owned Node.js runtime",
+  "ownership": "DaVinciResolveAIDirector",
+  "version": "24.18.0",
+  "distribution": "node-v24.18.0-win-x64.zip",
+  "source_url": "https://nodejs.org/dist/v24.18.0/node-v24.18.0-win-x64.zip",
+  "archive_sha256": "0AE68406B42D7725661DA979B1403EC9926DA205C6770827F33AAC9D8F26E821",
+  "expected_node_version": "v24.18.0",
+  "expected_bundled_npm_version": "11.16.0",
+  "purpose": [
+    "davinci-resolve-advanced MCP runtime",
+    "managed MCP dependency refresh"
+  ],
+  "boundary": "Resolve-product-owned; not machine-global and not AI Director Common.",
+  "node_exe_sha256": "9A4EB5F1C29C6A2E93852EAD46B999E284A6A5CA8BAB4D4E241D587D025A52DE"
+}

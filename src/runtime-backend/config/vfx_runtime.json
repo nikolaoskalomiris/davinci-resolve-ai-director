@@ -1,0 +1,8 @@
+{
+    "base_url":  "http://127.0.0.1:8091",
+    "model":  "Qwen3.8-Flash-Next",
+    "context_length":  131072,
+    "max_output_tokens":  16384,
+    "max_tool_rounds":  0,
+    "timeout_seconds":  43200
+}

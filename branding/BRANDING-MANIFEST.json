@@ -1,0 +1,133 @@
+{
+  "schema_version": 3,
+  "branding_id": "AI-Director-Brand-v3",
+  "product": "DaVinci Resolve AI Director",
+  "policy": {
+    "hashes_are_version_specific": true,
+    "visual_change_requires_new_branding_version": true,
+    "exports_are_reproducible_non_authoritative": true,
+    "brand_v2_is_immutable_predecessor": true
+  },
+  "icon_contract": {
+    "ico_frames": [
+      16,
+      20,
+      24,
+      32,
+      40,
+      48,
+      64,
+      96,
+      128,
+      256
+    ],
+    "action": "stabilize-windows-shell-frames-32bpp-alpha-v1",
+    "predecessor_branding_id": "AI-Director-Brand-v2",
+    "predecessor_icon_sha256": "3713B977D5BD4926D7FA0EEA32BA86C9981608BC52840F56906FC84F1C0C1155",
+    "all_frames_bits_per_pixel": 32,
+    "small_frame_alpha": "32bpp-dib-with-semtransparent-alpha",
+    "corner_alpha_max": 8,
+    "source_reference": "source/AI-Director-Icon-Windows-Reference-256.png",
+    "source_reference_sha256": "3AB53A43FA05FBEBE1F5AB487337BB325D3C19F64DB245B4E909B285D44FFDB7",
+    "resample_filter": "Lanczos"
+  },
+  "nsis_contract": {
+    "installer_header_banner": "497x57 24-bit RGB BMP",
+    "installer_header_ui_resource": "Win32 IDD_INST full-band resource",
+    "installer_sidebar": "164x314 24-bit RGB BMP",
+    "uninstaller_sidebar": "164x314 24-bit RGB BMP"
+  },
+  "installer_ui": {
+    "mode": "FULL_WIDTH_BRANDED_HEADER_V1",
+    "header": {
+      "bitmap": "build/installerHeaderBanner.bmp",
+      "ui_resource": "build/ai-director-header-ui.exe",
+      "title": "Welcome to AI Director",
+      "subtitle": "",
+      "title_font_size_pt": 11,
+      "title_font_weight": 700,
+      "text_color_rgb": "202020",
+      "transparent_text": true,
+      "full_band_centered": true
+    },
+    "resolve_integration_page": {
+      "heading": "Installation options",
+      "heading_font_weight": 700,
+      "checkbox": "Add AI Director launcher to DaVinci Resolve",
+      "information_heading": "Information",
+      "information_heading_font_weight": 700,
+      "information_text": "Adds an AI Director launcher to DaVinci Resolve's Workflow Integration menu."
+    }
+  },
+  "render_contract": {
+    "inkscape_cli": true,
+    "supersample_factor": 4,
+    "resample_filter": "Lanczos",
+    "colorspace": "sRGB",
+    "channel_depth_bits": 8,
+    "bmp_format": "BMP3",
+    "bmp_bits_per_pixel": 24,
+    "header": {
+      "authoring_canvas": "497x57",
+      "supersample_canvas": "1988x228",
+      "final_canvas": "497x57"
+    },
+    "sidebar": {
+      "authoring_canvas": "164x314",
+      "supersample_canvas": "656x1256",
+      "final_canvas": "164x314"
+    }
+  },
+  "authoring_sources": [
+    {
+      "path": "source/AI-Director-Icon-Master.png",
+      "sha256": "1040D234020199475BF921CC69FD60174129CA2C9DC7FC508D95135301AE3E21"
+    },
+    {
+      "path": "source/AI-Director-Icon-Master.svg",
+      "sha256": "966C4536D706646EEC476AA367FB633CEE23FDE1366B73E77473C59E0DA185C9"
+    },
+    {
+      "path": "source/installerHeaderBanner.svg",
+      "sha256": "4D79479081F2ACC0696018164D4D2F48F2A28FC1EA81159E1FD5EE11EDE2D8CA"
+    },
+    {
+      "path": "source/installerSidebar.svg",
+      "sha256": "8BE87BFC18BF27EC42896D592EC46BDB0A19E649F9ADD35A8EABC3A1F04CE633"
+    },
+    {
+      "path": "source/nsis/ai-director-header-v2.rc",
+      "sha256": "5148EE60123CFC968C7E0BF77372D54B102929C08D839CBB7CE7B1CB669AB5C6"
+    },
+    {
+      "path": "source/nsis/ui_stub.c",
+      "sha256": "144D4AC400E2B93EC59FA336DB44DD31BA919F6DC7087936F17E12CE63398C79"
+    },
+    {
+      "path": "source/AI-Director-Icon-Windows-Reference-256.png",
+      "sha256": "3AB53A43FA05FBEBE1F5AB487337BB325D3C19F64DB245B4E909B285D44FFDB7"
+    }
+  ],
+  "shipping_assets": [
+    {
+      "path": "build/icon.ico",
+      "sha256": "6DAE0068136E8F47F933AD397BBA7AF0E293AD40FD6E6C32F9A7303A3793F12E"
+    },
+    {
+      "path": "build/installerHeaderBanner.bmp",
+      "sha256": "5F5E3D8F0194146C3844BEEBDD7E61602F55441FE5DFC641BE6905EF065EE80A"
+    },
+    {
+      "path": "build/installerSidebar.bmp",
+      "sha256": "ECD999E74290C69480DD89E50268A629AB9C596046DA45B530AE008F8402D629"
+    },
+    {
+      "path": "build/uninstallerSidebar.bmp",
+      "sha256": "ECD999E74290C69480DD89E50268A629AB9C596046DA45B530AE008F8402D629"
+    },
+    {
+      "path": "build/ai-director-header-ui.exe",
+      "sha256": "62142A97230E0AD00C94322C1891928719EB4E0A8104FFC5114684165BB2E701"
+    }
+  ]
+}

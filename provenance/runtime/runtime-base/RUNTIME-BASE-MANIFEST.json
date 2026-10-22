@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "runtime_base_id": "CUDA13-Native-Base-v3",
+  "payload_role": "ACTIVE_RUNTIME_BASE",
+  "expected_shipping_file_count": 15720,
+  "bundled_mcp_seed": {
+    "version": "4.10.4",
+    "commit": "8911bd24aee76894238924317a461005dd013d94",
+    "path": "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.10.4-8911bd24aee7.tar.gz",
+    "sha256": "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6"
+  },
+  "runtime_stack_dependency": {
+    "id": "CUDA13.3.1-Dual-Shared-v2",
+    "descriptor_sha256": "872EF78E88D71E80332CEABEA685C8317F9F049669936C2C4A353B044E754E34",
+    "manifest_sha256": "AA04F057CA1B8788BB759DE23CFFD3B7CE65D6BA2F38B2D55C35A9BEF56EBA51",
+    "archive_sha256": "F3413EDF3D0BD76D5D5D80698261F55F766A905CAD2BEF2E26A67DEAF3548C44",
+    "mutation_authorized": false
+  },
+  "shipping_archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+  "shipping_archive_bytes": 94999083,
+  "shipping_inventory_sha256": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
+  "archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+  "archive_bytes": 94999083,
+  "inventory_file_count": 15720,
+  "archive_filter": "BCJ",
+  "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v3"
+}

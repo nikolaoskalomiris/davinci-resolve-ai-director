@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "launcher_id": "Resolve-Workflow-Launcher-v1.4",
+  "product": "DaVinci Resolve AI Director",
+  "plugin_id": "com.aidirector.davinciresolve",
+  "install_contract": {
+    "scope": "machine",
+    "requires_elevation": true,
+    "core_setup_mutates_programdata": false,
+    "plugin_folder_acl": "SYSTEM:F;Administrators:F;Users:RX;inheritance:removed"
+  },
+  "files": [
+    {
+      "path": "payload/main.js",
+      "sha256": "FB12C64109592535B3163455CB073B958774C1FB48AE0AB019BB9C7978AD16E5"
+    },
+    {
+      "path": "payload/manifest.xml",
+      "sha256": "5E647054049C8CC0CCED98715A3017881C25A11A54BCDF1DC3618BB3BD522799"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "runtime_base_id": "CUDA13-Native-Base-v3",
+  "kind": "runtime-base",
+  "payload_role": "ACTIVE_RUNTIME_BASE",
+  "files": [],
+  "bundled_mcp_version": "4.10.4",
+  "bundled_mcp_commit": "8911bd24aee76894238924317a461005dd013d94",
+  "expected_shipping_file_count": 15720,
+  "runtime_base_manifest": "RUNTIME-BASE-MANIFEST.json",
+  "runtime_base_manifest_sha256": "19AFDAB5C807C6A94AD0FC4AEB8DE99BF90B65252BB901BEF649F5FA1269519D",
+  "shipping_archive": "RUNTIME-BASE.7z",
+  "shipping_archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+  "shipping_archive_bytes": 94999083,
+  "shipping_inventory": "SHIPPING-INVENTORY.json",
+  "shipping_inventory_sha256": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
+  "archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+  "archive_bytes": 94999083,
+  "inventory_file_count": 15720,
+  "archive_filter": "BCJ",
+  "nsis7z_full_parity_required": true,
+  "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v3"
+}

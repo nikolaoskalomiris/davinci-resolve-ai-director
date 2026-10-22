@@ -1,0 +1,39 @@
+DaVinci Resolve AI Director - Python Runtime Third-Party Notice
+============================================================================
+
+This development package provisions a product-local CPython 3.11.9 x64 runtime
+from immutable official artifacts. The runtime itself carries the upstream license
+files contained in the Python distribution and Python package wheels.
+
+Components
+----------
+CPython 3.11.9
+  Source: Python Software Foundation / python.org
+  License family: Python Software Foundation License
+
+requests 2.34.2
+  Source: PyPI / Python Software Foundation Requests project
+  License: Apache-2.0
+
+urllib3 2.7.0
+  Source: PyPI / urllib3 project
+  License: MIT
+
+certifi 2026.7.22
+  Source: PyPI / certifi project
+  License: MPL-2.0
+
+charset-normalizer 3.4.9
+  Source: PyPI / charset-normalizer project
+  License: MIT
+
+idna 3.18
+  Source: PyPI / idna project
+  License: BSD-3-Clause
+
+Exact artifact URLs and SHA-256 values are recorded in
+DaVinciResolveAIDirector\Manifests\python-3.11.9.json.
+
+This notice is an engineering provenance record for the current development
+package. Final public release licensing/notices remain subject to the project's
+full third-party release due-diligence pass.

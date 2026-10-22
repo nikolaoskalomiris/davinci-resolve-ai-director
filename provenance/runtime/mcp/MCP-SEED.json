@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "AI-Director-MCP-Seed-v1",
+  "version": "4.10.4",
+  "commit": "8911bd24aee76894238924317a461005dd013d94",
+  "archive_name": "davinci-resolve-mcp-4.10.4-8911bd24aee7.tar.gz",
+  "bytes": 6307403,
+  "sha256": "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6",
+  "runtime_base_internal_path": "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.10.4-8911bd24aee7.tar.gz",
+  "committed_binary": false,
+  "role": "PINNED_RUNTIME_UPDATE_SEED_ASSET"
+}

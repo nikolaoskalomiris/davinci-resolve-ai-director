@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="green">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self'; script-src 'self';"
+    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Director</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+
+        <header class="header">
+            <div class="brand">
+                <div class="title">AI Director</div>
+                <div class="subtitle">DaVinci Resolve AI Control</div>
+            </div>
+
+            <div class="header-controls">
+                <div class="live-status" title="DaVinci Resolve bridge">
+                    <span id="resolveDot" class="dot"></span>
+                    <span id="resolveStatus">Connecting...</span>
+                </div>
+
+                <button
+                    id="updatesButton"
+                    class="updates-button"
+                    type="button"
+                    title="Check AI Director component updates"
+                >
+                    Updates<span id="updateIndicator" class="update-indicator" aria-hidden="true"></span>
+                </button>
+
+                <div class="server-control">
+                    <div class="profile-row">
+                        <span class="server-label">Profile</span>
+                        <select
+                            id="profileSelect"
+                            class="profile-select"
+                            title="Choose which llama-server runtime AI Director owns"
+                        >
+                            <option value="upstream">Upstream</option>
+                            <option value="direct">Direct</option>
+                        </select>
+                    </div>
+                    <div class="server-row">
+                        <span class="server-label">Server</span>
+                        <button
+                            id="serverToggle"
+                            class="switch"
+                            type="button"
+                            aria-pressed="false"
+                            title="Start or stop the AI Director llama-server"
+                        >
+                            <span class="switch-track">
+                                <span class="switch-thumb"></span>
+                            </span>
+                        </button>
+                        <span id="serverStatus" class="server-status">Starting...</span>
+                    </div>
+                    <div class="debug-row">
+                        <span class="server-label debug-label">Debug</span>
+                        <button
+                            id="debugToggle"
+                            class="switch switch-debug"
+                            type="button"
+                            aria-pressed="false"
+                            title="Enable diagnostic llama-server verbosity (-lv 4)"
+                        >
+                            <span class="switch-track">
+                                <span class="switch-thumb"></span>
+                            </span>
+                        </button>
+                        <span id="debugStatus" class="server-status">Off</span>
+                    </div>
+                </div>
+
+                <button
+                    id="settingsButton"
+                    class="settings-button"
+                    type="button"
+                    title="AI Director settings"
+                    aria-label="AI Director settings"
+                >
+                    <span aria-hidden="true">⚙</span>
+                </button>
+            </div>
+        </header>
+
+        <section class="info">
+            <div class="info-item">
+                <span class="label">Page</span>
+                <span id="currentPage" class="value">-</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Project</span>
+                <span id="currentProject" class="value">-</span>
+            </div>
+
+            <div class="info-item backend-item">
+                <span class="label">Backend</span>
+                <span class="state-value">
+                    <span id="backendDot" class="dot"></span>
+                    <span id="backendStatus">Starting...</span>
+                </span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Model</span>
+                <span id="modelStatus" class="value">Qwen3.8-Flash-Next</span>
+            </div>
+
+            <div class="info-item context-info-item">
+                <span class="label">Context</span>
+                <button
+                    id="contextMeter"
+                    class="context-meter"
+                    type="button"
+                    aria-expanded="false"
+                    aria-label="Context usage"
+                    title="0 / 131.1K used"
+                >
+                    <span id="contextMeterCircle" class="context-meter-circle" aria-hidden="true">
+                        <svg viewBox="0 0 32 32" focusable="false">
+                            <circle class="context-meter-track" cx="16" cy="16" r="13" pathLength="100"></circle>
+                            <circle id="contextMeterProgress" class="context-meter-progress" cx="16" cy="16" r="13" pathLength="100" stroke-dashoffset="100"></circle>
+                        </svg>
+                    </span>
+                    <span id="contextMeterText" class="context-meter-text" hidden>0 / 131.1K - 0%</span>
+                </button>
+            </div>
+        </section>
+
+        <main id="conversation" class="conversation"></main>
+
+        <button
+            id="jumpToLatest"
+            class="jump-to-latest"
+            type="button"
+            title="Return to the active response"
+            aria-label="Jump to latest response"
+            hidden
+        >
+            <span aria-hidden="true">↓</span>
+            <span>Jump to latest</span>
+        </button>
+
+        <section class="composer" id="composer">
+            <div
+                id="composerResizeHandle"
+                class="composer-resize-handle"
+                role="separator"
+                aria-orientation="horizontal"
+                aria-label="Resize instruction area"
+                title="Drag to resize the instruction area"
+            ></div>
+
+            <div class="composer-body">
+                <textarea
+                    id="prompt"
+                    placeholder="Type a DaVinci Resolve instruction..."
+                    rows="3"
+                ></textarea>
+
+                <button id="send" type="button">Send</button>
+            </div>
+        </section>
+
+        <dialog id="settingsDialog" class="settings-dialog">
+            <div class="settings-dialog-inner">
+                <div class="settings-dialog-header">
+                    <div>
+                        <div id="settingsDialogTitle" class="settings-dialog-title">AI Director Settings</div>
+                        <div id="settingsDialogSubtitle" class="settings-dialog-subtitle">Configure the runtime used by AI Director.</div>
+                    </div>
+                    <button id="closeSettings" class="dialog-close" type="button" aria-label="Close settings">×</button>
+                </div>
+
+                <div id="settingsLoadWarning" class="settings-warning" hidden></div>
+
+                <section class="settings-section">
+                    <div class="settings-section-title">Server Profile</div>
+                    <div class="profile-cards" role="radiogroup" aria-label="Server profile">
+                        <button id="settingsProfileUpstream" class="profile-card" type="button" data-profile="upstream" role="radio" aria-checked="false">
+                            <span class="profile-card-name">Upstream</span>
+                            <span class="profile-card-description">Updater-managed llama.cpp runtime</span>
+                            <span id="settingsProfileUpstreamAvailability" class="profile-card-state">Checking…</span>
+                        </button>
+                        <button id="settingsProfileDirect" class="profile-card" type="button" data-profile="direct" role="radio" aria-checked="false">
+                            <span class="profile-card-name">Direct</span>
+                            <span class="profile-card-description">Custom optimized AI Director runtime</span>
+                            <span id="settingsProfileDirectAvailability" class="profile-card-state">Checking…</span>
+                        </button>
+                    </div>
+                </section>
+                <section class="settings-section">
+                    <div class="settings-section-title">Model</div>
+                    <label class="settings-field">
+                        <span>Detected LM Studio GGUF</span>
+                        <select id="settingsModelSelect" class="profile-select" aria-label="Detected LM Studio model"></select>
+                    </label>
+                    <div id="settingsModelDetails" class="settings-impact">Select a detected model.</div>
+                    <div id="settingsModelDiscovery" class="settings-operation-status" aria-live="polite"></div>
+                    <button id="settingsModelRefresh" class="settings-secondary" type="button">Rescan Models</button>
+                </section>
+
+                <section class="settings-section settings-runtime-grid">
+                    <label class="settings-field">
+                        <span>Context Length</span>
+                        <input id="settingsContextLength" type="number" min="131072" max="262144" step="1024" inputmode="numeric">
+                        <small>Supported AI Director range: 131,072 through the selected model ceiling</small>
+                    </label>
+                    <label class="settings-field">
+                        <span>Max Output Tokens</span>
+                        <input id="settingsMaxOutput" type="number" min="256" max="32768" step="256" inputmode="numeric">
+                        <small>16,384 recommended; up to 32,768 supported</small>
+                    </label>
+                    <label class="settings-field">
+                        <span>Request Timeout (hours)</span>
+                        <input id="settingsTimeoutHours" type="number" min="0.0167" max="168" step="0.25" inputmode="decimal">
+                        <small>Whole-request execution deadline</small>
+                    </label>
+                    <label class="settings-field">
+                        <span>Context Overflow</span>
+                        <select id="settingsContextOverflowPolicy" class="profile-select" aria-label="Context overflow policy">
+                            <option value="rolling_window">Rolling Window</option>
+                            <option value="stop_at_limit">Stop at Limit</option>
+                        </select>
+                        <small>Compact older context or stop before a known overflow</small>
+                    </label>
+                </section>
+
+                <section class="settings-section settings-ffmpeg">
+                    <div class="settings-section-title">External FFmpeg (Optional)</div>
+                    <div id="settingsFfmpegSummary" class="settings-ffmpeg-summary">Continue Without FFmpeg</div>
+                    <div id="settingsFfmpegPath" class="settings-ffmpeg-path">AI Director core and Resolve-native features remain available without FFmpeg.</div>
+                    <div class="settings-ffmpeg-actions">
+                        <button id="settingsFfmpegGet" class="settings-secondary" type="button">Get Recommended</button>
+                        <button id="settingsFfmpegLocate" class="settings-secondary" type="button">Locate Existing</button>
+                        <button id="settingsFfmpegDisable" class="settings-secondary" type="button">Continue Without</button>
+                    </div>
+                    <small id="settingsFfmpegHelp" class="settings-ffmpeg-help">AI Director does not bundle or silently download FFmpeg. Locate Existing validates an absolute ffmpeg.exe + sibling ffprobe.exe pair and its required capabilities before Apply.</small>
+                </section>
+
+                <section class="settings-section settings-appearance">
+                    <div class="settings-section-title">Appearance</div>
+                    <div id="settingsSkinPicker" class="settings-skin-picker" role="radiogroup" aria-label="AI Director skin">
+                        <button class="settings-skin-option" type="button" data-skin="green" role="radio" aria-checked="false"><span class="skin-swatch skin-swatch-green" aria-hidden="true"></span><span>Green</span></button>
+                        <button class="settings-skin-option" type="button" data-skin="blue" role="radio" aria-checked="false"><span class="skin-swatch skin-swatch-blue" aria-hidden="true"></span><span>Blue</span></button>
+                        <button class="settings-skin-option" type="button" data-skin="purple" role="radio" aria-checked="false"><span class="skin-swatch skin-swatch-purple" aria-hidden="true"></span><span>Purple</span></button>
+                        <button class="settings-skin-option" type="button" data-skin="gray" role="radio" aria-checked="false"><span class="skin-swatch skin-swatch-gray" aria-hidden="true"></span><span>Gray</span></button>
+                    </div>
+                    <small id="settingsAppearanceStatus" class="settings-appearance-status">Changes apply immediately.</small>
+                </section>
+
+                <details class="settings-advanced">
+                    <summary>Advanced</summary>
+                    <div class="settings-advanced-grid">
+                        <label class="settings-field">
+                            <span>GPU Offload (Layers)</span>
+                            <input id="settingsGpuLayers" type="text" inputmode="text" placeholder="Auto">
+                            <small>Auto uses llama.cpp GPU-layer selection. Explicit 0 disables GPU layer offload.</small>
+                        </label>
+                        <label class="settings-field">
+                            <span>CPU MoE Layers</span>
+                            <input id="settingsCpuMoeLayers" type="number" min="0" max="999" step="1" inputmode="numeric" placeholder="Default">
+                            <small>Zero disables CPU MoE offload. Default follows the selected model recipe.</small>
+                        </label>
+                        <div class="settings-field">
+                            <span>KV Cache Quantization</span>
+                            <select id="settingsKvCacheType" aria-label="KV Cache Quantization">
+                                <option value="q8_0">Q8_0</option>
+                                <option value="q4_0">Q4_0</option>
+                                <option value="f16">F16</option>
+                            </select>
+                            <label class="settings-default-line"><input id="settingsKvCacheDefault" type="checkbox"> Use Default</label>
+                            <small>Default: Q8_0.</small>
+                        </div>
+                        <div class="settings-field">
+                            <span>Flash Attention</span>
+                            <select id="settingsFlashAttention" aria-label="Flash Attention">
+                                <option value="on">On</option>
+                                <option value="off">Off</option>
+                            </select>
+                            <label class="settings-default-line"><input id="settingsFlashAttentionDefault" type="checkbox"> Use Default</label>
+                            <small id="settingsFlashAttentionHelp">Default: On. Off requires F16 KV cache.</small>
+                        </div>
+                        <label class="settings-field">
+                            <span>CPU Thread Pool Size</span>
+                            <input id="settingsThreads" type="number" min="1" step="1" inputmode="numeric" placeholder="Auto">
+                            <small>Auto uses llama.cpp CPU thread selection.</small>
+                        </label>
+                        <label class="settings-field">
+                            <span>Batch Thread Pool Size</span>
+                            <input id="settingsBatchThreads" type="number" min="1" step="1" inputmode="numeric" placeholder="Auto">
+                            <small>Auto follows the CPU thread pool.</small>
+                        </label>
+                        <label class="settings-field">
+                            <span>Evaluation Batch Size</span>
+                            <input id="settingsBatchSize" type="number" min="32" max="4096" step="32" inputmode="numeric" placeholder="512">
+                        </label>
+                        <label class="settings-field">
+                            <span>Evaluation Micro-Batch Size</span>
+                            <input id="settingsMicroBatchSize" type="number" min="16" max="4096" step="16" inputmode="numeric" placeholder="256">
+                        </label>
+                    </div>
+                    <button id="settingsResetTuning" class="settings-secondary settings-reset-tuning" type="button">Reset Load Overrides</button>
+                    <label class="settings-check-row">
+                        <input id="settingsPrimeCache" type="checkbox">
+                        <span>
+                            <strong>Prime Execution Prefix on Server Start</strong>
+                            <small>Warms the execution prefix on server start. Separate from Prompt Cache Reuse.</small>
+                        </span>
+                    </label>
+                </details>
+
+                <div id="settingsImpact" class="settings-impact"></div>
+                <div id="settingsOperationStatus" class="settings-operation-status" aria-live="polite"></div>
+
+                <div class="settings-dialog-footer">
+                    <button id="cancelSettings" class="settings-secondary" type="button">Cancel</button>
+                    <button id="applySettings" class="settings-primary" type="button">Apply</button>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog id="updateDialog" class="update-dialog">
+            <div class="update-dialog-inner">
+                <div class="update-dialog-header">
+                    <div>
+                        <div class="update-dialog-title">Component Updates</div>
+                        <div id="updateDialogStatus" class="update-dialog-status">Not checked</div>
+                    </div>
+                    <button id="closeUpdates" class="dialog-close" type="button" aria-label="Close updates">×</button>
+                </div>
+
+                <div class="update-body">
+                    <section class="update-card">
+                        <div class="update-card-heading">
+                            <div>
+                                <div class="update-name">llama.cpp - Upstream</div>
+                                <div class="update-source">Unsloth prebuilt · unslothai/llama.cpp</div>
+                            </div>
+                            <span id="llamaUpdateState" class="update-state neutral">Unknown</span>
+                        </div>
+                        <div class="update-details">
+                            <div><span>Installed</span><strong id="llamaInstalled">-</strong></div>
+                            <div><span>Latest</span><strong id="llamaLatest">-</strong></div>
+                            <div><span>Bundle</span><strong id="llamaBundle">-</strong></div>
+                        </div>
+                        <div id="llamaUpdateReason" class="update-reason">Check for updates to determine availability.</div>
+                        <button id="installLlama" class="update-install" type="button" disabled>Install Upstream llama.cpp update</button>
+                    </section>
+
+                    <section class="update-card">
+                        <div class="update-card-heading">
+                            <div>
+                                <div class="update-name">DaVinci Resolve MCP</div>
+                                <div class="update-source">Managed package · samuelgursky/davinci-resolve-mcp</div>
+                            </div>
+                            <span id="mcpUpdateState" class="update-state neutral">Unknown</span>
+                        </div>
+                        <div class="update-details">
+                            <div><span>Installed</span><strong id="mcpInstalled">-</strong></div>
+                            <div><span>Latest</span><strong id="mcpLatest">-</strong></div>
+                            <div><span>Checkout</span><strong id="mcpCheckout">-</strong></div>
+                        </div>
+                        <div id="mcpUpdateReason" class="update-reason">Check for updates to determine availability.</div>
+                        <button id="installMcp" class="update-install" type="button" disabled>Install MCP update</button>
+                    </section>
+                </div>
+
+                <div class="update-dialog-footer">
+                    <button id="checkUpdates" class="update-check" type="button">Check now</button>
+                </div>
+            </div>
+        </dialog>
+
+    </div>
+
+    <script src="markdown.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>

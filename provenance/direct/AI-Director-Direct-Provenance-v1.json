@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "AI-Director-Direct-Provenance-v1",
+  "source_repository": "nikolaoskalomiris/llama-cpp-flashnext-direct",
+  "accepted_source": {
+    "commit": "c8f321699adbd0035c8c755bdefcb4182705262b",
+    "tree": "a17cf64683bc6877e2dbc4e0b4ef8933106257fb",
+    "rev_count": 3,
+    "short_head": "c8f321699"
+  },
+  "maintenance_authority": {
+    "branch": "sor/qwen38-direct-windows-fixed",
+    "head": "2076e0af4ee4fe067e8f80b7c5a9cff9c010edcf",
+    "tree": "93f5c424266ad753d18c4952c0d175320c8277fc",
+    "contract_blob_sha1": "a1dc5e32d113cb21ec030776c8fe659356133b05",
+    "builder_blob_sha1": "c04427a704e713b658036a7ccd38523b59ad6673",
+    "verifier_blob_sha1": "e3dbadd1725cabcd6636b105644579698549afa4",
+    "workflow_blob_sha1": "eefb997d80299b4fd73d44c688fa9cf6f4496fb4"
+  },
+  "github_verified_2026_10_20": {
+    "default_branch": "main",
+    "branches": [
+      "main",
+      "sor/qwen38-direct-windows-fixed"
+    ],
+    "visibility": "private",
+    "public_gate_required": true
+  },
+  "runtime_stack_binding": {
+    "runtime_stack_id": "CUDA13.3.1-Dual-Shared-v2",
+    "runtime_stack_manifest_sha256": "AA04F057CA1B8788BB759DE23CFFD3B7CE65D6BA2F38B2D55C35A9BEF56EBA51",
+    "install_root": "AIDirector/DaVinciResolve/Runtime/Llama/Stacks/CUDA13.3.1-Dual-Shared-v2/Direct/c8f321699",
+    "supported_sms": [
+      "75",
+      "80",
+      "86",
+      "89",
+      "90",
+      "120a",
+      "121a"
+    ],
+    "accepted_lazy_mode": "on-direct"
+  },
+  "source_build_contract": {
+    "file": "build/direct/AI-Director-Direct-Source-Build-Contract-v1.json",
+    "sha256": "2327DC49A9CDA1A3186AA2C5B8392A96D764AB868E6F99BF0080E11DF37B63A7"
+  },
+  "first_release_forensic_closure": {
+    "non_cuda_16": "timestamp_only_delta_under_historical_path_recipe",
+    "ggml_cuda": "closed_for_first_release__cicc_nondeterminism_localized",
+    "historical_accepted_bytes_remain_release_authority": true
+  },
+  "clean_build_policy": {
+    "prebuilt_direct_as_input": false,
+    "installed_product_as_input": false,
+    "maintainer_C_AI_dependency": false,
+    "immutable_source_checkout_required": true,
+    "direct_repository_must_be_public_before_gate6d": true
+  },
+  "ownership": {
+    "direct": "fixed product-owned runtime content",
+    "ordinary_upstream_update": "Upstream/Current only",
+    "shared_cuda": "separate immutable runtime lane"
+  },
+  "builder_files": [
+    {
+      "path": "build/direct/AI-Director-Direct-Source-Build-Contract-v1.json",
+      "sha256": "2327DC49A9CDA1A3186AA2C5B8392A96D764AB868E6F99BF0080E11DF37B63A7",
+      "bytes": 12080
+    },
+    {
+      "path": "build/direct/build_direct.py",
+      "sha256": "6A51AB655F23233E1A3CE33220F32C42A099FDADEE675143676C1778DC839592",
+      "bytes": 9415
+    },
+    {
+      "path": "build/direct/verify_direct_shipping_set.py",
+      "sha256": "F9AD927AA2F9E46D5FFFE6F42F889D5BED1737592475D6CBF387D7583907EFBE",
+      "bytes": 2299
+    }
+  ]
+}

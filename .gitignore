@@ -1,0 +1,26 @@
+# Generated bootstrap/toolchain/runtime input state
+_toolchain/
+_inputs/
+_cache/
+
+# Local/generated build outputs
+artifacts/
+reports/
+dist/
+out/
+node_modules/
+AI-Director-Release-Candidates/
+
+# Transaction/download scratch
+*.tmp
+*.partial
+*.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# Public source, manifests, provenance, branding and documentation remain tracked.

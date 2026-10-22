@@ -1,0 +1,3 @@
+# AI Director publication is byte-exact and SHA-bound.
+# Disable Git text/EOL normalization regardless of user core.autocrlf settings.
+* -text

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "product": "DaVinci Resolve AI Director",
+  "component": "Resolve-local Python runtime",
+  "patch": "v1.9.9.1",
+  "contract": {
+    "python_version": "3.11.9",
+    "architecture": "AMD64",
+    "policy": "Python 3.11.9 is the fixed AIDirector runtime version for DaVinci Resolve AI Director, Unreal Engine AI Director, and Native Unreal MCP unless explicitly revised by the user.",
+    "runtime_root": "C:\\AI\\AIDirector\\DaVinciResolveAIDirector\\Runtime\\Python\\3.11.9",
+    "system_python_required": false,
+    "first_game_supervisor_python_required": false,
+    "pip_required_on_end_user_machine": false
+  },
+  "python_distribution": {
+    "source": "Python.org official Windows embeddable distribution",
+    "filename": "python-3.11.9-embeddable-amd64.zip",
+    "url": "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embeddable-amd64.zip",
+    "sha256": "33B448F95FECB7C6F802157DBD5E6B40A2AD9BFC8B95CA634A06BA4073AD1AC0",
+    "license_family": "Python Software Foundation License"
+  },
+  "packages": [
+    {
+      "distribution": "requests",
+      "version": "2.34.2",
+      "filename": "requests-2.34.2-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+      "sha256": "2A0D60C172F83AC6AB31E4554906C0F3B3588D37B5CB939B1C061F4907E278E0",
+      "license": "Apache-2.0",
+      "accepted_live_tree_sha256": "BE6D37830B5DBE6DC7C6CC1EBBDB3FA4A92AA30C7CF2293E0E95629736BDEC69"
+    },
+    {
+      "distribution": "urllib3",
+      "version": "2.7.0",
+      "filename": "urllib3-2.7.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl",
+      "sha256": "9FB4C81EBBB1CE9531CCE37674BBC6F1360472BC18CA9A553EDE278EF7276897",
+      "license": "MIT",
+      "accepted_live_tree_sha256": "7B98ECEF620C0B8C3BD4F3FF488E7F60AF22853FCB80EF6C60A91B1DE1D59613"
+    },
+    {
+      "distribution": "certifi",
+      "version": "2026.7.22",
+      "filename": "certifi-2026.7.22-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec219ed242bb11b8efb69fcc4bec75db06fb7bfe35de520e6/certifi-2026.7.22-py3-none-any.whl",
+      "sha256": "62F22742B58A1A33014A2B6B706588A8D7E2A88AE7BD1A6EBE8C992928483775",
+      "license": "MPL-2.0",
+      "accepted_live_tree_sha256": "9E1777AD380225F90CF2BDA82873F27E41CFD78EA5411AF154B52D69247504A3"
+    },
+    {
+      "distribution": "charset-normalizer",
+      "import_name": "charset_normalizer",
+      "version": "3.4.9",
+      "filename": "charset_normalizer-3.4.9-cp311-cp311-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/ed/a1/e29995109e455dc8eff8d0fac6ae509be39561318a7cfeac5d33ad029213/charset_normalizer-3.4.9-cp311-cp311-win_amd64.whl",
+      "sha256": "6366A16E1A25018694D6A5D784D09B046EDC9EAC40EA2B54065C3052672516A1",
+      "license": "MIT",
+      "accepted_live_tree_sha256": "0E3CE4ABF1998B26782F3B47A4045082866258D3BF062BD39147A2F5EB27FFF2"
+    },
+    {
+      "distribution": "idna",
+      "version": "3.18",
+      "filename": "idna-3.18-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/1e/5e/d4e9f1a599fb8e573b7b87160658329fbf28d19eac2718f51fc3def3aa5a/idna-3.18-py3-none-any.whl",
+      "sha256": "7F952CBE720B688055E3F87DE14F5C3E5FDAA8BC3928985C4077CA689DE849A2",
+      "license": "BSD-3-Clause",
+      "accepted_live_tree_sha256": "DA391016FAE16D698BDDAAC41E7BCB55056836F12AA7B912E86DCA993D1BF14D"
+    }
+  ],
+  "accepted_source_environment": {
+    "venv_python_sha256": "21BB438C0D4A6F1F164B9A646F6EE000340185E5871180AEC06DB8D3F07C0082",
+    "base_python_exe_sha256": "5F7B89A612C9B8AF1D6456CDFCD1DBE5CA630849E79AEBCED9BEE9A6694952EC",
+    "base_python311_dll_sha256": "0817A2A657A24C0D5FBB60DF56960F42FC66B3039D522EC952DAB83E2D869364",
+    "openssl": "OpenSSL 3.0.13 30 Jan 2024"
+  },
+  "isolation": {
+    "pth_file": "python311._pth",
+    "pth_lines": [
+      "python311.zip",
+      ".",
+      "Lib\\site-packages"
+    ],
+    "import_site": false,
+    "rule": "The embedded runtime must not import from FirstGameSupervisor, a user-installed Python, PYTHONPATH, user site-packages, or the Windows Python registry."
+  },
+  "provenance_note": "The accepted_live_tree_sha256 values describe the previously live pip-installed venv trees supplied by the user. The product runtime is reproduced from immutable official distribution/wheel artifacts and is guarded by the artifact SHA-256 values above; extracted tree hashes are not expected to equal pip-installed tree hashes because installation metadata/bytecode can differ.",
+  "version_validation": "Exact pinned versions are compared against importlib.metadata distribution metadata. Package module __version__ strings are diagnostic only."
+}

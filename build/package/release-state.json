@@ -1,0 +1,87 @@
+{
+  "schema_version": 5,
+  "product": "DaVinci Resolve AI Director",
+  "state_mode": "ACCEPTED_READY",
+  "stable_version": "0.3.25",
+  "target_version": "0.3.25",
+  "builder_mode": "CANONICAL_SOURCE_BUILDER",
+  "application_source_authority": "CANONICAL",
+  "canonical_application": {
+    "id": "AI-Director-Canonical-Application-0.3.25-v1",
+    "source_dir": "src/application",
+    "manifest_path": "provenance/application/CANONICAL-SOURCE-MANIFEST.json",
+    "manifest_sha256": "E177D2FB20C9F52F4820C0A648EF21745790C0BDBB940F2FC79971050D48C80D",
+    "file_count": 13
+  },
+  "ordered_installer_policies": [
+    {
+      "id": "Unified-Optional-Resolve-Integration-v1.3",
+      "manifest_sha256": "7DDC3C4935DCAB70665C90BA5F475D31C9B11FACA5844218F3D310B9B74281FA"
+    }
+  ],
+  "active_branding": {
+    "id": "AI-Director-Brand-v3",
+    "manifest_sha256": "0419B6BFA46B7DE1FF6A828A78A4C49B7DB819411A72A3A5867957E7A29A848B"
+  },
+  "active_resolve_launcher": {
+    "id": "Resolve-Workflow-Launcher-v1.4",
+    "manifest_sha256": "5319FD17FD55DA7CFEFC327B4AB072FA386B3CFA877157F927A9266EC11973A7"
+  },
+  "active_runtime_stack": {
+    "id": "CUDA13.3.1-Dual-Shared-v2",
+    "manifest_sha256": "872EF78E88D71E80332CEABEA685C8317F9F049669936C2C4A353B044E754E34",
+    "archive_sha256": "F3413EDF3D0BD76D5D5D80698261F55F766A905CAD2BEF2E26A67DEAF3548C44",
+    "runtime_line": "cuda13",
+    "toolkit_line": "13.3",
+    "toolkit_version": "13.3.1",
+    "support_policy_id": "CUDA13-SM75Plus-v2"
+  },
+  "active_runtime_base": {
+    "id": "CUDA13-Native-Base-v3",
+    "manifest_sha256": "D07EF6F287886F9433E82DAED3FBC67FFB5F9F6E567BDC7D9372A950A73BB53B",
+    "archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+    "runtime_base_manifest_sha256": "19AFDAB5C807C6A94AD0FC4AEB8DE99BF90B65252BB901BEF649F5FA1269519D",
+    "archive_filter": "BCJ",
+    "inventory_sha256": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
+    "inventory_file_count": 15720
+  },
+  "runtime_base_source": "_inputs/Runtime-Bases/CUDA13-Native-Base-v3",
+  "builder_control_sha256": "E2655FBD3736A10993FA5ACF390B4B45944C2F8131402F0A333BBD08E30E6CA8",
+  "build_controller_sha256": "D7425BDF16D984B27352B9C5B5B2702730202B45120B694BE44D4947107FF686",
+  "control_bindings": {
+    "build_installer.py": "E2655FBD3736A10993FA5ACF390B4B45944C2F8131402F0A333BBD08E30E6CA8",
+    "authoritative_build.py": "D7425BDF16D984B27352B9C5B5B2702730202B45120B694BE44D4947107FF686",
+    "acceptance_control.py": "AC3A3700C91ADA989D9B281D61B11CFC8DC30FA4FBD034836A5B5AB0D556BF74",
+    "check_state.py": "FF9C11B5610D72EA289D3239A8CAF68FA1E619F514C52A05B90AC9258326F6F8",
+    "BUILD.cmd": "6D2A95AA8C017C647908475CE65891654556D74EC5C14B227E7B68DB79E315C4",
+    "CHECK-STATE.cmd": "205B7DE6E5525B6772D00710A7577BB910357A9A3610661EFF6A09E50A85ED4A",
+    "runtime_base_control.py": "FC07851C1F5AE29202AF0B05BA1466DAF9472935B09BE654823BA477F06FA95D",
+    "successor_policy.py": "0E96F41D7DC96A80011D7B4955BE0678956520D7DE24EBC28BF336B5B499BCC4",
+    "support/Remove-AIDirectorManagedState-v1.ps1": "A781B5B6F290A0CD3EE722625D5F89B28D341A7A017C6533EEF5FAE493E45976",
+    "support/Generate-AIDirectorRuntimePaths.ps1": "73404AF0C1CD248821D298107A4485D42FB1D8DD9FCABF78AB358703D26DC066",
+    "support/Verify-AIDirectorRuntimeBaseNsis7zParity.py": "4FCAE5D987A5FC4102849EA2C37B66906F589F42AD30C5DAEAC940D4125786B7",
+    "version_control.py": "8EA5D825BCB5134C55EF67D5CA4F64481C484AE28B38DADAD45C59313087C22D",
+    "VERSION.cmd": "183F1F9373AC0B3B061DCD2294205452960923D8E372415D2D96A4FB874095CC",
+    "build/system-toolchain/verify_system_toolchain.py": "1CCE8E41346A17B559377ABE36485AEC2D56C0193B9207643C3CCD5EDCFC8816"
+  },
+  "live_accepted_authority": "0.3.25",
+  "health_check_entrypoint": "CHECK-STATE.cmd",
+  "build_entrypoint": "BUILD.cmd",
+  "stable_promotion_executed": false,
+  "build_controller_mode": "STATIC_RELEASE_CANDIDATE_EXTERNAL_OUTPUT",
+  "build_output_policy": {
+    "mode": "BUILDER_PARENT_RELATIVE_SEQUENTIAL",
+    "relative_root": "AI-Director-Release-Candidates",
+    "attempt_prefix": "static-build-"
+  },
+  "version_lifecycle": {
+    "policy": "ACCEPTED_AUTHORITY_DERIVED_V1",
+    "build_advances_accepted_authority": false,
+    "failed_build_consumes_version": false,
+    "acceptance_promotion": "SEPARATE_EXPLICIT_GATE",
+    "acceptance_controller": "BUILDER_ACCEPTANCE_CONTROL_V1",
+    "acceptance_requires_live_attestation": true
+  },
+  "acceptance_entrypoint": "BUILD.cmd --accept",
+  "repository_mode": "PUBLIC_SOURCE_REPOSITORY_V1"
+}

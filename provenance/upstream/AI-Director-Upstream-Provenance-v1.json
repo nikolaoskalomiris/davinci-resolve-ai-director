@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "id": "AI-Director-Upstream-Provenance-v1",
+  "source_repository": "unslothai/llama.cpp",
+  "accepted_seed": {
+    "wrapper_commit": "cd0009d4ef39136d8b99d91cd9180317ad29cda2",
+    "source_tree": "edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+    "runtime_source_commit": "b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d",
+    "build_number": 11301
+  },
+  "public_source_asset": {
+    "repository": "unslothai/llama.cpp",
+    "release_id": 396173700,
+    "release_tag_display_only": "b11160-mix-a6922cc",
+    "asset_id": 587122044,
+    "asset_name": "llama.cpp-source-commit-a3c12db9dfc9a5bdf93df199ec370e9faf117c69.tar.gz",
+    "asset_size": 37958832,
+    "asset_sha256": "CBD0E8C756DA5B2F46DF4DDACDED46C7733316C44D86A1A5D176FE3ADE7B0675",
+    "historical_source_commit_identity": "a3c12db9dfc9a5bdf93df199ec370e9faf117c69",
+    "archive_leaf_count": 3639,
+    "archive_leaf_tree": "8756c8c0da4654b18af01e97db45b80034383860",
+    "normalization_leaf_count": 18,
+    "normalization": [
+      {
+        "path": ".gitignore",
+        "mode": "100644",
+        "sha": "9b589615a402350efb3765177c701ef5a3d37608",
+        "bytes": 1713,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": ".gitmodules",
+        "mode": "100644",
+        "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "bytes": 0,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/batched.swift/.gitignore",
+        "mode": "100644",
+        "sha": "e1e863bec6d5de6fed9939f44c88381f543c7256",
+        "bytes": 173,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.android/.gitignore",
+        "mode": "100644",
+        "sha": "347e252ef10e9c2052ee2017c929530eb0afc5f1",
+        "bytes": 431,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.android/app/.gitignore",
+        "mode": "100644",
+        "sha": "796b96d1c402326528b4ba3c12ee9d92d0e212e9",
+        "bytes": 7,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.android/lib/.gitignore",
+        "mode": "100644",
+        "sha": "796b96d1c402326528b4ba3c12ee9d92d0e212e9",
+        "bytes": 7,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.swiftui/.gitignore",
+        "mode": "100644",
+        "sha": "e585a2a4f4a5518081a7ff511a93f551de00fa41",
+        "bytes": 24,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.swiftui/llama.swiftui/Resources/models/.gitignore",
+        "mode": "100644",
+        "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "bytes": 0,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/model-conversion/.gitignore",
+        "mode": "100644",
+        "sha": "451227547fcc1e1740e809b7595892f94bfb0146",
+        "bytes": 21,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/simple-cmake-pkg/.gitignore",
+        "mode": "100644",
+        "sha": "67c01d64cb7ab21f9e6b59c018dd849f7f9aa5db",
+        "bytes": 387,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/test-cmake/.gitignore",
+        "mode": "100644",
+        "sha": "b630ddb7d62fe3c83b58276dc4eb2dc0b247ea10",
+        "bytes": 47,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "ggml/.gitignore",
+        "mode": "100644",
+        "sha": "c82d8e69295ac87ea0e1585c2fff14396abde4bf",
+        "bytes": 56,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "ggml/src/ggml-zdnn/.gitignore",
+        "mode": "100644",
+        "sha": "8322c0f8e6409be8cb72af02a702e0ce5211968e",
+        "bytes": 7,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tests/.gitignore",
+        "mode": "100644",
+        "sha": "04095c9ddba60c7f06c8882c5922c4dbe03912d6",
+        "bytes": 67,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tools/server/tests/.gitignore",
+        "mode": "100644",
+        "sha": "90ee7fe6d971a981c4d0f8b70eca2556f7840cd9",
+        "bytes": 10,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tools/ui/.gitignore",
+        "mode": "100644",
+        "sha": "7cd35376e1991cb5c7d71b6e9a991131eff43b44",
+        "bytes": 492,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tools/ui/src/.gitignore",
+        "mode": "100644",
+        "sha": "f9be8dfe090862e4ab26e294f310002228e3414c",
+        "bytes": 3,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "cmake/build-info.cmake",
+        "mode": "100644",
+        "sha": "c7005950c5612d1d93ca728386b10806b0043106",
+        "bytes": 1319,
+        "kind": "build_metadata_normalization"
+      }
+    ],
+    "normalization_result_tree": "edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+    "ordinary_source_code_leaf_delta": 0,
+    "policy": "Use source asset only. Corresponding prebuilt Windows CUDA assets are comparison/runtime-updater evidence and forbidden as normal clean-build inputs."
+  },
+  "source_build_contract": {
+    "file": "build/upstream/AI-Director-Upstream-Source-Build-Contract-v2.json",
+    "sha256": "4F7942E972C93CF9A822310B2D493EE88BF435F39500B71F017579F065CD51E1"
+  },
+  "accepted_marker_sha256": "46FBA3F8EB0DF27709ADBAB90BA12F6E2AFF19C6400CEEACB1AD11CF1DD83EC5",
+  "u4_static_confirmation": {
+    "report_sha256": "8196DF5018220BF4CAB876B38F1BD82E273956EF83BBF8D87F7987605F7D2DC4",
+    "classification": "U4_FUNCTIONAL_CONFIRMATION_BUILD_STATIC_PASS__READY_FOR_AI_DIRECTOR_TRANSACTIONAL_PRODUCT_TEST"
+  },
+  "u4_product_confirmation": {
+    "summary_sha256": "0625A31E98F456342817CCD4F010BD54A04DE23224CD2C4A649B5162199961A1",
+    "result": "PASS",
+    "direct_baseline_chat": "PASS",
+    "upstream_chat": "PASS",
+    "direct_restore_chat": "PASS",
+    "production_rollback": "PASS",
+    "accepted_runtime_restored_exact": "18_OF_18"
+  },
+  "ownership": {
+    "ordinary_upstream_update": "Upstream/Current only",
+    "direct": "excluded",
+    "shared_cuda": "excluded"
+  },
+  "clean_build_policy": {
+    "prebuilt_upstream_as_input": false,
+    "maintainer_C_AI_dependency": false,
+    "source_asset_plus_normalization": true
+  },
+  "builder_files": [
+    {
+      "path": "build/upstream/AI-Director-Upstream-Source-Build-Contract-v2.json",
+      "sha256": "4F7942E972C93CF9A822310B2D493EE88BF435F39500B71F017579F065CD51E1",
+      "bytes": 24258
+    },
+    {
+      "path": "build/upstream/AI-Director-Upstream-Source-Tree-Manifest-v1.json",
+      "sha256": "BA63DE7FB74C287408C009EB13277418C726C6B6D635A6C2FB5CF7C408A3E5A5",
+      "bytes": 658556
+    },
+    {
+      "path": "build/upstream/build_upstream.py",
+      "sha256": "21B3AF41BFB54D14D9931E11B19B9A754ED28B6A666D123D921C1DD4F4717D1A",
+      "bytes": 10740
+    },
+    {
+      "path": "build/upstream/normalization/.gitignore",
+      "sha256": "0E5CB267521256B9BC98AD21103DF88E8749374C63D309B9EEE863F56F779DAF",
+      "bytes": 1713
+    },
+    {
+      "path": "build/upstream/normalization/.gitmodules",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "build/upstream/normalization/cmake/build-info.cmake",
+      "sha256": "D5CB300D2A3665EAC85370617853A143A4F4A7884977F83D0635B18699F93EEE",
+      "bytes": 1319
+    },
+    {
+      "path": "build/upstream/normalization/examples/batched.swift/.gitignore",
+      "sha256": "1F3BC9C857DB41ADBD141EEC30803E3CD896C67960CAA56588F99AFB527919D3",
+      "bytes": 173
+    },
+    {
+      "path": "build/upstream/normalization/examples/llama.android/.gitignore",
+      "sha256": "52B5AE65DF42AF9C3F73E061858EDCAF432B0BDE46924B9257BDA6A5258B3934",
+      "bytes": 431
+    },
+    {
+      "path": "build/upstream/normalization/examples/llama.android/app/.gitignore",
+      "sha256": "5B46EB48D96E8571E8C93E4EF4F6FFBE6807B6D7350664A36A064E1167A32718",
+      "bytes": 7
+    },
+    {
+      "path": "build/upstream/normalization/examples/llama.android/lib/.gitignore",
+      "sha256": "5B46EB48D96E8571E8C93E4EF4F6FFBE6807B6D7350664A36A064E1167A32718",
+      "bytes": 7
+    },
+    {
+      "path": "build/upstream/normalization/examples/llama.swiftui/.gitignore",
+      "sha256": "20B019981A1E4FD4475B3591376B0F4C2CBAF386BDF5146A7E94F76E0C7C1F87",
+      "bytes": 24
+    },
+    {
+      "path": "build/upstream/normalization/examples/llama.swiftui/llama.swiftui/Resources/models/.gitignore",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "build/upstream/normalization/examples/model-conversion/.gitignore",
+      "sha256": "3C2396E5B0D821BFFD20F06663D2436B19D74CEA678952E39A5ECF7434A728EF",
+      "bytes": 21
+    },
+    {
+      "path": "build/upstream/normalization/examples/simple-cmake-pkg/.gitignore",
+      "sha256": "F86F93CD806411F37B155CEB77C23B4E17E887932EBCDDBF521BB6594F4FEEC2",
+      "bytes": 387
+    },
+    {
+      "path": "build/upstream/normalization/examples/test-cmake/.gitignore",
+      "sha256": "5CF2C7A464C5D64532D0A9B0F09A10819FFEFAC5E625BBF5ADCCDC58D3B06453",
+      "bytes": 47
+    },
+    {
+      "path": "build/upstream/normalization/ggml/.gitignore",
+      "sha256": "ECE7973726BB40DD457571BD4A8BC3CD4DBC53E68F2C79ACA74FD3764F4A4BB2",
+      "bytes": 56
+    },
+    {
+      "path": "build/upstream/normalization/ggml/src/ggml-zdnn/.gitignore",
+      "sha256": "82F4B5B4363E3AAFB1A0D4BA700A66DD9B5FFB5EB52C778EBE083EB733C95256",
+      "bytes": 7
+    },
+    {
+      "path": "build/upstream/normalization/tests/.gitignore",
+      "sha256": "66D2813B14240C50CF93C2ED706FA3FEE830693BAE2016531F5A84B65675CBAF",
+      "bytes": 67
+    },
+    {
+      "path": "build/upstream/normalization/tools/server/tests/.gitignore",
+      "sha256": "C206798C086EEAEAF20F806330F16ED71405F376AEB956D4D59533CF026D5653",
+      "bytes": 10
+    },
+    {
+      "path": "build/upstream/normalization/tools/ui/.gitignore",
+      "sha256": "51578424774638B721F8B6D27CAE19FE5DD3BFBA23A9CA8E068BA8EB7EBD6B9B",
+      "bytes": 492
+    },
+    {
+      "path": "build/upstream/normalization/tools/ui/src/.gitignore",
+      "sha256": "B39DECBA66E79D9A8AB7A89E6E3C7942C0C92F125E9ECE55C45020B877170638",
+      "bytes": 3
+    },
+    {
+      "path": "build/upstream/reconstruct_source.py",
+      "sha256": "E269528EB96403BC1C7CA7CED62EC383E26E3DC97663CB8D4B36727483C9DE2D",
+      "bytes": 5180
+    }
+  ]
+}

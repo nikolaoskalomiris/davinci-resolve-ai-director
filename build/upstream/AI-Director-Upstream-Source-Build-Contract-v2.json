@@ -1,0 +1,524 @@
+{
+  "schema": "ai-director-upstream-source-build-contract/v2",
+  "contract_revision": "2.0",
+  "created_date": "2026-10-20",
+  "purpose": "Deterministic Upstream Windows x64 CUDA 13.3 functional-confirmation build contract for first release. Supersedes v1 TLS causation only; preserves U3 source, toolchain, CUDA topology and packaging policy.",
+  "governing_public_build_invariant": {
+    "build_entrypoint_future": "BUILD.cmd",
+    "direct_upstream_prebuilt_servers_as_clean_build_inputs": false,
+    "accepted_runtime_bytes_role": "comparison/release authority only",
+    "runtime_updater_assets": "separate installed-product transaction path"
+  },
+  "authority": {
+    "accepted_source_tree": "edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+    "local_wrapper_commit": "cd0009d4ef39136d8b99d91cd9180317ad29cda2",
+    "local_wrapper_is_not_build_identity": true,
+    "accepted_runtime_source_identity": "b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d",
+    "accepted_runtime_build_number": 11301,
+    "accepted_marker_sha256": "46FBA3F8EB0DF27709ADBAB90BA12F6E2AFF19C6400CEEACB1AD11CF1DD83EC5",
+    "u1_provenance_sha256": "52C4BA82A1CF184B32D7452C2A42C302524EB5845C6D84E0F2CC1FA2145E4EED"
+  },
+  "public_source_acquisition": {
+    "repository": "unslothai/llama.cpp",
+    "release_id": 396173700,
+    "release_tag_display_only": "b11160-mix-a6922cc",
+    "asset_id": 587122044,
+    "asset_name": "llama.cpp-source-commit-a3c12db9dfc9a5bdf93df199ec370e9faf117c69.tar.gz",
+    "asset_size": 37958832,
+    "asset_sha256": "CBD0E8C756DA5B2F46DF4DDACDED46C7733316C44D86A1A5D176FE3ADE7B0675",
+    "historical_source_commit_identity": "a3c12db9dfc9a5bdf93df199ec370e9faf117c69",
+    "archive_leaf_count": 3639,
+    "archive_leaf_tree": "8756c8c0da4654b18af01e97db45b80034383860",
+    "normalization_leaf_count": 18,
+    "normalization": [
+      {
+        "path": ".gitignore",
+        "mode": "100644",
+        "sha": "9b589615a402350efb3765177c701ef5a3d37608",
+        "bytes": 1713,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": ".gitmodules",
+        "mode": "100644",
+        "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "bytes": 0,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/batched.swift/.gitignore",
+        "mode": "100644",
+        "sha": "e1e863bec6d5de6fed9939f44c88381f543c7256",
+        "bytes": 173,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.android/.gitignore",
+        "mode": "100644",
+        "sha": "347e252ef10e9c2052ee2017c929530eb0afc5f1",
+        "bytes": 431,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.android/app/.gitignore",
+        "mode": "100644",
+        "sha": "796b96d1c402326528b4ba3c12ee9d92d0e212e9",
+        "bytes": 7,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.android/lib/.gitignore",
+        "mode": "100644",
+        "sha": "796b96d1c402326528b4ba3c12ee9d92d0e212e9",
+        "bytes": 7,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.swiftui/.gitignore",
+        "mode": "100644",
+        "sha": "e585a2a4f4a5518081a7ff511a93f551de00fa41",
+        "bytes": 24,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/llama.swiftui/llama.swiftui/Resources/models/.gitignore",
+        "mode": "100644",
+        "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "bytes": 0,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/model-conversion/.gitignore",
+        "mode": "100644",
+        "sha": "451227547fcc1e1740e809b7595892f94bfb0146",
+        "bytes": 21,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/simple-cmake-pkg/.gitignore",
+        "mode": "100644",
+        "sha": "67c01d64cb7ab21f9e6b59c018dd849f7f9aa5db",
+        "bytes": 387,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "examples/test-cmake/.gitignore",
+        "mode": "100644",
+        "sha": "b630ddb7d62fe3c83b58276dc4eb2dc0b247ea10",
+        "bytes": 47,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "ggml/.gitignore",
+        "mode": "100644",
+        "sha": "c82d8e69295ac87ea0e1585c2fff14396abde4bf",
+        "bytes": 56,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "ggml/src/ggml-zdnn/.gitignore",
+        "mode": "100644",
+        "sha": "8322c0f8e6409be8cb72af02a702e0ce5211968e",
+        "bytes": 7,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tests/.gitignore",
+        "mode": "100644",
+        "sha": "04095c9ddba60c7f06c8882c5922c4dbe03912d6",
+        "bytes": 67,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tools/server/tests/.gitignore",
+        "mode": "100644",
+        "sha": "90ee7fe6d971a981c4d0f8b70eca2556f7840cd9",
+        "bytes": 10,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tools/ui/.gitignore",
+        "mode": "100644",
+        "sha": "7cd35376e1991cb5c7d71b6e9a991131eff43b44",
+        "bytes": 492,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "tools/ui/src/.gitignore",
+        "mode": "100644",
+        "sha": "f9be8dfe090862e4ab26e294f310002228e3414c",
+        "bytes": 3,
+        "kind": "added_vcs_control"
+      },
+      {
+        "path": "cmake/build-info.cmake",
+        "mode": "100644",
+        "sha": "c7005950c5612d1d93ca728386b10806b0043106",
+        "bytes": 1319,
+        "kind": "build_metadata_normalization"
+      }
+    ],
+    "normalization_result_tree": "edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+    "ordinary_source_code_leaf_delta": 0,
+    "policy": "Use source asset only. Corresponding prebuilt Windows CUDA assets are comparison/runtime-updater evidence and forbidden as normal clean-build inputs."
+  },
+  "u3_local_source_materialization": {
+    "source": "C:\\AI\\llama-cpp-unsloth-upstream\\src",
+    "method": "Export exact accepted Git tree into a new VCS-free disposable source directory outside every Git worktree; do not build in wrapper checkout.",
+    "git_parent_guard": "git -C <staged-source> rev-parse --show-toplevel must fail before configure."
+  },
+  "build_stamp_materialization": {
+    "generic_build_info_sha256": "D5CB300D2A3665EAC85370617853A143A4F4A7884977F83D0635B18699F93EEE",
+    "generic_build_info_bytes": 1319,
+    "replace_exactly": [
+      {
+        "from": "set(BUILD_NUMBER 0)",
+        "to": "set(BUILD_NUMBER 11301)"
+      },
+      {
+        "from": "set(BUILD_COMMIT \"unknown\")",
+        "to": "set(BUILD_COMMIT \"b7eb4a03a\")"
+      }
+    ],
+    "stamped_build_info_sha256": "F66E62B2D9B6EDB06DE6BC75154C401B1ADECB6941B114B19FD67FE1CC5E24A6",
+    "stamped_build_info_bytes": 1325,
+    "unsloth_fingerprint": "ABSENT",
+    "scope": "Disposable VCS-free build source only; never mutate accepted source-authority checkout.",
+    "expected_runtime_version_fragment": "0.5.0-dev (build 11301, commit b7eb4a03a)"
+  },
+  "boringssl": {
+    "status": "DISABLED_FOR_DETERMINISTIC_SUCCESSOR_BUILD",
+    "source_option": "LLAMA_BUILD_BORINGSSL=OFF",
+    "llama_openssl": "OFF",
+    "staging_policy": "FORBIDDEN_NOT_REQUIRED",
+    "historical_exact_trigger": "UNRECOVERED",
+    "accepted_effective_surface": "CPPHTTPLIB_OPENSSL_SUPPORT absent; no BoringSSL object linkage in accepted llama-common.dll or llama-server-impl.dll.",
+    "successor_decision": "Explicitly disable both LLAMA_OPENSSL and LLAMA_BUILD_BORINGSSL to preserve accepted TLS-less observable semantics.",
+    "superseded_v1_reference": {
+      "source_option": "LLAMA_BUILD_BORINGSSL=ON",
+      "source_declared_tag": "0.20260903.0",
+      "tag_object": "31d8e3efee3277bd60928f7275940cdf2b5ca1bc",
+      "commit": "0ce57bbf06a35864fa39e3b9346d41e833683383",
+      "tree": "96e4b713131c217e51873e4ee80430f48617b9cb",
+      "openssl_no_asm": true,
+      "fetch_policy": "Stage exact public BoringSSL source independently and set FETCHCONTENT_SOURCE_DIR_BORINGSSL; configure/build network disabled.",
+      "accepted_binary_causation": "TLS help flags present; no external SSL/crypto DLL dependency; static linkage bound."
+    }
+  },
+  "toolchain": {
+    "platform": "Windows x64",
+    "msvc_toolset": "14.44.35207",
+    "msvc_compiler": "19.44.35229",
+    "windows_sdk": "10.0.26100.0",
+    "cmake": "3.31.6-msvc6",
+    "ninja": "1.12.1",
+    "cuda_toolkit": "13.3",
+    "nvcc": "V13.3.73",
+    "tools": {
+      "cmake.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
+        "sha256": "6FE2E6431B45CF32B9B2F3E50A8EFAE046A2366EB34D0FB36DA027CF56102AEC",
+        "identity": "3.31.6-msvc6"
+      },
+      "ninja.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja\\ninja.exe",
+        "sha256": "FF29BCB5F547174BAE6B73C84278CCE9B674E8EBC2F3C3926AB21030B33F34B8",
+        "identity": "1.12.1"
+      },
+      "cl.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+        "sha256": "FE251EF50A1545B1B0835EE17B1E785459712B38D79E45B5C1D3D28970A36619",
+        "identity": "19.44.35229"
+      },
+      "link.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\link.exe",
+        "sha256": "A364AF801A8539E4324D9489313DBF001D959128451FC99A27B24676BBAC058F",
+        "identity": "14.44.35229.0"
+      },
+      "lib.exe": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\lib.exe",
+        "sha256": "FDE148A275981855689C45F932DDA56B10DC9289A0290826A0FB93478DA34929",
+        "identity": "14.44.35229.0"
+      },
+      "rc.exe": {
+        "path": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\rc.exe",
+        "sha256": "65DB0D7B4F10BA0F55973FD9356543A556DA9EC1C777A0C05F05A0329C8A100A",
+        "identity": "Windows SDK 10.0.26100.0 path-bound"
+      },
+      "mt.exe": {
+        "path": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\mt.exe",
+        "sha256": "FB1AB75294B78619BD6AC8CADF30CB95BEFBC7324703CBE2654EF800DDD2BF4D",
+        "identity": "Windows SDK 10.0.26100.0 path-bound"
+      },
+      "vcvars64.bat": {
+        "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat",
+        "sha256": "6B516D8FCF543C14B2D861E1F45661E0029230FE0DC48E86CE78522801822209",
+        "identity": "invoke -vcvars_ver=14.44"
+      },
+      "nvcc.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.exe",
+        "sha256": "92D993C6E7025E1597D0D895E65E8658F5F1D41576A477656647A7EECE2CD35F",
+        "identity": "V13.3.73 / compiler.38244171_0"
+      },
+      "nvcc.profile": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.profile",
+        "sha256": "786C422E4251B936D4B809C0D6192C49A364250F305C9EF11BDE867E2CFF5826",
+        "identity": "CUDA 13.3 profile"
+      },
+      "cicc.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\nvvm\\bin\\cicc.exe",
+        "sha256": "8CCA41451B25328A8A923254E6A6A52093FF7155A1EDEADA880C2C1632EEF5F9",
+        "identity": "CUDA 13.3 internal compiler"
+      },
+      "ptxas.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\ptxas.exe",
+        "sha256": "86B2FF48655C55F1547EDC59B503D39A62AA5C71745B7ECF6BE526C29AF0B693",
+        "identity": "CUDA 13.3"
+      },
+      "nvlink.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvlink.exe",
+        "sha256": "5F51CCEF446A7C0009293BB61C9E4B24112474DF454BAA1C4408303913F0473B",
+        "identity": "CUDA 13.3"
+      },
+      "fatbinary.exe": {
+        "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\fatbinary.exe",
+        "sha256": "7AC13247EDD275418AC8D8F4DD41AE1900A52B58B4F289A55956DDA3AC613715",
+        "identity": "CUDA 13.3"
+      }
+    }
+  },
+  "environment": {
+    "vcvars": "vcvars64.bat -vcvars_ver=14.44",
+    "required_set": {
+      "CUDA_PATH": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3",
+      "CUDACXX": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.exe"
+    },
+    "required_absent": [
+      "CL",
+      "_CL_",
+      "NVCC_PREPEND_FLAGS",
+      "NVCC_APPEND_FLAGS"
+    ],
+    "ccache_policy": "OFF for reference successor build; historical workflow ccache is predecessor implementation detail, not a product dependency."
+  },
+  "configure": {
+    "generator": "Ninja",
+    "build_type": "Release",
+    "cmake_cuda_architectures": "UNSET",
+    "defines": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDLL",
+      "BUILD_SHARED_LIBS": "ON",
+      "FETCHCONTENT_FULLY_DISCONNECTED": "ON",
+      "GGML_CCACHE": "OFF",
+      "GGML_BACKEND_DL": "ON",
+      "GGML_NATIVE": "OFF",
+      "GGML_CPU": "ON",
+      "GGML_CPU_ALL_VARIANTS": "ON",
+      "GGML_RPC": "ON",
+      "GGML_CUDA": "ON",
+      "GGML_CUDA_CUB_3DOT2": "OFF",
+      "GGML_CUDA_FA": "ON",
+      "GGML_CUDA_GRAPHS": "ON",
+      "GGML_CUDA_NCCL": "OFF",
+      "GGML_CUDA_COMPRESSION_MODE": "size",
+      "GGML_OPENMP": "ON",
+      "LLAMA_BUILD_IS_DEV": "ON",
+      "LLAMA_BUILD_COMMON": "ON",
+      "LLAMA_BUILD_TESTS": "OFF",
+      "LLAMA_BUILD_EXAMPLES": "OFF",
+      "LLAMA_BUILD_TOOLS": "ON",
+      "LLAMA_BUILD_SERVER": "ON",
+      "LLAMA_BUILD_APP": "OFF",
+      "LLAMA_BUILD_MTMD": "OFF",
+      "LLAMA_BUILD_UI": "OFF",
+      "LLAMA_USE_PREBUILT_UI": "OFF",
+      "LLAMA_OPENSSL": "OFF",
+      "LLAMA_BUILD_BORINGSSL": "OFF",
+      "OPENSSL_NO_ASM": "ON",
+      "LLAMA_SUBPROCESS": "ON"
+    },
+    "source_override": {},
+    "notes": [
+      "CMAKE_CUDA_ARCHITECTURES remains unset; source derives PTX 75/80/90 + SASS 86/89/120a/121a under CUDA 13.3.",
+      "GGML_RPC=ON preserves predecessor intent but ggml-rpc.dll is non-shipping.",
+      "LLAMA_BUILD_APP=OFF removes an unrelated non-shipping target.",
+      "GGML_CUDA_CUB_3DOT2 remains OFF. No evidence-backed first-release reason exists to change the U3 CUDA/CCCL contract.",
+      "GGML_CUDA_NCCL=OFF makes the effective no-NCCL Windows state explicit.",
+      "LLAMA_OPENSSL=OFF and LLAMA_BUILD_BORINGSSL=OFF are deliberate successor rules chosen to reproduce the accepted runtime TLS-less observable surface. They are not a claim about the unrecovered historical R2 initiating switch.",
+      "Do not stage or fetch BoringSSL for this build."
+    ]
+  },
+  "source_causal_cuda_policy": {
+    "ptx": [
+      "75",
+      "80",
+      "90"
+    ],
+    "sass": [
+      "86",
+      "89",
+      "120a",
+      "121a"
+    ],
+    "accepted_binary_match": true,
+    "accepted_ptx_isa": "9.3",
+    "accepted_arch_topology_match": true,
+    "historical_byte_identity_required_for_first_release": false,
+    "flashattention_instruction_selection_delta": "CONFIRMED_BETWEEN_ACCEPTED_R2_AND_U3__FORENSICS_CLOSED_FOR_FIRST_RELEASE_UNLESS_FUNCTIONAL_FAILURE",
+    "contract_decision": "Preserve U3 CUDA configuration, including GGML_CUDA_CUB_3DOT2=OFF and unset CMAKE_CUDA_ARCHITECTURES, for the functional confirmation build."
+  },
+  "build": {
+    "configure_shape": "cmake -S <vcs-free-stamped-source> -B <fresh-build> -G Ninja [defines] -DFETCHCONTENT_SOURCE_DIR_BORINGSSL=<staged-boringssl>",
+    "command": "cmake --build <fresh-build> -j 3",
+    "network_during_configure_build": "FORBIDDEN",
+    "accepted_runtime_mutation": "FORBIDDEN"
+  },
+  "shipping": {
+    "file_count": 17,
+    "allowlist_sha256": {
+      "ggml.dll": "2C51A9473F519D964C89EC7B34092354BC5393DF7510FFE447E114A412AC2456",
+      "ggml-base.dll": "19C37B8145E014A7587F74247D145CDF5EBDD4E9F7E340F17941CFB217E5390D",
+      "ggml-cpu-alderlake.dll": "1915E68B9542DA7711EFB7CDB915F839AB3009634CFB11FA92EE1EDE506752CF",
+      "ggml-cpu-cannonlake.dll": "6E0BF54E98B1247C684D31F0D9206F870925F7BCDD8B7D808A48F8BF2DC72C67",
+      "ggml-cpu-cascadelake.dll": "5A3403B77259052F122687ABF3C5DE447607AF2DED8404EF8BF26A776467DF1A",
+      "ggml-cpu-haswell.dll": "48EA50BD922A504A754C982E2442E822B3D6C81D9CCA3C2DF2D214323FF32DF3",
+      "ggml-cpu-icelake.dll": "D5CF9C67B3B1DE2EC2DB93D9D05803A76973462A53D91F2BC4F9B07FA4E1E8A0",
+      "ggml-cpu-sandybridge.dll": "5C465C3C577730AFE7D74EA53E81A3C90BD5E4718519953CE59E085381510C54",
+      "ggml-cpu-skylakex.dll": "305319DB6CBB628C8EB06D89E1761CAF86E400F613703D42D859CCD6C1C5DB86",
+      "ggml-cpu-sse42.dll": "F3349EDF1D1C669DF48D0F6173E07AC021F173E884E44C75EEF6BF37225B072F",
+      "ggml-cpu-x64.dll": "7AB01CA0F7DECE12394CBC6202FE1B0AB324E6C27E4FDB868CD9CCC83E0718E1",
+      "ggml-cuda.dll": "ECD0524A247D0D39631203E289F3C82672011E4AE38ED04BEC6C01C373C613E4",
+      "llama.dll": "87545E354687050856CC003B787394D1B7717BE8A64DE3599C4F4402C5D84BC0",
+      "llama-common.dll": "7CA8BAB7DA7010287EF6F08C7BDA4FCFA95AE6007EBE49690F87BE14EEF1D246",
+      "llama-server.exe": "02B9327264869C8015EABFC85AE879680064DFBB8E9F09CC9FA125504CBCB1D6",
+      "llama-server-impl.dll": "A27D6D32E09F2DF42B6F01DF1D5B2F149C7F7640127F07B334DFA16D40F599A7",
+      "mtmd.dll": "F497D008C9B21A2FE63D52535AA60327D805D295485E462C9395B5D1887453E3"
+    },
+    "shared_cuda_bundled_in_upstream_candidate": false,
+    "shared_cuda_runtime": "CUDA13.3.1-Dual-Shared-v2",
+    "marker_file": "UNSLOTH_PREBUILT_INFO.json",
+    "marker_expected_sha256": "46FBA3F8EB0DF27709ADBAB90BA12F6E2AFF19C6400CEEACB1AD11CF1DD83EC5",
+    "marker_json": {
+      "upstream_tag": "b11160-mix-a6922cc",
+      "source_repo": "unslothai/llama.cpp",
+      "source_repo_url": "https://github.com/unslothai/llama.cpp",
+      "source_ref_kind": "ai-director-reconstructed-successor",
+      "requested_source_ref": "b11160-mix-a6922cc",
+      "resolved_source_ref": "b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d",
+      "source_commit": "b7eb4a03a1285c50ebe86c6bd2fc7a70c6f7214d",
+      "source_commit_short": "b7eb4a03",
+      "platform": "windows-x64-cuda",
+      "bundle_profile": "cuda13-portable",
+      "runtime_line": "cuda13",
+      "coverage_class": "portable",
+      "bundle_rank": 60,
+      "toolkit_line": "13.3",
+      "supported_sms": [
+        "75",
+        "80",
+        "86",
+        "89",
+        "90",
+        "120",
+        "121"
+      ],
+      "min_sm": 75,
+      "max_sm": 121,
+      "notes": "AI Director reconstructed Upstream successor seed for the transactional CUDA13 runtime stack.",
+      "ai_director_runtime_stack_id": "CUDA13.3.1-Dual-Shared-v2",
+      "ai_director_source_tree": "edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+      "ai_director_supported_sms": [
+        "75",
+        "80",
+        "86",
+        "89",
+        "90",
+        "120a",
+        "121a"
+      ],
+      "ai_director_shared_cuda_root": "AIDirector/Common/Runtime/CUDA/13.3"
+    },
+    "extra_build_outputs": "NON_SHIPPING"
+  },
+  "evidence": {
+    "u1_provenance_manifest_sha256": "52C4BA82A1CF184B32D7452C2A42C302524EB5845C6D84E0F2CC1FA2145E4EED",
+    "b2_recipe_inventory_sha256": "8300AC84A182F693A95DEE5C7EF315E0146D54AC82EE2B9B42672227E39E246E",
+    "b2_successor_delta_sha256": "8777BB4BC0EC267FE2311F07667BEF4947F22576B3750698672670460690F465",
+    "b2_artifact_closure_v1_1_sha256": "55C67FAAD750F3C0F61C5505E41E234176E51AAEBE5836C1957DF98D2E196E22",
+    "deep_recovery_sha256": "94E945CA6B01C4E4BF62E827FAF68954D35340426C86A144F71AABD5E6554AC6",
+    "u2_runtime_recovery_sha256": "FB4601387B1403E51409BB4E8E5C1AC6382AA30DD2ABB4EFB8A711B17A8CF2BC",
+    "u2_contract_extractor_sha256": "C65AF2DA2FB6FEBA8FFBD031D149231EFFFC1B65127AD37D3228DC741C4DB421",
+    "historical_workflow_run": 36071532274,
+    "historical_workflow_head": "119fa9dc43cd4d63e89a7b5d11f9378b84c52822",
+    "historical_workflow_blobs": {
+      ".github/workflows/unsloth-prebuilt.yml": "90cc17852b6bbb23aba18bac45956e336c2a18ee",
+      ".github/workflows/unsloth-prebuilt-cuda-windows.yml": "1cefeebb33fbda4d13fe1a0e71946b40c425ffda",
+      ".github/actions/unsloth-cuda-windows-setup/action.yml": "58a4c882ff25591da40d9a4aa7a09bb199454533",
+      "scripts/unsloth/package_bundle.py": "4bd2dc9fba6655a82b6ec87f242a825a5eab3ff8"
+    },
+    "u3_first_build_script_sha256": "D902CC2391F9AB347B14670CFBB1CE487754B65AB7D6CB5C588315E6B00B2D04",
+    "u3_pe_delta_report_sha256": "5327F3D95E8027532112F2DA5D7CC951EC754F79BD50413E561ED49DB90B8337",
+    "u3_link_tls_path_report_sha256": "62C6C52752D5A7A69DD313842E40FB994B4CC8732C755435E3AD33B60CE8CA69",
+    "public_portable_tls_asset_report_sha256": "0207375F4546C57F324B4B492F2925EC3379AC09A00821CB16C64C633DADBB43",
+    "cuda_fatbin_path_closure_v1_1_report_sha256": "CCE5C6111257EF46764A4B55F3DA396074E206A02F3F9FD5A9B6F81458D6DAD6",
+    "cuda_device_code_closure_report_sha256": "4B6624080FFDD937913B8ADC053735A9FF09B617BFA5C96223EE0C51A59A2CB4",
+    "cuda_frontend_localization_report_sha256": "901118F3ADD44642148FF91F45407436FE26AB09DD992BF0F4B0025F040F6FC9",
+    "cuda_flashattention_semantic_closure_report_sha256": "11DC9F04D3B74241C98A19FFBBAC82280929F148756CD695EFEC5F8FF1931982",
+    "continuity_head": "SoR_AI_Director_Continuity_v3_26.json"
+  },
+  "u3_acceptance_policy": {
+    "status": "SUPERSEDED_BY_FUNCTIONAL_CONFIRMATION_POLICY_V2",
+    "accepted_runtime_is_read_only_comparison_oracle": true,
+    "historical_byte_identity_not_first_release_blocker": true,
+    "no_further_cuda_forensics_unless_functional_failure": true
+  },
+  "open_boundaries_not_u2_blockers": {
+    "public_toolchain_bootstrap_urls": "Gate 6D integration must acquire the bound toolchain without manual install; U2 binds identities/hashes.",
+    "public_u1_normalization_overlay": "U5/public product repo must publish durable 18-leaf reconstruction tooling/overlay.",
+    "signing": "Not part of U2 source compilation contract."
+  },
+  "predecessor_contract": {
+    "name": "AI-Director-Upstream-U2-Source-Build-Contract-v1.json",
+    "sha256": "3C3FF6B839B49711A373349DE878065F8BE0C9CCD9A9C12DB99FF0A4D4624B02",
+    "relationship": "IMMUTABLE_PREDECESSOR__SUPERSEDED_ONLY_FOR_TLS_CAUSATION_AND_FIRST_RELEASE_FUNCTIONAL_CONFIRMATION"
+  },
+  "functional_confirmation_policy": {
+    "operator_authorization": "GRANTED_2026-10-20_IN_CHAT",
+    "role": "One isolated confirmation build, then test candidate through AI Director Upstream profile/backend plumbing before release acceptance.",
+    "build_affecting_delta_from_u3": [
+      "LLAMA_OPENSSL: ON -> OFF",
+      "LLAMA_BUILD_BORINGSSL: ON -> OFF",
+      "remove FETCHCONTENT_SOURCE_DIR_BORINGSSL and all BoringSSL acquisition/staging"
+    ],
+    "must_remain_unchanged": [
+      "accepted source tree edd784f1d459cd39f2605ccf66adc0c79ef75a93",
+      "build stamp 11301 / b7eb4a03",
+      "MSVC 14.44 / SDK 10.0.26100.0 / CMake 3.31.6 / Ninja 1.12.1 / NVCC 13.3.73",
+      "CMAKE_CUDA_ARCHITECTURES unset",
+      "GGML_CUDA_CUB_3DOT2=OFF",
+      "GGML_CUDA_FA=ON",
+      "GGML_CUDA_GRAPHS=ON",
+      "GGML_CUDA_COMPRESSION_MODE=size",
+      "17 shipping PEs plus generated accepted marker schema",
+      "shared CUDA excluded from Upstream candidate"
+    ],
+    "static_candidate_pass": [
+      "17 shipping PEs produced",
+      "server --version reports expected build stamp",
+      "accepted CUDA architecture topology PTX 75/80/90 and SASS 86/89/120a/121a",
+      "no CRYPT32 import in llama-common.dll or llama-server-impl.dll",
+      "no focused httplib SSLServer/SSLClient exports in llama-server-impl.dll",
+      "no external ssl/crypto DLL dependencies",
+      "marker generated exactly from contract"
+    ],
+    "product_acceptance_after_static_pass": [
+      "transactional candidate activation preserving updater ownership boundary",
+      "built-in Upstream profile server/backend/cache health",
+      "one short real AI Director chat inference with supported local model",
+      "restore/re-prime previous Direct profile when applicable",
+      "intentional failure rollback proof before final release acceptance"
+    ],
+    "deadline": "2026-10-21"
+  }
+}

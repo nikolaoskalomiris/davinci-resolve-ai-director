@@ -1,0 +1,16 @@
+{
+  "schema_version": 4,
+  "component": "DaVinci Resolve AI Director product-owned MCP Python runtime",
+  "ownership": "DaVinciResolveAIDirector",
+  "python_version": "3.11.9",
+  "mcp_version": "4.10.4",
+  "runtime_root": "Runtime\\Python\\MCP\\3.11.9",
+  "image_source": "reused accepted immutable Python dependency contract after exact requirements match",
+  "dependency_reuse_record": "MCP-DEPENDENCY-REUSE-4.10.4.json",
+  "source_commit": "8911bd24aee76894238924317a461005dd013d94",
+  "dependency_contract": {
+    "requirements_sha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
+    "network_required_for_activation": false,
+    "system_python_required": false
+  }
+}
