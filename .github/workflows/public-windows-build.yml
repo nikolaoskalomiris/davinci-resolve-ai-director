@@ -123,7 +123,142 @@ jobs:
           Write-Host "CI_VS_FIXED_BOOTSTRAPPER_SHA256=$actualBootstrapperSha256"
           Write-Host "CI_VS_FIXED_INSTALL=PASS"
 
-      - name: Verify exact Visual Studio toolchain hashes
+      - name: Install fixed Windows SDK 10.0.26100.8249
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $sdkInstallerUrl = 'https://download.microsoft.com/download/dba6f26e-0fb0-43bd-be9a-e3e24becb4a3/KIT_BUNDLE_WINDOWSSDK_MEDIACREATION/winsdksetup.exe'
+          $sdkInstaller = Join-Path $env:RUNNER_TEMP 'winsdksetup-10.0.26100.8249.exe'
+          $targetSdkPackageVersion = [version]'10.1.26100.8249'
+          $targetToolVersion = '10.0.26100.8249'
+          $rc = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\rc.exe'
+          $mt = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\mt.exe'
+          $expectedRcSha256 = '65DB0D7B4F10BA0F55973FD9356543A556DA9EC1C777A0C05F05A0329C8A100A'
+          $expectedMtSha256 = 'FB1AB75294B78619BD6AC8CADF30CB95BEFBC7324703CBE2654EF800DDD2BF4D'
+
+          function Test-ExactSdkTools {
+            if (-not (Test-Path -LiteralPath $rc -PathType Leaf) -or
+                -not (Test-Path -LiteralPath $mt -PathType Leaf)) {
+              return $false
+            }
+
+            $rcHash = (Get-FileHash -LiteralPath $rc -Algorithm SHA256).Hash.ToUpperInvariant()
+            $mtHash = (Get-FileHash -LiteralPath $mt -Algorithm SHA256).Hash.ToUpperInvariant()
+            $rcVersion = (Get-Item -LiteralPath $rc).VersionInfo.ProductVersion
+            $mtVersion = (Get-Item -LiteralPath $mt).VersionInfo.ProductVersion
+
+            return (
+              $rcHash -eq $expectedRcSha256 -and
+              $mtHash -eq $expectedMtSha256 -and
+              $rcVersion -eq $targetToolVersion -and
+              $mtVersion -eq $targetToolVersion
+            )
+          }
+
+          if (-not (Test-ExactSdkTools)) {
+            $uninstallRoots = @(
+              'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
+            )
+
+            $newerSdkPackages = Get-ItemProperty $uninstallRoots -ErrorAction SilentlyContinue |
+              Where-Object {
+                $_.Publisher -like 'Microsoft*' -and
+                $_.DisplayName -like 'Windows*' -and
+                $_.DisplayVersion -match '^10\.1\.26100\.\d+$'
+              } |
+              ForEach-Object {
+                $parsed = $null
+                if ([version]::TryParse([string]$_.DisplayVersion, [ref]$parsed) -and
+                    $parsed -gt $targetSdkPackageVersion) {
+                  [pscustomobject]@{
+                    DisplayName = [string]$_.DisplayName
+                    DisplayVersion = [string]$_.DisplayVersion
+                    ProductCode = [string]$_.PSChildName
+                  }
+                }
+              } |
+              Where-Object {
+                $_ -and $_.ProductCode -match '^\{[0-9A-Fa-f-]{36}\}$'
+              } |
+              Sort-Object ProductCode -Unique
+
+            foreach ($package in $newerSdkPackages) {
+              Write-Host "CI_SDK_REMOVE_NEWER=$($package.DisplayName) $($package.DisplayVersion) $($package.ProductCode)"
+
+              $process = Start-Process `
+                -FilePath 'msiexec.exe' `
+                -ArgumentList "/x $($package.ProductCode) /qn /norestart" `
+                -Wait `
+                -PassThru
+
+              if ($process.ExitCode -notin @(0, 1605, 1614, 3010)) {
+                throw "Unable to remove newer Windows SDK package $($package.ProductCode). Exit=$($process.ExitCode)"
+              }
+            }
+
+            Invoke-WebRequest -UseBasicParsing -Uri $sdkInstallerUrl -OutFile $sdkInstaller
+
+            $signature = Get-AuthenticodeSignature -LiteralPath $sdkInstaller
+            if ($signature.Status -ne 'Valid' -or
+                -not $signature.SignerCertificate -or
+                $signature.SignerCertificate.Subject -notmatch 'Microsoft') {
+              throw "Windows SDK installer Authenticode verification failed."
+            }
+
+            $process = Start-Process `
+              -FilePath $sdkInstaller `
+              -ArgumentList '/features OptionId.DesktopCPPx64 /quiet /norestart /ceip off' `
+              -Wait `
+              -PassThru
+
+            if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
+              throw "Windows SDK 10.0.26100.8249 installer failed with exit code $($process.ExitCode)."
+            }
+
+            $deadline = [DateTime]::UtcNow.AddMinutes(5)
+            while ([DateTime]::UtcNow -lt $deadline -and -not (Test-ExactSdkTools)) {
+              Start-Sleep -Seconds 5
+            }
+          }
+
+          if (-not (Test-ExactSdkTools)) {
+            $actualRc = if (Test-Path -LiteralPath $rc) {
+              (Get-FileHash -LiteralPath $rc -Algorithm SHA256).Hash.ToUpperInvariant()
+            } else {
+              'MISSING'
+            }
+
+            $actualMt = if (Test-Path -LiteralPath $mt) {
+              (Get-FileHash -LiteralPath $mt -Algorithm SHA256).Hash.ToUpperInvariant()
+            } else {
+              'MISSING'
+            }
+
+            throw "Exact Windows SDK 10.0.26100.8249 tools were not established. rc=$actualRc mt=$actualMt"
+          }
+
+          $sdkEntry = Get-ItemProperty `
+              'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' `
+              -ErrorAction SilentlyContinue |
+            Where-Object {
+              $_.DisplayName -eq 'Windows SDK' -and
+              $_.DisplayVersion -eq '10.1.26100.8249'
+            } |
+            Select-Object -First 1
+
+          if (-not $sdkEntry) {
+            throw "Windows SDK 10.1.26100.8249 uninstall identity was not found after installation."
+          }
+
+          Write-Host "CI_WINDOWS_SDK_PACKAGE_VERSION=10.1.26100.8249"
+          Write-Host "CI_WINDOWS_SDK_RC_SHA256=$expectedRcSha256"
+          Write-Host "CI_WINDOWS_SDK_MT_SHA256=$expectedMtSha256"
+          Write-Host "CI_WINDOWS_SDK_FIXED_INSTALL=PASS"
+
+      - name: Verify exact Microsoft toolchain hashes
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -134,32 +269,40 @@ jobs:
           }
 
           $contract = Get-Content -LiteralPath $contractPath -Raw -Encoding UTF8 | ConvertFrom-Json
-          $tools = $contract.toolchain.tools.PSObject.Properties
+          $toolNames = @(
+            'cmake.exe',
+            'ninja.exe',
+            'cl.exe',
+            'link.exe',
+            'lib.exe',
+            'rc.exe',
+            'mt.exe',
+            'vcvars64.bat'
+          )
 
-          if (@($tools).Count -ne 14) {
-            throw "Expected exactly 14 system-toolchain records in the Direct contract."
-          }
+          foreach ($name in $toolNames) {
+            $record = $contract.toolchain.tools.$name
+            if (-not $record) {
+              throw "Microsoft toolchain contract record is missing: $name"
+            }
 
-          foreach ($tool in $tools) {
-            $name = [string]$tool.Name
-            $record = $tool.Value
             $path = [string]$record.path
             $expected = ([string]$record.sha256).ToUpperInvariant()
 
             if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
-              throw "Required system-toolchain file is missing: $name :: $path"
+              throw "Required Microsoft toolchain file is missing: $name :: $path"
             }
 
             $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToUpperInvariant()
             if ($actual -ne $expected) {
-              throw "System-toolchain SHA256 mismatch: $name Expected=$expected Actual=$actual"
+              throw "Microsoft toolchain SHA256 mismatch: $name Expected=$expected Actual=$actual"
             }
 
-            Write-Host "CI_TOOLCHAIN_HASH_PASS=$name"
+            Write-Host "CI_MICROSOFT_TOOLCHAIN_HASH_PASS=$name"
           }
 
-          Write-Host "CI_VS_TOOLCHAIN_HASH_COUNT=14"
-          Write-Host "CI_VS_TOOLCHAIN_HASH_SET=PASS"
+          Write-Host "CI_MICROSOFT_TOOLCHAIN_HASH_COUNT=8"
+          Write-Host "CI_MICROSOFT_TOOLCHAIN_HASH_SET=PASS"
 
       - name: Install CUDA Toolkit 13.3.1
         shell: pwsh
@@ -198,6 +341,44 @@ jobs:
 
           Write-Host "CI_CUDA_PREREQUISITE=PASS"
           Write-Host "CI_NVCC=V13.3.73"
+
+      - name: Verify exact full system toolchain hashes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $contractPath = Join-Path $env:GITHUB_WORKSPACE 'build\direct\AI-Director-Direct-Source-Build-Contract-v1.json'
+          if (-not (Test-Path -LiteralPath $contractPath -PathType Leaf)) {
+            throw "Direct build contract is missing."
+          }
+
+          $contract = Get-Content -LiteralPath $contractPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          $tools = @($contract.toolchain.tools.PSObject.Properties)
+
+          if ($tools.Count -ne 14) {
+            throw "Expected exactly 14 system-toolchain records in the Direct contract."
+          }
+
+          foreach ($tool in $tools) {
+            $name = [string]$tool.Name
+            $record = $tool.Value
+            $path = [string]$record.path
+            $expected = ([string]$record.sha256).ToUpperInvariant()
+
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+              throw "Required system-toolchain file is missing: $name :: $path"
+            }
+
+            $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToUpperInvariant()
+            if ($actual -ne $expected) {
+              throw "System-toolchain SHA256 mismatch: $name Expected=$expected Actual=$actual"
+            }
+
+            Write-Host "CI_TOOLCHAIN_HASH_PASS=$name"
+          }
+
+          Write-Host "CI_SYSTEM_TOOLCHAIN_HASH_COUNT=14"
+          Write-Host "CI_SYSTEM_TOOLCHAIN_HASH_SET=PASS"
 
       - name: Run authoritative public build
         shell: cmd
