@@ -380,6 +380,35 @@ jobs:
           Write-Host "CI_SYSTEM_TOOLCHAIN_HASH_COUNT=14"
           Write-Host "CI_SYSTEM_TOOLCHAIN_HASH_SET=PASS"
 
+      - name: Prepare long-path build environment
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $shortTemp = 'D:\t'
+          New-Item -ItemType Directory -Force -Path $shortTemp | Out-Null
+
+          git config --global core.longpaths true
+          if ($LASTEXITCODE -ne 0) {
+            throw "Unable to enable Git long-path support."
+          }
+
+          $longPaths = (git config --global --get core.longpaths).Trim()
+          if ($LASTEXITCODE -ne 0 -or $longPaths -ne 'true') {
+            throw "Git long-path configuration did not persist."
+          }
+
+          foreach ($name in @('TEMP', 'TMP', 'TMPDIR')) {
+            Add-Content `
+              -LiteralPath $env:GITHUB_ENV `
+              -Value "$name=$shortTemp" `
+              -Encoding UTF8
+          }
+
+          Write-Host "CI_GIT_CORE_LONGPATHS=$longPaths"
+          Write-Host "CI_BUILD_TEMP_ROOT=$shortTemp"
+          Write-Host "CI_LONG_PATH_ENVIRONMENT=PASS"
+
       - name: Run authoritative public build
         shell: cmd
         run: BUILD.cmd
