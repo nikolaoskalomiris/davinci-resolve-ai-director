@@ -54,47 +54,64 @@ jobs:
           Write-Host "CI_COMMIT=$env:GITHUB_SHA"
           Write-Host "CI_RUNNER_ENVIRONMENT=$env:RUNNER_ENVIRONMENT"
 
-      - name: Install Visual Studio 2022 Build Tools contract
+      - name: Bind hosted Visual Studio to build contract path
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
-          $requiredCl = Join-Path $env:VS_BUILDTOOLS_ROOT 'VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe'
-          $requiredCmake = Join-Path $env:VS_BUILDTOOLS_ROOT 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'
-          $requiredNinja = Join-Path $env:VS_BUILDTOOLS_ROOT 'Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe'
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+          if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
+            throw "vswhere.exe is missing from the GitHub-hosted runner."
+          }
 
-          if (-not (Test-Path -LiteralPath $requiredCl) -or
-              -not (Test-Path -LiteralPath $requiredCmake) -or
-              -not (Test-Path -LiteralPath $requiredNinja)) {
-            $bootstrapper = Join-Path $env:RUNNER_TEMP 'vs_buildtools.exe'
-            Invoke-WebRequest -UseBasicParsing `
-              -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' `
-              -OutFile $bootstrapper
+          $vsRoot = (& $vswhere `
+            -latest `
+            -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -requires Microsoft.VisualStudio.Component.Windows11SDK.26100 `
+            -property installationPath | Select-Object -First 1).Trim()
 
-            & $bootstrapper `
-              --quiet `
-              --wait `
-              --norestart `
-              --nocache `
-              --installPath $env:VS_BUILDTOOLS_ROOT `
-              --add Microsoft.VisualStudio.Workload.VCTools `
-              --includeRecommended `
-              --add Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64 `
-              --add Microsoft.VisualStudio.Component.Windows11SDK.26100
+          if (-not $vsRoot) {
+            throw "No hosted Visual Studio installation satisfies the required VC tools and Windows SDK components."
+          }
 
-            $rc = $LASTEXITCODE
-            if ($rc -ne 0 -and $rc -ne 3010) {
-              throw "Visual Studio Build Tools installation failed with exit code $rc."
+          $requiredRelativeFiles = @(
+            'VC\Auxiliary\Build\vcvars64.bat',
+            'VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe',
+            'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe',
+            'Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe'
+          )
+
+          foreach ($relative in $requiredRelativeFiles) {
+            $source = Join-Path $vsRoot $relative
+            if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
+              throw "Hosted Visual Studio is missing required contract file: $source"
             }
           }
 
-          foreach ($path in @($requiredCl, $requiredCmake, $requiredNinja)) {
-            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
-              throw "Required Build Tools file is missing after installation: $path"
+          $contractRoot = $env:VS_BUILDTOOLS_ROOT
+          if (Test-Path -LiteralPath $contractRoot) {
+            $item = Get-Item -LiteralPath $contractRoot -Force
+            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) {
+              throw "Contract BuildTools path already exists and is not a reparse point: $contractRoot"
+            }
+            Remove-Item -LiteralPath $contractRoot -Force
+          }
+
+          $contractParent = Split-Path -Parent $contractRoot
+          New-Item -ItemType Directory -Force -Path $contractParent | Out-Null
+          New-Item -ItemType Junction -Path $contractRoot -Target $vsRoot | Out-Null
+
+          foreach ($relative in $requiredRelativeFiles) {
+            $contractFile = Join-Path $contractRoot $relative
+            if (-not (Test-Path -LiteralPath $contractFile -PathType Leaf)) {
+              throw "Contract-path binding failed for: $contractFile"
             }
           }
 
-          Write-Host "CI_VS_BUILDTOOLS_PREREQUISITE=PASS"
+          Write-Host "CI_VS_HOSTED_ROOT=$vsRoot"
+          Write-Host "CI_VS_CONTRACT_ROOT=$contractRoot"
+          Write-Host "CI_VS_CONTRACT_BINDING=PASS"
 
       - name: Install CUDA Toolkit 13.3.1
         shell: pwsh
