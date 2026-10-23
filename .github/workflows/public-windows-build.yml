@@ -1,0 +1,217 @@
+name: Public Windows build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-windows-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build unsigned Windows release artifacts
+    runs-on: windows-2022
+    timeout-minutes: 330
+
+    env:
+      VS_BUILDTOOLS_ROOT: 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools'
+      CUDA_TOOLKIT_VERSION: '13.3.1'
+      CUDA_NETWORK_INSTALLER: 'https://developer.download.nvidia.com/compute/cuda/13.3.1/network_installers/cuda_13.3.1_windows_network.exe'
+
+    steps:
+      - name: Check out public source
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Verify GitHub-hosted source boundary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          if ($env:RUNNER_ENVIRONMENT -ne 'github-hosted') {
+            throw "This workflow requires a GitHub-hosted runner."
+          }
+
+          $status = git status --porcelain=v1
+          if ($LASTEXITCODE -ne 0) {
+            throw "git status failed."
+          }
+          if ($status) {
+            throw "Checkout is not clean."
+          }
+
+          foreach ($name in @('_cache', '_inputs', '_toolchain', 'node_modules', 'AI-Director-Release-Candidates')) {
+            if (Test-Path -LiteralPath (Join-Path $env:GITHUB_WORKSPACE $name)) {
+              throw "Generated/private prebuild path is present: $name"
+            }
+          }
+
+          Write-Host "CI_SOURCE_BOUNDARY=PASS"
+          Write-Host "CI_COMMIT=$env:GITHUB_SHA"
+          Write-Host "CI_RUNNER_ENVIRONMENT=$env:RUNNER_ENVIRONMENT"
+
+      - name: Install Visual Studio 2022 Build Tools contract
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $requiredCl = Join-Path $env:VS_BUILDTOOLS_ROOT 'VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe'
+          $requiredCmake = Join-Path $env:VS_BUILDTOOLS_ROOT 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'
+          $requiredNinja = Join-Path $env:VS_BUILDTOOLS_ROOT 'Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe'
+
+          if (-not (Test-Path -LiteralPath $requiredCl) -or
+              -not (Test-Path -LiteralPath $requiredCmake) -or
+              -not (Test-Path -LiteralPath $requiredNinja)) {
+            $bootstrapper = Join-Path $env:RUNNER_TEMP 'vs_buildtools.exe'
+            Invoke-WebRequest -UseBasicParsing `
+              -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' `
+              -OutFile $bootstrapper
+
+            & $bootstrapper `
+              --quiet `
+              --wait `
+              --norestart `
+              --nocache `
+              --installPath $env:VS_BUILDTOOLS_ROOT `
+              --add Microsoft.VisualStudio.Workload.VCTools `
+              --includeRecommended `
+              --add Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64 `
+              --add Microsoft.VisualStudio.Component.Windows11SDK.26100
+
+            $rc = $LASTEXITCODE
+            if ($rc -ne 0 -and $rc -ne 3010) {
+              throw "Visual Studio Build Tools installation failed with exit code $rc."
+            }
+          }
+
+          foreach ($path in @($requiredCl, $requiredCmake, $requiredNinja)) {
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+              throw "Required Build Tools file is missing after installation: $path"
+            }
+          }
+
+          Write-Host "CI_VS_BUILDTOOLS_PREREQUISITE=PASS"
+
+      - name: Install CUDA Toolkit 13.3.1
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $nvcc = 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.3\bin\nvcc.exe'
+          if (-not (Test-Path -LiteralPath $nvcc -PathType Leaf)) {
+            $installer = Join-Path $env:RUNNER_TEMP 'cuda_13.3.1_windows_network.exe'
+
+            Invoke-WebRequest -UseBasicParsing `
+              -Uri $env:CUDA_NETWORK_INSTALLER `
+              -OutFile $installer
+
+            $process = Start-Process `
+              -FilePath $installer `
+              -ArgumentList '-s' `
+              -Wait `
+              -PassThru
+
+            if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
+              throw "CUDA Toolkit installation failed with exit code $($process.ExitCode)."
+            }
+          }
+
+          if (-not (Test-Path -LiteralPath $nvcc -PathType Leaf)) {
+            throw "nvcc.exe is missing after CUDA Toolkit installation."
+          }
+
+          $version = & $nvcc --version 2>&1 | Out-String
+          if ($LASTEXITCODE -ne 0 -or
+              $version -notmatch 'release 13\.3' -or
+              $version -notmatch 'V13\.3\.73') {
+            throw "Unexpected nvcc identity: $version"
+          }
+
+          Write-Host "CI_CUDA_PREREQUISITE=PASS"
+          Write-Host "CI_NVCC=V13.3.73"
+
+      - name: Run authoritative public build
+        shell: cmd
+        run: BUILD.cmd
+
+      - name: Check public build state
+        shell: cmd
+        run: CHECK-STATE.cmd
+
+      - name: Collect build evidence
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $workspaceParent = Split-Path -Parent $env:GITHUB_WORKSPACE
+          $candidateVersionRoot = Join-Path $workspaceParent 'AI-Director-Release-Candidates\0.3.25'
+
+          if (-not (Test-Path -LiteralPath $candidateVersionRoot -PathType Container)) {
+            throw "Release candidate version root was not produced: $candidateVersionRoot"
+          }
+
+          $candidate = Get-ChildItem -LiteralPath $candidateVersionRoot -Directory |
+            Sort-Object Name |
+            Select-Object -Last 1
+
+          if (-not $candidate) {
+            throw "No release candidate directory was produced."
+          }
+
+          $evidenceRoot = Join-Path $env:GITHUB_WORKSPACE '_ci_evidence'
+          New-Item -ItemType Directory -Force -Path $evidenceRoot | Out-Null
+
+          $records = @()
+          Get-ChildItem -LiteralPath $candidate.FullName -Recurse -File | ForEach-Object {
+            $relative = $_.FullName.Substring($candidate.FullName.Length).TrimStart('\')
+            $hash = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToUpperInvariant()
+
+            $records += [pscustomobject]@{
+              relative_path = $relative
+              bytes = [int64]$_.Length
+              sha256 = $hash
+            }
+
+            if ($_.Extension -in @('.json', '.txt')) {
+              $safeName = ($relative -replace '[\\/:*?"<>|]', '__')
+              Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $evidenceRoot $safeName)
+            }
+          }
+
+          $manifest = [ordered]@{
+            schema_version = 1
+            repository = $env:GITHUB_REPOSITORY
+            commit = $env:GITHUB_SHA
+            run_id = $env:GITHUB_RUN_ID
+            runner_environment = $env:RUNNER_ENVIRONMENT
+            candidate = $candidate.Name
+            files = @($records)
+          }
+
+          $manifestPath = Join-Path $evidenceRoot 'CI-BUILD-ARTIFACT-MANIFEST.json'
+          [System.IO.File]::WriteAllText(
+            $manifestPath,
+            ($manifest | ConvertTo-Json -Depth 8),
+            (New-Object System.Text.UTF8Encoding($false))
+          )
+
+          $installers = @($records | Where-Object { $_.relative_path -like '*.exe' })
+          if ($installers.Count -lt 2) {
+            throw "Expected at least two installer executables in the build candidate."
+          }
+
+          Write-Host "CI_BUILD_EVIDENCE=PASS"
+          Write-Host "CI_CANDIDATE=$($candidate.Name)"
+          Write-Host "CI_INSTALLER_COUNT=$($installers.Count)"
+
+      - name: Upload public build evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: public-build-evidence-${{ github.run_id }}
+          path: _ci_evidence
+          if-no-files-found: error
+          retention-days: 7
