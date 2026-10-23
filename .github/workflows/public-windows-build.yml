@@ -54,64 +54,112 @@ jobs:
           Write-Host "CI_COMMIT=$env:GITHUB_SHA"
           Write-Host "CI_RUNNER_ENVIRONMENT=$env:RUNNER_ENVIRONMENT"
 
-      - name: Bind hosted Visual Studio to build contract path
+      - name: Install fixed Visual Studio Build Tools 2022 17.14.42
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
+          $bootstrapperUrl = 'https://download.visualstudio.microsoft.com/download/pr/c95450be-0a45-4779-b142-33f567ccfd6e/2a6aa7d94e38d457a4eb3930fc60056ecab06865b2eb925e5275b8473a017583/vs_BuildTools.exe'
+          $bootstrapperSha256 = '2A6AA7D94E38D457A4EB3930FC60056ECAB06865B2EB925E5275B8473A017583'
+          $expectedInstallationVersion = '17.14.37806.7'
+          $bootstrapper = Join-Path $env:RUNNER_TEMP 'vs_BuildTools-17.14.42.exe'
           $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-          if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
-            throw "vswhere.exe is missing from the GitHub-hosted runner."
+
+          Invoke-WebRequest -UseBasicParsing -Uri $bootstrapperUrl -OutFile $bootstrapper
+
+          $actualBootstrapperSha256 = (Get-FileHash -LiteralPath $bootstrapper -Algorithm SHA256).Hash.ToUpperInvariant()
+          if ($actualBootstrapperSha256 -ne $bootstrapperSha256) {
+            throw "Fixed Visual Studio bootstrapper SHA256 mismatch."
           }
 
-          $vsRoot = (& $vswhere `
-            -latest `
-            -products * `
-            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
-            -requires Microsoft.VisualStudio.Component.Windows11SDK.26100 `
+          $argumentString = @(
+            '--quiet'
+            '--wait'
+            '--norestart'
+            '--nocache'
+            '--installPath'
+            ('"' + $env:VS_BUILDTOOLS_ROOT + '"')
+            '--add'
+            'Microsoft.VisualStudio.Workload.VCTools'
+            '--add'
+            'Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64'
+            '--add'
+            'Microsoft.VisualStudio.Component.VC.CMake.Project'
+            '--add'
+            'Microsoft.VisualStudio.Component.Windows11SDK.26100'
+          ) -join ' '
+
+          $process = Start-Process `
+            -FilePath $bootstrapper `
+            -ArgumentList $argumentString `
+            -Wait `
+            -PassThru
+
+          if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
+            throw "Visual Studio Build Tools 17.14.42 installation failed with exit code $($process.ExitCode)."
+          }
+
+          if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
+            throw "vswhere.exe is missing after Build Tools installation."
+          }
+
+          $installationPath = (& $vswhere `
+            -products Microsoft.VisualStudio.Product.BuildTools `
             -property installationPath | Select-Object -First 1).Trim()
 
-          if (-not $vsRoot) {
-            throw "No hosted Visual Studio installation satisfies the required VC tools and Windows SDK components."
+          $installationVersion = (& $vswhere `
+            -products Microsoft.VisualStudio.Product.BuildTools `
+            -property installationVersion | Select-Object -First 1).Trim()
+
+          if ($installationPath -ne $env:VS_BUILDTOOLS_ROOT) {
+            throw "Build Tools installation path mismatch. Expected=$env:VS_BUILDTOOLS_ROOT Actual=$installationPath"
           }
 
-          $requiredRelativeFiles = @(
-            'VC\Auxiliary\Build\vcvars64.bat',
-            'VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe',
-            'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe',
-            'Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe'
-          )
+          if ($installationVersion -ne $expectedInstallationVersion) {
+            throw "Build Tools installation version mismatch. Expected=$expectedInstallationVersion Actual=$installationVersion"
+          }
 
-          foreach ($relative in $requiredRelativeFiles) {
-            $source = Join-Path $vsRoot $relative
-            if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
-              throw "Hosted Visual Studio is missing required contract file: $source"
+          Write-Host "CI_VS_BUILDTOOLS_VERSION=$installationVersion"
+          Write-Host "CI_VS_FIXED_BOOTSTRAPPER_SHA256=$actualBootstrapperSha256"
+          Write-Host "CI_VS_FIXED_INSTALL=PASS"
+
+      - name: Verify exact Visual Studio toolchain hashes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $contractPath = Join-Path $env:GITHUB_WORKSPACE 'build\direct\AI-Director-Direct-Source-Build-Contract-v1.json'
+          if (-not (Test-Path -LiteralPath $contractPath -PathType Leaf)) {
+            throw "Direct build contract is missing."
+          }
+
+          $contract = Get-Content -LiteralPath $contractPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          $tools = $contract.toolchain.tools.PSObject.Properties
+
+          if (@($tools).Count -ne 14) {
+            throw "Expected exactly 14 system-toolchain records in the Direct contract."
+          }
+
+          foreach ($tool in $tools) {
+            $name = [string]$tool.Name
+            $record = $tool.Value
+            $path = [string]$record.path
+            $expected = ([string]$record.sha256).ToUpperInvariant()
+
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+              throw "Required system-toolchain file is missing: $name :: $path"
             }
-          }
 
-          $contractRoot = $env:VS_BUILDTOOLS_ROOT
-          if (Test-Path -LiteralPath $contractRoot) {
-            $item = Get-Item -LiteralPath $contractRoot -Force
-            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) {
-              throw "Contract BuildTools path already exists and is not a reparse point: $contractRoot"
+            $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToUpperInvariant()
+            if ($actual -ne $expected) {
+              throw "System-toolchain SHA256 mismatch: $name Expected=$expected Actual=$actual"
             }
-            Remove-Item -LiteralPath $contractRoot -Force
+
+            Write-Host "CI_TOOLCHAIN_HASH_PASS=$name"
           }
 
-          $contractParent = Split-Path -Parent $contractRoot
-          New-Item -ItemType Directory -Force -Path $contractParent | Out-Null
-          New-Item -ItemType Junction -Path $contractRoot -Target $vsRoot | Out-Null
-
-          foreach ($relative in $requiredRelativeFiles) {
-            $contractFile = Join-Path $contractRoot $relative
-            if (-not (Test-Path -LiteralPath $contractFile -PathType Leaf)) {
-              throw "Contract-path binding failed for: $contractFile"
-            }
-          }
-
-          Write-Host "CI_VS_HOSTED_ROOT=$vsRoot"
-          Write-Host "CI_VS_CONTRACT_ROOT=$contractRoot"
-          Write-Host "CI_VS_CONTRACT_BINDING=PASS"
+          Write-Host "CI_VS_TOOLCHAIN_HASH_COUNT=14"
+          Write-Host "CI_VS_TOOLCHAIN_HASH_SET=PASS"
 
       - name: Install CUDA Toolkit 13.3.1
         shell: pwsh
