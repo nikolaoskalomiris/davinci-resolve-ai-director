@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
-  "id": "AI-Director-Canonical-Application-0.3.25-v1",
+  "id": "AI-Director-Canonical-Application-0.3.26-v1",
   "product": "DaVinci Resolve AI Director",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "source_authority": "CANONICAL",
   "source_phase": "ACCEPTED_READY",
   "file_count": 13,
@@ -19,8 +19,8 @@
     },
     {
       "path": "UpdateManager.js",
-      "sha256": "EE979324588DFD400DD4E9F9FF937D9C33FB509F5AEBFB26204D9FDD1B909ED8",
-      "bytes": 187999
+      "sha256": "D71A93878826E1081F6A59FA5ABBD02D8EF42E577EE2BFCC14AA098DB2AF582D",
+      "bytes": 200760
     },
     {
       "path": "build/electron-builder.config.cjs",
@@ -39,8 +39,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "89080AADD65477FE6A4BB26D088B01A9E69493A4C05242E15166F17A9B547CAB",
-      "bytes": 207802
+      "sha256": "8C5C875EEE8548077FC14CFE1688AFF2369CD22FC6CD5933EA95005EE7F535F0",
+      "bytes": 208868
     },
     {
       "path": "markdown.js",
@@ -49,12 +49,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "8BB89A9E645D481093873F04829C0CECD95A33A62BBCDC180F17153C2135F182",
+      "sha256": "52B7746DCF21BFC19332DC7E57360DCB1AFFA98F9F78DD5F13F010E49F075939",
       "bytes": 143754
     },
     {
       "path": "package.json",
-      "sha256": "BCD2E91788543B9A2C1606E85C9B6289FE059362735CEC1077D4EA5E9D889619",
+      "sha256": "0EEBF44B6DE9D510BE842C28356F566462887194ECCE335F3B5CBAC83C1E5C64",
       "bytes": 1609
     },
     {

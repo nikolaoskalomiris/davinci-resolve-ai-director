@@ -98,6 +98,316 @@ const MCP_COMPATIBILITY_CONTRACT = Object.freeze({
     mandatoryAdvancedBetterSqlite3Version: '11.10.0'
 });
 
+// AI_DIRECTOR_MCP_RESOLVE_LAUNCH_COMPATIBILITY_V1_BEGIN
+// Downstream, version/SHA-guarded compatibility for managed davinci-resolve-mcp.
+const MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS = 30;
+const MCP_RESOLVE_LAUNCH_OVERLAY_ID = 'AI_DIRECTOR_RESOLVE_LAUNCH_GRACE_V1';
+
+const MCP_RESOLVE_LAUNCH_POLICIES = Object.freeze({
+    '4.10.4': Object.freeze({
+        mode: 'overlay',
+        overlayId: MCP_RESOLVE_LAUNCH_OVERLAY_ID,
+        sourceCommit: '8911bd24aee76894238924317a461005dd013d94',
+        graceSeconds: MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS,
+        serverBaselineSha256: '67ECA615A0727956B84B642B86EB81D694A803168438B9AF8D3DABDC71D7CCB5',
+        serverPatchedSha256: '59071BA76E9AFC0C5CA6021231EA2B92B9533A0DFA34C618CB9682DD5D78F52F'
+    })
+});
+
+const MCP_RESOLVE_POLL_LOOP_ANCHOR = [
+    '    for i in range(30):',
+    '        time.sleep(2)',
+    '        if _try_connect():',
+    '            logger.info(f"Resolve responded after {(i+1)*2}s")',
+    '            return True',
+    ''
+].join('\n');
+
+const MCP_RESOLVE_POLL_LOOP_PATCH = [
+    '    # AI Director Resolve launch compatibility: keep external scripting away from the Fusion TCP 1144 bootstrap window.',
+    `    time.sleep(${MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS})`,
+    '',
+    MCP_RESOLVE_POLL_LOOP_ANCHOR
+].join('\n');
+
+
+function resolveLaunchPolicy(version) {
+    const normalized = String(version || '').trim().replace(/^v/i, '');
+    return normalized ? MCP_RESOLVE_LAUNCH_POLICIES[normalized] || null : null;
+}
+
+function registeredResolveLaunchVersions() {
+    return Object.keys(MCP_RESOLVE_LAUNCH_POLICIES);
+}
+
+function transformVulnerableServerSource(sourceText, graceSeconds = MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS) {
+    const marker = 'AI Director Resolve launch compatibility: keep external scripting away from the Fusion TCP 1144 bootstrap window.';
+    if (sourceText.includes(marker)) {
+        throw new Error('Resolve launch overlay is already present in this source.');
+    }
+
+    if (Number(graceSeconds) !== MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS) {
+        throw new Error(
+            `AI Director Resolve launch compatibility is validated only for ${MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS}s grace.`
+        );
+    }
+
+    const matches = sourceText.split(MCP_RESOLVE_POLL_LOOP_ANCHOR).length - 1;
+    if (matches !== 1) {
+        throw new Error(
+            `Resolve launch overlay transform identity mismatch (pollLoop=${matches}).`
+        );
+    }
+
+    return sourceText.replace(MCP_RESOLVE_POLL_LOOP_ANCHOR, MCP_RESOLVE_POLL_LOOP_PATCH);
+}
+
+function inspectResolveLaunchCompatibility({ mcpRoot, expectedVersion = null } = {}) {
+    if (!mcpRoot) throw new Error('MCP root is required.');
+
+    const packagePath = path.join(mcpRoot, 'package.json');
+    const serverPath = path.join(mcpRoot, 'src', 'server.py');
+    const packageJson = readJsonFile(packagePath);
+
+    if (!packageJson || packageJson.name !== MCP_NPM_PACKAGE) {
+        throw new Error(`MCP package identity is missing or unexpected at ${packagePath}.`);
+    }
+
+    const version = String(packageJson.version || '').trim();
+    if (!/^\d+\.\d+\.\d+$/.test(version)) {
+        throw new Error(`MCP package version is invalid: ${version || 'missing'}.`);
+    }
+
+    if (expectedVersion && version !== String(expectedVersion).trim().replace(/^v/i, '')) {
+        throw new Error(
+            `MCP package version changed during compatibility validation. Expected ${expectedVersion}, actual ${version}.`
+        );
+    }
+
+    const policy = resolveLaunchPolicy(version);
+    if (!policy) {
+        return {
+            ok: false,
+            status: 'review_required',
+            version,
+            serverPath,
+            reason: `MCP ${version} has no registered AI Director Resolve launch compatibility policy.`
+        };
+    }
+
+    if (policy.mode === 'upstream-safe') {
+        return {
+            ok: true,
+            status: 'upstream_safe',
+            version,
+            serverPath,
+            policy,
+            changed: false
+        };
+    }
+
+    if (!fs.existsSync(serverPath)) {
+        throw new Error(`MCP Resolve launch server is missing: ${serverPath}`);
+    }
+
+    const beforeHash = sha256Buffer(fs.readFileSync(serverPath));
+    if (beforeHash === policy.serverPatchedSha256) {
+        return {
+            ok: true,
+            status: 'compatible',
+            version,
+            serverPath,
+            policy,
+            beforeHash,
+            afterHash: beforeHash,
+            changed: false
+        };
+    }
+
+    if (beforeHash !== policy.serverBaselineSha256) {
+        return {
+            ok: false,
+            status: 'review_required',
+            version,
+            serverPath,
+            policy,
+            beforeHash,
+            reason:
+                `MCP ${version} src/server.py identity changed. ` +
+                `Expected baseline ${policy.serverBaselineSha256} or patched ${policy.serverPatchedSha256}; actual ${beforeHash}.`
+        };
+    }
+
+    return {
+        ok: true,
+        status: 'patch_required',
+        version,
+        serverPath,
+        policy,
+        beforeHash,
+        afterHash: policy.serverPatchedSha256,
+        changed: true
+    };
+}
+
+function compatibilityMarker(inspection) {
+    if (!inspection?.policy) return null;
+    const serverSha256 = inspection.afterHash || inspection.beforeHash || null;
+    return {
+        overlayId: inspection.policy.overlayId || null,
+        status: inspection.status,
+        sourceCommit: inspection.policy.sourceCommit || null,
+        serverSha256,
+        graceSeconds: Number(inspection.policy.graceSeconds || 0)
+    };
+}
+
+function assertCompatibilityMarker(marker, inspection) {
+    if (!inspection?.ok || !['compatible', 'upstream_safe'].includes(inspection.status)) {
+        throw new Error('Resolved MCP launch compatibility inspection is required.');
+    }
+    const expected = compatibilityMarker(inspection);
+    if (!marker || typeof marker !== 'object') {
+        throw new Error('Managed MCP Resolve launch compatibility marker is missing.');
+    }
+    for (const key of ['overlayId', 'status', 'sourceCommit', 'serverSha256', 'graceSeconds']) {
+        if (marker[key] !== expected[key]) {
+            throw new Error(
+                `Managed MCP Resolve launch compatibility marker mismatch for ${key}. ` +
+                `Expected ${JSON.stringify(expected[key])}, actual ${JSON.stringify(marker[key])}.`
+            );
+        }
+    }
+    return true;
+}
+
+function replaceFileTransactionally(filePath, replacementBuffer, expectedSha256) {
+    const beforeBuffer = fs.readFileSync(filePath);
+    const beforeHash = sha256Buffer(beforeBuffer);
+    const stamp = `${process.pid}-${Date.now()}`;
+    const tempPath = `${filePath}.aidir-compat-${stamp}.tmp`;
+    const backupPath = `${filePath}.aidir-compat-${stamp}.bak`;
+    let originalMoved = false;
+    let replacementActivated = false;
+
+    fs.writeFileSync(tempPath, replacementBuffer, { flag: 'wx' });
+    const stagedHash = sha256Buffer(fs.readFileSync(tempPath));
+    if (stagedHash !== expectedSha256) {
+        try { fs.unlinkSync(tempPath); } catch (_cleanupError) {}
+        throw new Error(
+            `Resolve launch overlay staged hash mismatch. Expected ${expectedSha256}, actual ${stagedHash}.`
+        );
+    }
+
+    try {
+        fs.renameSync(filePath, backupPath);
+        originalMoved = true;
+        fs.renameSync(tempPath, filePath);
+        replacementActivated = true;
+
+        const afterHash = sha256Buffer(fs.readFileSync(filePath));
+        if (afterHash !== expectedSha256) {
+            throw new Error(
+                `Resolve launch overlay post-write verification failed. Expected ${expectedSha256}, actual ${afterHash}.`
+            );
+        }
+
+        try { fs.unlinkSync(backupPath); } catch (_cleanupError) {}
+        return { beforeHash, afterHash };
+    } catch (error) {
+        let rollbackError = null;
+        try {
+            if (replacementActivated && fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+            if (originalMoved && fs.existsSync(backupPath) && !fs.existsSync(filePath)) {
+                fs.renameSync(backupPath, filePath);
+            }
+            if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+        } catch (restoreError) {
+            rollbackError = restoreError;
+        }
+
+        if (rollbackError) {
+            throw new Error(
+                `${error?.message || String(error)} Rollback also failed: ${rollbackError.message}`
+            );
+        }
+        throw error;
+    }
+}
+
+function ensureResolveLaunchCompatibility({
+    mcpRoot,
+    expectedVersion = null,
+    allowMutation = true
+} = {}) {
+    const inspection = inspectResolveLaunchCompatibility({ mcpRoot, expectedVersion });
+
+    if (!inspection.ok) {
+        throw new Error(inspection.reason || 'MCP Resolve launch compatibility needs review.');
+    }
+
+    if (inspection.status !== 'patch_required') {
+        return inspection;
+    }
+
+    if (!allowMutation) {
+        throw new Error(
+            `MCP ${inspection.version} requires the registered AI Director Resolve launch overlay.`
+        );
+    }
+
+    const sourceBuffer = fs.readFileSync(inspection.serverPath);
+    const sourceText = sourceBuffer.toString('utf8');
+    const transformed = transformVulnerableServerSource(
+        sourceText,
+        inspection.policy.graceSeconds
+    );
+    const transformedBuffer = Buffer.from(transformed, 'utf8');
+    const transformedHash = sha256Buffer(transformedBuffer);
+
+    if (transformedHash !== inspection.policy.serverPatchedSha256) {
+        throw new Error(
+            `Resolve launch overlay result mismatch. Expected ${inspection.policy.serverPatchedSha256}, actual ${transformedHash}.`
+        );
+    }
+
+    const replaced = replaceFileTransactionally(
+        inspection.serverPath,
+        transformedBuffer,
+        inspection.policy.serverPatchedSha256
+    );
+
+    if (replaced.beforeHash !== inspection.policy.serverBaselineSha256) {
+        throw new Error(
+            `Resolve launch overlay source changed during replacement. Expected ${inspection.policy.serverBaselineSha256}, actual ${replaced.beforeHash}.`
+        );
+    }
+
+    return {
+        ...inspection,
+        status: 'compatible',
+        beforeHash: replaced.beforeHash,
+        afterHash: replaced.afterHash,
+        changed: true
+    };
+}
+
+function requireResolvedResolveLaunchCompatibility({ mcpRoot, expectedVersion = null } = {}) {
+    const inspection = inspectResolveLaunchCompatibility({ mcpRoot, expectedVersion });
+    if (!inspection.ok) {
+        throw new Error(inspection.reason || 'MCP Resolve launch compatibility needs review.');
+    }
+    if (!['compatible', 'upstream_safe'].includes(inspection.status)) {
+        throw new Error(
+            `MCP ${inspection.version} Resolve launch compatibility is not active (status=${inspection.status}).`
+        );
+    }
+    return inspection;
+}
+// AI_DIRECTOR_MCP_RESOLVE_LAUNCH_COMPATIBILITY_V1_END
+
 // AI_DIRECTOR_MCP_SEMANTIC_ENGINE_V1_1_BEGIN
 // AI Director successor MCP directional semantic compatibility engine v1.1.
 // Fail closed whenever the supported subset cannot prove the directional relation.
@@ -894,7 +1204,12 @@ const MCP_RUNTIME_ENVIRONMENT_KEYS = new Set([
 function systemRuntimePathEntries() {
     if (process.platform !== 'win32') return ['/usr/bin', '/bin'];
     const systemRoot = process.env.SystemRoot || process.env.WINDIR || 'C:\\Windows';
-    return [path.join(systemRoot, 'System32'), systemRoot];
+    return [
+        path.join(systemRoot, 'System32'),
+        path.join(systemRoot, 'System32', 'WindowsPowerShell', 'v1.0'),
+        path.join(systemRoot, 'System32', 'wbem'),
+        systemRoot
+    ];
 }
 
 function mcpPythonEnvironment(runtimeRoot, aafProbePython = null) {
@@ -2606,6 +2921,11 @@ async function installManagedMcpCompatibilityUpdate(status, { onProgress } = {})
             throw new Error('Staged MCP source package identity mismatch.');
         }
 
+        const launchCompatibility = ensureResolveLaunchCompatibility({
+            mcpRoot: stagedMcpRoot,
+            expectedVersion: targetVersion
+        });
+
         const currentLogs = path.join(MCP_ROOT, 'logs');
         if (fs.existsSync(currentLogs)) {
             fs.cpSync(currentLogs, path.join(stagedMcpRoot, 'logs'), { recursive: true, force: true });
@@ -2630,7 +2950,8 @@ async function installManagedMcpCompatibilityUpdate(status, { onProgress } = {})
             sourceCommit: spec.sourceCommit,
             compatibilityBundleSha256: spec.sha256,
             productOverlay: {
-                advancedWindowsGuidanceSha256: productOverlay.afterHash
+                advancedWindowsGuidanceSha256: productOverlay.afterHash,
+                resolveLaunchCompatibility: compatibilityMarker(launchCompatibility)
             },
             updatedAt: new Date().toISOString()
         });
@@ -2984,6 +3305,11 @@ async function installManagedMcpCompatibleRelease(status, { onProgress } = {}) {
         await fs.promises.mkdir(stagedMcpRoot, { recursive: true });
         fs.cpSync(packageRoot, stagedMcpRoot, { recursive: true, force: true });
 
+        const launchCompatibility = ensureResolveLaunchCompatibility({
+            mcpRoot: stagedMcpRoot,
+            expectedVersion: targetVersion
+        });
+
         let productOverlay = { changed: false, afterHash: descriptorHashes.capabilitiesSha256 };
         if (releaseContract.applyWindowsGuidanceOverlay) {
             productOverlay = await applyWindowsAdvancedGuidanceOverlay({
@@ -3006,7 +3332,10 @@ async function installManagedMcpCompatibleRelease(status, { onProgress } = {}) {
                 advancedPackageSha256: MCP_COMPATIBILITY_CONTRACT.advancedPackageSha256,
                 advancedLockSha256: MCP_COMPATIBILITY_CONTRACT.advancedLockSha256
             },
-            productOverlay: productOverlay.changed ? { advancedWindowsGuidanceSha256: productOverlay.afterHash } : null,
+            productOverlay: {
+                ...(productOverlay.changed ? { advancedWindowsGuidanceSha256: productOverlay.afterHash } : {}),
+                resolveLaunchCompatibility: compatibilityMarker(launchCompatibility)
+            },
             updatedAt: new Date().toISOString()
         });
 
@@ -3111,6 +3440,14 @@ async function installManagedMcpCompatibleRelease(status, { onProgress } = {}) {
         if (activePackage?.version !== targetVersion || activeMarker?.version !== targetVersion || activeMarker?.sourceCommit !== releaseContract.sourceCommit) {
             throw new Error('MCP post-activation source identity verification failed.');
         }
+        const activeLaunchCompatibility = requireResolvedResolveLaunchCompatibility({
+            mcpRoot: MCP_ROOT,
+            expectedVersion: targetVersion
+        });
+        assertCompatibilityMarker(
+            activeMarker?.productOverlay?.resolveLaunchCompatibility,
+            activeLaunchCompatibility
+        );
 
         failurePhase = 'post-swap-validation';
         const postSwapValidation = await validateStagedMcpCompatibility({
@@ -3871,6 +4208,14 @@ async function verifyInstalledUpdate(result) {
         if (!marker || !packageJson || marker.managed !== true || marker.version !== result.toVersion || packageJson.version !== result.toVersion) {
             throw new Error(`Updated MCP local identity mismatch. Expected ${result.toVersion}.`);
         }
+        const launchCompatibility = requireResolvedResolveLaunchCompatibility({
+            mcpRoot: MCP_ROOT,
+            expectedVersion: result.toVersion
+        });
+        assertCompatibilityMarker(
+            marker?.productOverlay?.resolveLaunchCompatibility,
+            launchCompatibility
+        );
         if (result.compatibilityBundleSha256 && marker.compatibilityBundleSha256 !== result.compatibilityBundleSha256) {
             throw new Error('Updated MCP compatibility-bundle identity mismatch after runtime restart.');
         }
@@ -4063,6 +4408,18 @@ module.exports = {
     verifyPayloadManifest,
     buildMcpCompatibilityProbeCode,
     buildWindowsAdvancedGuidanceOverlayFunctions,
+    MCP_RESOLVE_LAUNCH_DEFAULT_GRACE_SECONDS,
+    MCP_RESOLVE_LAUNCH_OVERLAY_ID,
+    MCP_RESOLVE_LAUNCH_POLICIES,
+    registeredResolveLaunchVersions,
+    resolveLaunchPolicy,
+    transformVulnerableServerSource,
+    inspectResolveLaunchCompatibility,
+    compatibilityMarker,
+    assertCompatibilityMarker,
+    replaceFileTransactionally,
+    ensureResolveLaunchCompatibility,
+    requireResolvedResolveLaunchCompatibility,
     LLAMA_ROOT,
     MCP_ROOT,
     checkAll,

@@ -1,6 +1,6 @@
 {
   "name": "davinci-resolve-ai-director",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "description": "DaVinci Resolve AI Director",
   "main": "main.js",
   "private": true,

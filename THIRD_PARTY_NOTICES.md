@@ -42,6 +42,7 @@ Preserve original upstream copyright and license notices. The existence of a pro
 - Upstream: `samuelgursky/davinci-resolve-mcp`.
 - License: MIT.
 - Accepted bundled seed: version `4.10.4`, commit `8911bd24aee76894238924317a461005dd013d94`.
+- AI Director may apply a version- and SHA-256-guarded downstream compatibility overlay to its managed local copy of MCP. This does not change upstream authorship or licensing. Unknown or changed MCP source is review-required rather than patched blindly.
 
 The shipping runtime contains dependency license files; those notices must remain intact.
 

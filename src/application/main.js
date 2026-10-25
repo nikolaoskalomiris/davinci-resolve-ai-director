@@ -2588,7 +2588,12 @@ const MCP_CHILD_ENVIRONMENT_KEYS = new Set([
 function systemRuntimePathEntries() {
     if (process.platform !== 'win32') return ['/usr/bin', '/bin'];
     const systemRoot = process.env.SystemRoot || process.env.WINDIR || 'C:\\Windows';
-    return [path.join(systemRoot, 'System32'), systemRoot];
+    return [
+        path.join(systemRoot, 'System32'),
+        path.join(systemRoot, 'System32', 'WindowsPowerShell', 'v1.0'),
+        path.join(systemRoot, 'System32', 'wbem'),
+        systemRoot
+    ];
 }
 
 function buildServerEnvironment(profile = getSelectedServerProfile()) {
@@ -3021,6 +3026,32 @@ async function ensureLlamaServer() {
             error: error.message
         });
         throw error;
+    }
+
+    let mcpLaunchCompatibility;
+    try {
+        mcpLaunchCompatibility = UpdateManager.ensureResolveLaunchCompatibility({
+            mcpRoot: MCP_ROOT
+        });
+    } catch (error) {
+        const compatibilityError = new Error(
+            `AI Director MCP launch compatibility check failed: ${error?.message || String(error)}`
+        );
+        notifyServerStatus({
+            state: 'error',
+            ownership: 'none',
+            endpoint: LLAMA_BASE_URL,
+            desired: serverDesired,
+            debug: debugEnabled,
+            error: compatibilityError.message
+        });
+        throw compatibilityError;
+    }
+    if (mcpLaunchCompatibility?.changed) {
+        console.log(
+            `[AI Director] Applied MCP Resolve launch compatibility for ${mcpLaunchCompatibility.version}: ` +
+            `${mcpLaunchCompatibility.beforeHash} -> ${mcpLaunchCompatibility.afterHash}`
+        );
     }
 
     const cudaCompatibility = await queryNvidiaCudaCompatibility();
