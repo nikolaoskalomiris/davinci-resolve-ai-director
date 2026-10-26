@@ -218,6 +218,68 @@ def _uninstall_macro(builder_root: Path, integration_uninstaller_name: str) -> s
 !macroend'''
 
 
+
+def _transform_runtime_base_v4_common_ownership(text: str) -> str:
+    replacements = [
+        (
+            'Var /GLOBAL aidSeedCommonRuntime\n',
+            '',
+            'legacy core Common seed flag',
+        ),
+        (
+            '    StrCpy $aidSeedCommonRuntime "0"\n',
+            '',
+            'legacy core Common seed initialization',
+        ),
+        (
+            'aid_eval_product_done:\n'
+            '    IfFileExists "$LocalAppData\\AIDirector\\Common\\*.*" aid_eval_common_done aid_eval_common_absent\n\n'
+            'aid_eval_common_absent:\n'
+            '    StrCpy $aidSeedCommonRuntime "1"\n\n'
+            'aid_eval_common_done:\n',
+            'aid_eval_product_done:\n',
+            'legacy core Common seed evaluation',
+        ),
+        (
+            '    StrCmp $aidSeedCommonRuntime "1" aid_seed_required 0\n',
+            '',
+            'legacy core Common extraction trigger',
+        ),
+        (
+            '    IfFileExists "$PLUGINSDIR\\aid-runtime-out\\AIDirector\\Common\\*.*" 0 aid_extract_failed\n',
+            '',
+            'legacy core Common extraction assertion',
+        ),
+        (
+            'aid_skip_product_copy:\n'
+            '    StrCmp $aidSeedCommonRuntime "1" 0 aid_skip_common_copy\n'
+            '    DetailPrint "Provisioning shared AI Director runtime..."\n'
+            '    CreateDirectory "$LocalAppData\\AIDirector"\n'
+            '    ClearErrors\n'
+            '    CopyFiles /SILENT "$PLUGINSDIR\\aid-runtime-out\\AIDirector\\Common" "$LocalAppData\\AIDirector"\n'
+            '    IfErrors aid_copy_failed 0\n\n'
+            'aid_skip_common_copy:\n',
+            'aid_skip_product_copy:\n',
+            'legacy core Common copy block',
+        ),
+        (
+            '    StrCmp $aidSeedCommonRuntime "1" aid_bind_paths\n',
+            '',
+            'legacy core Common path-binding trigger',
+        ),
+    ]
+
+    out = text
+    for old, new, label in replacements:
+        count = out.count(old)
+        if count != 1:
+            raise RuntimeError(
+                f"A6 runtime-base v4 Common ownership transform anchor mismatch ({label}); found {count}."
+            )
+        out = out.replace(old, new, 1)
+    return out
+
+
 def _transform_additive_compatibility_assets(text: str, builder_root: Path) -> str:
     _validate_compat_asset_helper(builder_root)
     helper = builder_root / "runtime" / "support" / COMPAT_ASSET_HELPER_NAME
@@ -301,6 +363,7 @@ def _transform_additive_compatibility_assets(text: str, builder_root: Path) -> s
 def transform_nsis_include(text: str, builder_root: Path, integration_uninstaller_name: str) -> str:
     out = _replace_macro(text, "customUnInstall", _uninstall_macro(builder_root, integration_uninstaller_name))
     out = _transform_additive_compatibility_assets(out, builder_root)
+    out = _transform_runtime_base_v4_common_ownership(out)
     low = out.casefold()
     residual = [
         token for token in FORBIDDEN_LEGACY_MIGRATION_TOKENS
@@ -342,6 +405,24 @@ def validate_successor_nsis(text: str, integration_uninstaller_name: str) -> Non
     missing = [token for token in required if token not in low]
     if missing:
         raise RuntimeError(f"0.3.21 NSIS contract missing: {missing}")
+
+    forbidden_core_common = (
+        'var /global aidseedcommonruntime',
+        'aid_eval_common_absent',
+        'aid_eval_common_done',
+        'strcmp $aidseedcommonruntime',
+        '$pluginsdir\\aid-runtime-out\\aidirector\\common',
+    )
+    leaked_core_common = [token for token in forbidden_core_common if token in low]
+    if leaked_core_common:
+        raise RuntimeError(
+            f"Runtime-base v4 core NSIS still owns Common payload state: {leaked_core_common}"
+        )
+    if (
+        'copyfiles /silent "$pluginsdir\\aid-runtime-stack-out\\aidirector\\common" '
+        '"$localappdata\\aidirector"'
+    ) not in low:
+        raise RuntimeError("Runtime-stack is not the sole installer owner of AIDirector/Common.")
     if integration_uninstaller_name.casefold() not in low:
         raise RuntimeError("Generated parent uninstall macro is not bound to the active Integration uninstaller filename.")
     if "remove davinci resolve ai director resolve integration.exe" in low:
