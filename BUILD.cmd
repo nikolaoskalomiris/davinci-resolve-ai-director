@@ -7,7 +7,7 @@ set "ELECTRON=%ROOT%_toolchain\Archives\electron-v36.3.2-win32-x64.zip"
 set "NSIS=%ROOT%_toolchain\Archives\nsis-3.0.4.1.7z"
 set "NSIS_RES=%ROOT%_toolchain\Archives\nsis-resources-3.4.1.7z"
 set "SEVENZIP=%ROOT%_toolchain\Archives\7zip-win-x64.tar.gz"
-set "RUNTIME_BASE=%ROOT%_inputs\Runtime-Bases\CUDA13-Native-Base-v4\RUNTIME-BASE.7z"
+set "RUNTIME_BASE=%ROOT%_inputs\Runtime-Bases\CUDA13-Native-Base-v5\RUNTIME-BASE.7z"
 set "CUDA_CUDART_REDIST=%ROOT%_inputs\Shared-CUDA\CUDA13.3.1\Archives\cuda_cudart-windows-x86_64-13.3.29-archive.zip"
 set "CUDA_CUBLAS_REDIST=%ROOT%_inputs\Shared-CUDA\CUDA13.3.1\Archives\libcublas-windows-x86_64-13.6.0.2-archive.zip"
 set "BOOTSTRAP=%ROOT%bootstrap\BOOTSTRAP.ps1"
@@ -34,7 +34,7 @@ set "AI_DIRECTOR_BOOTSTRAP_SCRIPT=%BOOTSTRAP%"
 set "BOOTSTRAP_SHA="
 for /f "usebackq delims=" %%H in (`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$h=(Get-FileHash -LiteralPath $env:AI_DIRECTOR_BOOTSTRAP_SCRIPT -Algorithm SHA256).Hash.ToUpperInvariant(); Write-Output $h"`) do set "BOOTSTRAP_SHA=%%H"
 set "AI_DIRECTOR_BOOTSTRAP_SCRIPT="
-if /I not "%BOOTSTRAP_SHA%"=="53AE186FD91B8D557662CB91F8CC94A3CD2F8A68D34F5DDD49E45960F044C226" (
+if /I not "%BOOTSTRAP_SHA%"=="2119818A8A3D64BF6DBA620D6D67AC485616AAF90EBAE0688F26CB4CC06F806C" (
   echo BOOTSTRAP_STATUS=ERROR
   echo ERROR=Bootstrap control SHA256 mismatch.
   exit /b 3

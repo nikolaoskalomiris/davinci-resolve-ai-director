@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "status": "SHIPPING_PORTABLE_SEED_PAYLOAD",
   "product_name": "DaVinci Resolve AI Director",
   "app_id": "com.aidirector.davinciresolve",
@@ -20,8 +20,11 @@
     "release_manifest_sha256": "F66BF975CFF513107EFED60B791039B3B834FC2FDC74E509CF379809DC245B1E"
   },
   "managed_mcp": {
-    "version": "4.10.4",
-    "commit": "8911bd24aee76894238924317a461005dd013d94"
+    "version": "4.15.3",
+    "commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+    "package_json_sha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
+    "server_sha256_after_registered_overlays": "787C09014DCAEF4430DBE24AA483C72331C469CBC739AA7612479A55C8BA96A0",
+    "managed_marker_sha256": "DA6B0AF2F489463DC7AC1C272B2AC2E0F2A14D33A0790989DA39F1DDAC02E52C"
   },
   "identity_policy": {
     "product_owned_legacy_identity_hits": 0,
@@ -68,14 +71,24 @@
       "tree_digest_sha256": "B95D7523E96D96658426B0E426E204E220DE6E333550ECFF3288271A179F7AC9"
     },
     "advanced_dependency_image": {
-      "file_count": 4649,
-      "total_bytes": 118148433,
-      "tree_digest_sha256": "13B6E9C99C3AAB7110D7235624A0D81011CAC76DA05709436B36A80DA26610E4"
+      "file_count": 4609,
+      "total_bytes": 59755977,
+      "inventory_slice_sha256": "89411B7E2C4C88A373B50DB8F65FF519D94B5958BAE0FDDF430D0EAE2AAE0638",
+      "inventory_slice_algorithm": "SHA256_UTF8_COMPACT_JSON_SORTED_CASEFOLD_RELATIVE_PATH_ROWS_V1",
+      "version": "4.15.3",
+      "authority_node_modules_tree_sha256": "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964",
+      "payload_manifest_sha256": "093DB2168F3FAD4FD14915BADE393183DAA5FF4B3A4C6BF0C6856597A916A09D"
     },
     "managed_mcp": {
-      "file_count": 5844,
-      "total_bytes": 76978745,
-      "tree_digest_sha256": "3CF8489AD20F1B223D02C0CB647FB8F23F20576B5D597A8626431B295DF7EE5E"
+      "file_count": 1301,
+      "total_bytes": 19645112,
+      "inventory_slice_sha256": "33F97BA9FAC2582D951AD5BE7AFBA0D1CAB52EA1776964302C50F4B507ECE35A",
+      "inventory_slice_algorithm": "SHA256_UTF8_COMPACT_JSON_SORTED_CASEFOLD_RELATIVE_PATH_ROWS_V1",
+      "version": "4.15.3",
+      "commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+      "package_json_sha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
+      "server_sha256_after_registered_overlays": "787C09014DCAEF4430DBE24AA483C72331C469CBC739AA7612479A55C8BA96A0",
+      "managed_marker_sha256": "DA6B0AF2F489463DC7AC1C272B2AC2E0F2A14D33A0790989DA39F1DDAC02E52C"
     }
   },
   "generated_artifact_pruning": {
@@ -103,17 +116,27 @@
     "accepted_source_release_manifest_sha256": "130903A50DC38B9BDE0254C71F583967700ECF6456C7603ED782CA18C193DDB2"
   },
   "successor_seed_promotion": {
-    "status": "CLEAN_4_10_4_BASELINE",
-    "from_managed_mcp_version": "4.8.22",
-    "to_managed_mcp_version": "4.10.4",
-    "source_commit": "8911bd24aee76894238924317a461005dd013d94",
-    "source_archive_sha256": "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6",
-    "live_accepted_contract_sha256": "3ED68C583E5DB9CA148A28C64C64F5459C6B3CDC7A4915BAE016262217D33765",
-    "strict_candidate_contract_sha256": "F6B4F585668499EDF2972961942F3C093FB1D874EF30CA320D0A07CBD99488F6",
-    "product_overlay_sha256": "E01116148EA0ECC1583F3484300228CA25AE2DB21321C7EC8499EC3A89D45391",
-    "advanced_dependency_lineage": "4.8.20 immutable image, accepted shipping-pruned node_modules",
+    "status": "CLEAN_4_15_3_BASELINE",
+    "from_managed_mcp_version": "4.10.4",
+    "to_managed_mcp_version": "4.15.3",
+    "source_commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+    "source_archive_sha256": "E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C",
+    "live_accepted_contract_sha256": "6D0E91F0E6100CFEB6B074E08007040687E85877601EA3BA60178DB7F3655587",
+    "strict_candidate_contract_sha256": "57ECECA939B23F5E44D9A78909074159DEFACAA171DAED6B94E58BC6370AB95C",
+    "active_managed_marker_sha256": "DA6B0AF2F489463DC7AC1C272B2AC2E0F2A14D33A0790989DA39F1DDAC02E52C",
+    "advanced_dependency_lineage": "4.15.3 immutable A5 image",
     "python_dependency_lineage": "3.11.9 immutable runtime, exact requirements match",
-    "historical_4_8_22_versioned_manifests_retained": false,
+    "historical_4_10_4_versioned_manifests_retained": true,
     "runtime_generated_mcp_artifacts_retained": false
+  },
+  "component_identity_policy": {
+    "unchanged_component_entries": "retained from predecessor release payload identity because bytes are unchanged",
+    "changed_component_entries": "inventory-slice identity over the final v5 staged payload",
+    "inventory_slice_algorithm": "SHA256_UTF8_COMPACT_JSON_SORTED_CASEFOLD_RELATIVE_PATH_ROWS_V1"
+  },
+  "runtime_base_rebind": {
+    "runtime_base_id": "CUDA13-Native-Base-v5",
+    "probe_archive_sha256": "1B2648E1962EF9B6D866256156E1FC3D2B79BAF38B7B552A3EEAF31075027204",
+    "final_shipping_archive_identity": "BOUND_BY_RUNTIME_BASE_DESCRIPTOR_AND_SHIPPING_INVENTORY"
   }
 }

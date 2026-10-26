@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "managed_mcp_version": "4.15.3",
+  "github_tag": "v4.15.3",
+  "github_source_commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+  "source_archive_sha256": "E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C",
+  "strict_contract_sha256": "57ECECA939B23F5E44D9A78909074159DEFACAA171DAED6B94E58BC6370AB95C",
+  "dependency_reuse_record_sha256": "0A4C9714433CD702C26F9BC48760794C5E4C3D7494C304BBC16CFC00FC93A08E",
+  "descriptors": {
+    "sourcePackageSha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
+    "requirementsSha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
+    "advancedPackageSha256": "A7C60D9AD9EFC4961527BA590F5028654217E6D4726E46935F78205190500B89",
+    "advancedLockSha256": "8D390671744C4DC7A9F64FAF4AB83B759E6B8F3BC701A4D56E11A96675FA94FD",
+    "capabilitiesSha256": "653E51C16C7DDAC7217F03EBFADA66052383DA0AEEE71EF1579227384F406558"
+  },
+  "expected_tools": {
+    "compound": 37,
+    "full": 390,
+    "advanced": 18,
+    "discovered_authorized": 445
+  },
+  "active_source_identity": {
+    "package_json_sha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
+    "server_sha256_after_registered_overlays": "787C09014DCAEF4430DBE24AA483C72331C469CBC739AA7612479A55C8BA96A0",
+    "capabilities_sha256_before_registered_guidance_overlay": "653E51C16C7DDAC7217F03EBFADA66052383DA0AEEE71EF1579227384F406558",
+    "capabilities_sha256_after_registered_guidance_overlay": "E01116148EA0ECC1583F3484300228CA25AE2DB21321C7EC8499EC3A89D45391",
+    "managed_marker_sha256": "DA6B0AF2F489463DC7AC1C272B2AC2E0F2A14D33A0790989DA39F1DDAC02E52C",
+    "product_overlay": {
+      "advancedWindowsGuidanceSha256": "E01116148EA0ECC1583F3484300228CA25AE2DB21321C7EC8499EC3A89D45391",
+      "advancedWindowsConformIndexSha256": "F6046FB27A4AAAD1F7C5F891C929405C1868EF7AD6C76213C25225C40A8F82FF",
+      "resolveLaunchCompatibility": {
+        "overlayId": "AI_DIRECTOR_RESOLVE_LAUNCH_GUARD_V2",
+        "markerVersion": 2,
+        "status": "compatible",
+        "sourceCommit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+        "graceSeconds": 30,
+        "targets": [
+          {
+            "id": "compound",
+            "path": "src/server.py",
+            "sha256": "787C09014DCAEF4430DBE24AA483C72331C469CBC739AA7612479A55C8BA96A0"
+          },
+          {
+            "id": "granular_full",
+            "path": "src/granular/common.py",
+            "sha256": "698D8CFDA613764FA5838431F19D75CBB57CABFB3FC172FE052B1982B29A622A"
+          }
+        ]
+      }
+    }
+  },
+  "advanced_dependency_image": {
+    "version": "4.15.3",
+    "root": "AIDirector/DaVinciResolve/Runtime/MCP/Advanced/4.15.3",
+    "source_image_zip_sha256": "FE8163322E864CD0F216D3ABF13B7C3F0BA988747BEB9C83D4B8EF1D31C13EF0",
+    "source_image_zip_bytes": 20031449,
+    "payload_manifest_sha256": "093DB2168F3FAD4FD14915BADE393183DAA5FF4B3A4C6BF0C6856597A916A09D",
+    "mandatory_manifest_sha256": "5F6A6CE58F7D8B9F96A2FC4FBDDE42E26A8E6538B4D590C1980700656C9AF9BD",
+    "provenance_sha256": "165AC34CC84ACEEFCF8125E4832A80D850ECEA1FB90B986300DEA77616DA990C",
+    "native_reproducibility_sha256": "94ACAD418CB1698029EF69955FD2EBCAD503177DEAC2CBC633B7B3DF64B590F1",
+    "third_party_inventory_sha256": "22F1B0E06BFB32773837594C6EBB202E64CD6EA6E0C1A9913427D0BADFEB51B8",
+    "node_modules_tree_sha256": "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964",
+    "node_modules_file_count": 4602,
+    "node_modules_bytes": 58626067,
+    "image_file_count": 4609,
+    "sharp_native_sha256": "971048779F9C8598DF14641DFC03C625885C93F473A788E65CA2DEB50D0B083E",
+    "better_sqlite3_native_sha256": "78EB63B1D38EFA70DAB28439D7A330CAAB952E4A21E563FB980C01B00E62FEA0"
+  },
+  "python_dependency_contract": {
+    "requirements_sha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
+    "network_required_for_activation": false,
+    "system_python_required": false
+  },
+  "clean_install_baseline": true,
+  "live_validation": {
+    "status": "PASS",
+    "evidence": [
+      "AI-Director-TrackA-MCP4153-Live-Activation-v2-20261026-195315.zip",
+      "AI-Director-TrackA-MCP4153-PostInference-v1-20261026-195750.zip"
+    ],
+    "direct_model": "Qwen3.6-35B-A3B",
+    "tool_count": 445,
+    "memory_inference": "PASS"
+  }
+}

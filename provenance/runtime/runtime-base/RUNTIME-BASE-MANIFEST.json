@@ -1,20 +1,30 @@
 {
-  "schema_version": 3,
-  "runtime_base_id": "CUDA13-Native-Base-v4",
+  "schema_version": 4,
+  "runtime_base_id": "CUDA13-Native-Base-v5",
   "payload_role": "ACTIVE_RUNTIME_BASE",
-  "expected_shipping_file_count": 20330,
+  "expected_shipping_file_count": 15790,
   "baseline_runtime_inheritance": {
-    "runtime_base_id": "CUDA13-Native-Base-v3",
-    "shipping_archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
-    "shipping_inventory_sha256": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
-    "file_count": 15720,
-    "all_baseline_file_bytes_preserved": true
+    "runtime_base_id": "CUDA13-Native-Base-v4",
+    "shipping_archive_sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
+    "shipping_inventory_sha256": "AB8041B93FE7CDD92378BFE51E4D6D7A8C9CBB40674E11B3A8507CA40913CC83",
+    "file_count": 20330,
+    "preservation_mode": "AUTHORIZED_REPLACEMENT_ROOTS_ONLY",
+    "authorized_replacement_roots": [
+      "davinci-resolve-mcp/",
+      "AIDirector/DaVinciResolve/Manifests/"
+    ]
   },
   "installed_managed_mcp_baseline": {
-    "version": "4.10.4",
-    "commit": "8911bd24aee76894238924317a461005dd013d94",
-    "package_json_sha256": "BA1BCD25E4AFACF00C40C5F2529B7548C54B0161017CF8EA7D9F7B84BA659E38",
-    "installer_activation": false
+    "version": "4.15.3",
+    "commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+    "package_json_sha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
+    "server_sha256_after_registered_overlays": "787C09014DCAEF4430DBE24AA483C72331C469CBC739AA7612479A55C8BA96A0",
+    "managed_marker_sha256": "DA6B0AF2F489463DC7AC1C272B2AC2E0F2A14D33A0790989DA39F1DDAC02E52C",
+    "compatibility_manifest_sha256": "6D0E91F0E6100CFEB6B074E08007040687E85877601EA3BA60178DB7F3655587",
+    "strict_contract_sha256": "57ECECA939B23F5E44D9A78909074159DEFACAA171DAED6B94E58BC6370AB95C",
+    "dependency_reuse_record_sha256": "0A4C9714433CD702C26F9BC48760794C5E4C3D7494C304BBC16CFC00FC93A08E",
+    "installer_activation": false,
+    "first_start_overlay_mutation_required": false
   },
   "bundled_mcp_seed": {
     "version": "4.15.3",
@@ -39,6 +49,13 @@
     "node_modules_bytes": 58626067,
     "image_file_count": 4609
   },
+  "python_dependency_contract": {
+    "python_version": "3.11.9",
+    "requirements_sha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
+    "reuse_existing_immutable_image": true,
+    "network_required_for_activation": false,
+    "system_python_required": false
+  },
   "runtime_stack_dependency": {
     "id": "CUDA13.3.1-Dual-Shared-v2",
     "descriptor_sha256": "872EF78E88D71E80332CEABEA685C8317F9F049669936C2C4A353B044E754E34",
@@ -46,21 +63,21 @@
     "archive_sha256": "F3413EDF3D0BD76D5D5D80698261F55F766A905CAD2BEF2E26A67DEAF3548C44",
     "mutation_authorized": false
   },
-  "upgrade_semantics": {
-    "mode": "ADDITIVE_COMPATIBILITY_ASSETS_ONLY",
-    "advanced_target": "AIDirector/DaVinciResolve/Runtime/MCP/Advanced/4.15.3",
-    "bootstrap_target": "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.15.3-931bc2cda8fd.tar.gz",
+  "clean_install_semantics": {
+    "mode": "PREVALIDATED_ACTIVE_MCP_BASELINE",
     "active_managed_mcp_swap_during_installer": false,
     "active_python_swap_during_installer": false,
     "active_manifest_rewrite_during_installer": false,
-    "vfx_mcp_config_rewrite_during_additive_migration": false
+    "active_mcp_overlay_mutation_on_first_start": false,
+    "vfx_mcp_config_rewrite_during_installer": false,
+    "historical_4_10_4_versioned_provenance_retained": true
   },
-  "shipping_archive_sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
-  "shipping_archive_bytes": 108296457,
-  "shipping_inventory_sha256": "AB8041B93FE7CDD92378BFE51E4D6D7A8C9CBB40674E11B3A8507CA40913CC83",
-  "archive_sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
-  "archive_bytes": 108296457,
-  "inventory_file_count": 20330,
+  "shipping_archive_sha256": "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A",
+  "shipping_archive_bytes": 96918486,
+  "shipping_inventory_sha256": "88249F66294113A0CC31E2527DAD6CFD6BEAB4A0B79C2A78F860B7C3D9261C7C",
+  "archive_sha256": "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A",
+  "archive_bytes": 96918486,
+  "inventory_file_count": 15790,
   "archive_filter": "BCJ",
-  "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v4"
+  "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v5"
 }

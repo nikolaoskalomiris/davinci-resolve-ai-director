@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$BuilderRoot,
     [string]$AssetRoot
 )
@@ -19,7 +19,7 @@ if ($AssetRoot) {
 }
 
 $ManifestPath = Join-Path $ScriptRoot "bootstrap-inputs.json"
-$ExpectedManifestSha256 = "6AC2C460E626258C5C4C858CAF47EEA59F5B3C3E04017A540764AA3236F82574"
+$ExpectedManifestSha256 = "6B02D592FD600B26F4F10C04421DEF58CB6DD0497D522EB841B1C580E6A019E4"
 
 function Require {
     param(

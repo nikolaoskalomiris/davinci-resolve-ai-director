@@ -2,23 +2,23 @@
   "schema_version": 2,
   "installed_at": null,
   "from_version": null,
-  "to_version": "4.10.4",
-  "source_commit": "8911bd24aee76894238924317a461005dd013d94",
+  "to_version": "4.15.3",
+  "source_commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
   "candidate_identity": {
-    "version": "4.10.4",
-    "sourceCommit": "8911bd24aee76894238924317a461005dd013d94",
+    "version": "4.15.3",
+    "sourceCommit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
     "enginesNode": ">=20.9",
-    "sourcePackageSha256": "BA1BCD25E4AFACF00C40C5F2529B7548C54B0161017CF8EA7D9F7B84BA659E38",
+    "sourcePackageSha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
     "requirementsSha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
-    "advancedPackageSha256": "DB980EEF605B90FFEE98EED89C9DA3302445EAE960977B909DCB6ED83B293F2F",
-    "advancedLockSha256": "7A051C3787CA117B884AC93A1C39D5CA5D668B46E375F94C5EFE526DD511F4F1",
+    "advancedPackageSha256": "A7C60D9AD9EFC4961527BA590F5028654217E6D4726E46935F78205190500B89",
+    "advancedLockSha256": "8D390671744C4DC7A9F64FAF4AB83B759E6B8F3BC701A4D56E11A96675FA94FD",
     "capabilitiesSha256": "653E51C16C7DDAC7217F03EBFADA66052383DA0AEEE71EF1579227384F406558",
-    "versionContractSha256": "3ED68C583E5DB9CA148A28C64C64F5459C6B3CDC7A4915BAE016262217D33765",
+    "versionContractSha256": "57ECECA939B23F5E44D9A78909074159DEFACAA171DAED6B94E58BC6370AB95C",
     "sourceAddressing": "commit",
-    "commitArchiveSha256": "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6"
+    "commitArchiveSha256": "E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C"
   },
-  "strict_candidate_contract_sha256": "F6B4F585668499EDF2972961942F3C093FB1D874EF30CA320D0A07CBD99488F6",
-  "live_accepted_contract_sha256": "3ED68C583E5DB9CA148A28C64C64F5459C6B3CDC7A4915BAE016262217D33765",
+  "strict_candidate_contract_sha256": "57ECECA939B23F5E44D9A78909074159DEFACAA171DAED6B94E58BC6370AB95C",
+  "live_accepted_contract_sha256": "6D0E91F0E6100CFEB6B074E08007040687E85877601EA3BA60178DB7F3655587",
   "install_mode": "clean-install-seed",
   "source_backup_root": null,
   "python_backup_root": null,
@@ -27,23 +27,23 @@
   "vfx_mcp_binding": "INSTALL_TIME_GENERATED",
   "expected_tools": {
     "compound": 37,
-    "full": 389,
+    "full": 390,
     "advanced": 18,
-    "discovered_authorized": 444
+    "discovered_authorized": 445
   },
   "runtime_health": {
     "status": "LIVE_HEALTH_ACCEPTED",
-    "validated_at": "2026-10-11T18:13:09.722Z",
+    "validated_at": null,
     "backend_ready": true,
     "execution_cache_primed": true,
     "functional_read_only_canary": true,
-    "scope": "seed-source-live-acceptance-evidence"
+    "scope": "Track A static-build-004 MCP 4.15.3 live activation and post-inference evidence"
   },
-  "seed_prepared_from_live_acceptance_at": "2026-10-11T18:13:09.725Z",
+  "seed_prepared_from_live_acceptance_at": null,
   "identity_rebase": {
     "status": "CLEAN_INSTALL_BASELINE",
     "product_root": "%LOCALAPPDATA%\\AIDirector\\DaVinciResolve",
     "managed_mcp_root": "%LOCALAPPDATA%\\davinci-resolve-mcp",
-    "note": "Historical development-machine backup paths intentionally excluded from release payload."
+    "note": "Historical development-machine backup paths are excluded; 4.10.4 versioned provenance remains historical only."
   }
 }

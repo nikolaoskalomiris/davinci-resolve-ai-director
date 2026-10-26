@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "managed_mcp_version": "4.15.3",
+  "github_source_commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+  "python_version": "3.11.9",
+  "reuse_from_managed_mcp_version": "4.10.4",
+  "reuse_from_source_commit": "8911bd24aee76894238924317a461005dd013d94",
+  "reuse_reason": "Exact requirements.txt SHA-256 is unchanged; reuse the product-owned immutable Python 3.11.9 dependency image.",
+  "dependency_contract": {
+    "requirements_sha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
+    "network_required_for_activation": false,
+    "system_python_required": false
+  },
+  "candidate_identity": {
+    "sourcePackageSha256": "C3B281B83B4016C049B0CCC6514134FF7BEAE5703C835547693C4734F99821F4",
+    "requirementsSha256": "8C5A69A398447A6ECD719256C3ABE351B125CD1D6F6E86A09112E186E073FC57",
+    "advancedPackageSha256": "A7C60D9AD9EFC4961527BA590F5028654217E6D4726E46935F78205190500B89",
+    "advancedLockSha256": "8D390671744C4DC7A9F64FAF4AB83B759E6B8F3BC701A4D56E11A96675FA94FD",
+    "capabilitiesSha256": "653E51C16C7DDAC7217F03EBFADA66052383DA0AEEE71EF1579227384F406558",
+    "generated_source_archive_sha256": "E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C"
+  },
+  "clean_install_baseline": true
+}
