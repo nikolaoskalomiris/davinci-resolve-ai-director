@@ -792,6 +792,7 @@ def prepare_project(api, current: dict, root: Path, logs: Path):
     env["npm_config_prefer_online"] = "true"
     env["TEMP"] = str(root / "npm-tmp")
     env["TMP"] = str(root / "npm-tmp")
+    env["TMPDIR"] = str(root / "npm-tmp")
     Path(env["TEMP"]).mkdir(parents=True, exist_ok=True)
     env["PATH"] = str(node.parent) + ";" + env.get("PATH", "")
     run([node, npm_cli, "ci", "--ignore-scripts", "--no-audit", "--no-fund"], cwd=project, env=env, log=logs / "npm-ci.log")
@@ -829,6 +830,7 @@ def dir_build(api, node: Path, eb_cli: Path, project: Path, env: dict, archive_m
     eb_env["ELECTRON_SKIP_BINARY_DOWNLOAD"] = "1"
     eb_env["TEMP"] = str(root / "eb-dir-tmp")
     eb_env["TMP"] = str(root / "eb-dir-tmp")
+    eb_env["TMPDIR"] = str(root / "eb-dir-tmp")
     Path(eb_env["TEMP"]).mkdir(parents=True, exist_ok=True)
     system_root = eb_env.get("SystemRoot") or eb_env.get("WINDIR") or r"C:\Windows"
     eb_env["PATH"] = ";".join([str(node.parent), str(Path(system_root)/"System32"/"WindowsPowerShell"/"v1.0"), str(Path(system_root)/"System32"), system_root])
@@ -954,6 +956,18 @@ def _build_once_unlocked(*, public_checked_out_build: bool = False) -> int:
     core_sha = sha256(CORE_PATH)
     api = load_core()
     work = Path(tempfile.mkdtemp(prefix=f"AI-Director-{TARGET_VERSION}-StaticBuild-"))
+    # AI_DIRECTOR_BUILD_TEMP_CONTAINMENT_V1: the one permitted top-level Temp entry is `work`.
+    # Every generic descendant process inherits a fallback inside that workspace; phase-specific
+    # Direct/Upstream/npm/electron-builder roots remain unchanged and take precedence.
+    inherited_process_temp = {k: os.environ.get(k) for k in ('TEMP','TMP','TMPDIR')}
+    inherited_tempfile_tempdir = tempfile.tempdir
+    process_temp = work / 'process-temp'
+    process_temp.mkdir()
+    for k in ('TEMP','TMP','TMPDIR'):
+        os.environ[k] = str(process_temp)
+    tempfile.tempdir = str(process_temp)
+    print(f"BUILD_WORK_ROOT={work}", flush=True)
+    print(f"BUILD_PROCESS_TEMP={process_temp}", flush=True)
     output_stage = series_root / f".{attempt_name}.staging-{os.getpid()}"
     require(not output_stage.exists(), f"Release-candidate staging path already exists: {output_stage}")
     output_committed = False
@@ -963,10 +977,13 @@ def _build_once_unlocked(*, public_checked_out_build: bool = False) -> int:
         archive_map = archives()
         seven, makensis, _, eb_cache = extract_nsis_toolchain(archive_map, work / "pinned-tools")
         base, descriptor_path, descriptor = runtime_base(current, core_sha)
+        print("BUILD_STAGE=SOURCE_RUNTIME_STACK_BEGIN", flush=True)
         stack, marker, required_targets, partial_roots = build_source_runtime_stack(seven, work, logs)
+        print("BUILD_STAGE=SOURCE_RUNTIME_STACK_END", flush=True)
         generator = ROOT / "runtime" / "support" / "Generate-AIDirectorRuntimePaths.ps1"
         assert_hash("runtime path generator", generator, EXPECTED["runtime_path_generator"])
 
+        print("BUILD_STAGE=APPLICATION_PACKAGING_BEGIN", flush=True)
         node, eb_cli, project, env, _overlays, _stack_targets, branding, branding_build = prepare_project(
             api, current, work, logs
         )
@@ -1025,6 +1042,7 @@ def _build_once_unlocked(*, public_checked_out_build: bool = False) -> int:
         eb_env["ELECTRON_BUILDER_7Z_FILTER"] = "BCJ"
         eb_env["TEMP"] = str(work / "eb-nsis-tmp")
         eb_env["TMP"] = str(work / "eb-nsis-tmp")
+        eb_env["TMPDIR"] = str(work / "eb-nsis-tmp")
         Path(eb_env["TEMP"]).mkdir(parents=True, exist_ok=True)
         system_root = eb_env.get("SystemRoot") or eb_env.get("WINDIR") or r"C:\Windows"
         eb_env["PATH"] = ";".join([
@@ -1052,6 +1070,7 @@ def _build_once_unlocked(*, public_checked_out_build: bool = False) -> int:
         setup = project / "installer-dist" / expected_main_setup_name
         require(child.name == expected_integration_setup_name, f"Resolve Integration artifact name mismatch: {child.name!r}")
         static_pe(setup)
+        print("BUILD_STAGE=APPLICATION_PACKAGING_END", flush=True)
 
         base_offset = api.exact_stream_offset(setup, base["archive_path"])
         stack_offset = api.exact_stream_offset(setup, stack["archive_path"])
@@ -1287,15 +1306,24 @@ def _build_once_unlocked(*, public_checked_out_build: bool = False) -> int:
     finally:
         active_exc = sys.exc_info()[1]
         try:
-            if work.exists():
-                remove_tree_strict(work, "Build temp")
-            require(not work.exists(), f"Build temp cleanup failed: {work}")
-            print("BUILD_TEMP_REMOVED=True")
-        except Exception as cleanup_exc:
-            print("BUILD_TEMP_REMOVED=False")
-            print(f"BUILD_TEMP_CLEANUP_ERROR={cleanup_exc}")
-            if active_exc is None:
-                raise
+            try:
+                if work.exists():
+                    remove_tree_strict(work, "Build temp")
+                require(not work.exists(), f"Build temp cleanup failed: {work}")
+                print("BUILD_TEMP_REMOVED=True")
+            except Exception as cleanup_exc:
+                print("BUILD_TEMP_REMOVED=False")
+                print(f"BUILD_TEMP_CLEANUP_ERROR={cleanup_exc}")
+                if active_exc is None:
+                    raise
+        finally:
+            tempfile.tempdir = inherited_tempfile_tempdir
+            for k, value in inherited_process_temp.items():
+                if value is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = value
+            print("BUILD_PROCESS_TEMP_RESTORED=True")
 
 
 

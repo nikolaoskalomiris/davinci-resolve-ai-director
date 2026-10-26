@@ -45,6 +45,14 @@ def vcenv(c):
         if '=' in line:
             k,v=line.split('=',1); env[k]=v
     for k in CLEAN: env.pop(k,None)
+    # AI_DIRECTOR_INHERITED_TEMP_REASSERT_V1: vcvars may rewrite TEMP/TMP.
+    # The authoritative parent already selected the phase-local temp root; restore it exactly.
+    for k in ('TEMP','TMP','TMPDIR'):
+        inherited=os.environ.get(k)
+        if inherited:
+            env[k]=inherited
+        else:
+            env.pop(k,None)
     cuda=c['environment']['required_set']['CUDA_PATH']; nvcc=c['environment']['required_set']['CUDACXX']
     cmake=Path(c['toolchain']['tools']['cmake.exe']['path']); ninja=Path(c['toolchain']['tools']['ninja.exe']['path'])
     env['CUDA_PATH']=cuda; env['CUDA_HOME']=cuda; env['CUDA_PATH_V13_3']=cuda; env['CUDACXX']=nvcc
