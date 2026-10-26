@@ -10,7 +10,7 @@
     "id": "AI-Director-Canonical-Application-0.3.27-v1",
     "source_dir": "src/application",
     "manifest_path": "provenance/application/CANONICAL-SOURCE-MANIFEST.json",
-    "manifest_sha256": "8E6D506C0D29C242458DBCE9D11554C2C664072D9AB5E80E429F5DCF4193A363",
+    "manifest_sha256": "93E2365CF3DDC0888A25C3B7F12077E35223E3C2737B3313D238C46633CB95DA",
     "file_count": 13
   },
   "ordered_installer_policies": [

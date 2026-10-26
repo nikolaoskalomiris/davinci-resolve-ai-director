@@ -19,8 +19,8 @@
     },
     {
       "path": "UpdateManager.js",
-      "sha256": "F773447C41BD251705E3F7FDFDC8BF2EAD0CDFB7F670F10FED7296E5604308B0",
-      "bytes": 221975
+      "sha256": "EF40C4F59F0950E31FB4723452C012A3E907C061C244F61BED30B750406951FD",
+      "bytes": 223713
     },
     {
       "path": "build/electron-builder.config.cjs",
@@ -39,8 +39,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "8C5C875EEE8548077FC14CFE1688AFF2369CD22FC6CD5933EA95005EE7F535F0",
-      "bytes": 208868
+      "sha256": "E977DA79C52269C402E8750474B5A01398503E7E43D62424745151F2E5542CB6",
+      "bytes": 208736
     },
     {
       "path": "markdown.js",
