@@ -41,20 +41,6 @@ const MCP_LIVE_SERVER = path.join(MCP_ROOT, 'src', 'server.py');
 const MCP_ADVANCED_BIN = path.join(MCP_ROOT, 'bin', 'davinci-resolve-advanced-mcp.mjs');
 const MCP_ADVANCED_PACKAGE = path.join(MCP_ROOT, 'resolve-advanced', 'package.json');
 const MCP_ADVANCED_NODE_MODULES = path.join(MCP_ROOT, 'resolve-advanced', 'node_modules');
-const MCP_ADVANCED_SHARP_NATIVE = path.join(
-    MCP_ADVANCED_NODE_MODULES,
-    '@img',
-    'sharp-win32-x64',
-    'lib',
-    'sharp-win32-x64-0.35.4.node'
-);
-const MCP_ADVANCED_SQLITE_NATIVE = path.join(
-    MCP_ADVANCED_NODE_MODULES,
-    'better-sqlite3',
-    'build',
-    'Release',
-    'better_sqlite3.node'
-);
 const NODE_EXE = ProductPaths.resolveNodeExecutable;
 const NPM_CLI = ProductPaths.resolveNpmCli;
 
@@ -2550,6 +2536,10 @@ function requiredServerRuntimeFilesPresent(profile = getSelectedServerProfile())
     const cudaRuntimeFiles = CUDA_RUNTIME_FILES.map((file) =>
         path.join(CUDA_RUNTIME_ROOT, file)
     );
+    const managedMcpDependencies = UpdateManager.managedMcpRuntimeDependencyPaths({
+        mcpRoot: MCP_ROOT
+    });
+    if (!managedMcpDependencies) return false;
 
     return [
         ...runtimeFiles,
@@ -2566,8 +2556,8 @@ function requiredServerRuntimeFilesPresent(profile = getSelectedServerProfile())
         MCP_ADVANCED_BIN,
         MCP_ADVANCED_PACKAGE,
         MCP_ADVANCED_NODE_MODULES,
-        MCP_ADVANCED_SHARP_NATIVE,
-        MCP_ADVANCED_SQLITE_NATIVE,
+        managedMcpDependencies.sharpNative,
+        managedMcpDependencies.sqliteNative,
         NODE_EXE,
         NPM_CLI
     ].every((file) => fs.existsSync(file));

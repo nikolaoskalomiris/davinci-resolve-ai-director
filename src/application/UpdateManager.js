@@ -4478,6 +4478,50 @@ async function rollbackInstalledUpdate(result, { onProgress } = {}) {
     throw new Error(`Unsupported update transaction for rollback: ${result.component || 'unknown'}`);
 }
 
+
+// Runtime prerequisite paths are derived from the exact registered managed-MCP
+// version contract. This keeps startup fail-closed while allowing a validated
+// managed update to change native dependency versions (for example sharp
+// 0.35.4 in MCP 4.10.4 -> 0.35.5 in MCP 4.15.3) without stale filename gates.
+function managedMcpRuntimeDependencyPaths({ mcpRoot = MCP_ROOT } = {}) {
+    const marker = readJsonFile(path.join(mcpRoot, '.davinci-resolve-mcp-managed.json'));
+    const packageJson = readJsonFile(path.join(mcpRoot, 'package.json'));
+    const version = normalizeMcpSemver(packageJson?.version);
+    const markerVersion = normalizeMcpSemver(marker?.version);
+
+    if (!version || !marker || marker.managed !== true || markerVersion !== version) {
+        return null;
+    }
+
+    const contract = mcpCompatibilityContract(version);
+    if (!contract ||
+        !contract.mandatoryAdvancedSharpVersion ||
+        !contract.mandatoryAdvancedBetterSqlite3Version) {
+        return null;
+    }
+
+    const nodeModulesRoot = path.join(mcpRoot, 'resolve-advanced', 'node_modules');
+    return Object.freeze({
+        version,
+        sharpVersion: String(contract.mandatoryAdvancedSharpVersion),
+        betterSqlite3Version: String(contract.mandatoryAdvancedBetterSqlite3Version),
+        sharpNative: path.join(
+            nodeModulesRoot,
+            '@img',
+            'sharp-win32-x64',
+            'lib',
+            `sharp-win32-x64-${contract.mandatoryAdvancedSharpVersion}.node`
+        ),
+        sqliteNative: path.join(
+            nodeModulesRoot,
+            'better-sqlite3',
+            'build',
+            'Release',
+            'better_sqlite3.node'
+        )
+    });
+}
+
 module.exports = {
     parseJsonText,
     readJsonFile,
@@ -4500,6 +4544,7 @@ module.exports = {
     requireWindowsAdvancedConformIndexCompatibility,
     LLAMA_ROOT,
     MCP_ROOT,
+    managedMcpRuntimeDependencyPaths,
     checkAll,
     checkLlamaUpdates,
     checkMcpUpdates,
