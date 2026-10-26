@@ -13,9 +13,11 @@ FORBIDDEN_LEGACY_MIGRATION_TOKENS = (
 INTEGRATION_REL = "Blackmagic Design\\DaVinci Resolve\\Support\\Workflow Integration Plugins\\com.aidirector.davinciresolve"
 INTEGRATION_UNINSTALL_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\DaVinciResolveAIDirectorResolveIntegration"
 CLEANUP_HELPER_NAME = "Remove-AIDirectorManagedState-v1.ps1"
+COMPAT_ASSET_HELPER_NAME = "Install-AIDirectorMcpCompatibilityAssets-v1.ps1"
 
-EXPECTED_RUNTIME_BASE_V3_ARCHIVE_SHA256 = "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D"
-EXPECTED_RUNTIME_BASE_INVENTORY_SHA256 = "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944"
+EXPECTED_RUNTIME_BASE_V4_ARCHIVE_SHA256 = "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC"
+EXPECTED_RUNTIME_BASE_INVENTORY_SHA256 = "AB8041B93FE7CDD92378BFE51E4D6D7A8C9CBB40674E11B3A8507CA40913CC83"
+EXPECTED_COMPAT_ASSET_HELPER_SHA256 = "99079478EB9C049F6B627678C47F7E8CF88209B45AD57857B1AFF02FAC984488"
 
 
 def _sha256(path: Path) -> str:
@@ -40,8 +42,8 @@ def _assert_accepted_runtime_base(builder_root: Path, args, kwargs) -> None:
                 break
     if archive is None or not archive.is_file():
         raise RuntimeError("0.3.21 successor installer policy could not identify the runtime-base archive argument.")
-    if _sha256(archive) != EXPECTED_RUNTIME_BASE_V3_ARCHIVE_SHA256:
-        raise RuntimeError("Runtime-base v3 archive is not the accepted full-Nsis7z-parity BCJ archive.")
+    if _sha256(archive) != EXPECTED_RUNTIME_BASE_V4_ARCHIVE_SHA256:
+        raise RuntimeError("Runtime-base v4 archive is not the exact A6 full-Nsis7z-parity BCJ archive.")
 
     inventory = (
         builder_root
@@ -51,7 +53,7 @@ def _assert_accepted_runtime_base(builder_root: Path, args, kwargs) -> None:
         / "SHIPPING-INVENTORY.json"
     )
     if not inventory.is_file() or _sha256(inventory) != EXPECTED_RUNTIME_BASE_INVENTORY_SHA256:
-        raise RuntimeError("Runtime-base v3 shipping inventory identity mismatch.")
+        raise RuntimeError("Runtime-base v4 shipping inventory identity mismatch.")
 
 
 def _validate_cleanup_helper(builder_root: Path) -> None:
@@ -71,6 +73,14 @@ def _validate_cleanup_helper(builder_root: Path) -> None:
     missing = [token for token in required if token not in low]
     if missing:
         raise RuntimeError(f"Managed-state cleanup helper contract missing: {missing}")
+
+
+def _validate_compat_asset_helper(builder_root: Path) -> None:
+    helper = builder_root / "runtime" / "support" / COMPAT_ASSET_HELPER_NAME
+    if not helper.is_file():
+        raise RuntimeError(f"Compatibility-asset helper missing: {helper}")
+    if _sha256(helper) != EXPECTED_COMPAT_ASSET_HELPER_SHA256:
+        raise RuntimeError("Compatibility-asset helper hash mismatch.")
 
 
 def _nsis_escape_path(path: Path) -> str:
@@ -208,8 +218,89 @@ def _uninstall_macro(builder_root: Path, integration_uninstaller_name: str) -> s
 !macroend'''
 
 
+def _transform_additive_compatibility_assets(text: str, builder_root: Path) -> str:
+    _validate_compat_asset_helper(builder_root)
+    helper = builder_root / "runtime" / "support" / COMPAT_ASSET_HELPER_NAME
+    helper_nsis = _nsis_escape_path(helper)
+
+    replacements = [
+        (
+            'Var /GLOBAL aidSeedManagedMcp\n',
+            'Var /GLOBAL aidSeedManagedMcp\nVar /GLOBAL aidNeedMcpCompatibilityAssets\n',
+            'global compatibility-assets flag',
+        ),
+        (
+            '    StrCpy $aidSeedManagedMcp "0"\n',
+            '    StrCpy $aidSeedManagedMcp "0"\n    StrCpy $aidNeedMcpCompatibilityAssets "1"\n',
+            'compatibility-assets evaluation flag',
+        ),
+        (
+            '    StrCmp $aidSeedManagedMcp "1" aid_seed_required aid_seed_not_required\n',
+            '    StrCmp $aidSeedManagedMcp "1" aid_seed_required 0\n'
+            '    StrCmp $aidNeedMcpCompatibilityAssets "1" aid_seed_required aid_seed_not_required\n',
+            'runtime extraction decision',
+        ),
+        (
+            '    DetailPrint "Binding per-user AI Director runtime paths..."\n',
+            '    StrCmp $aidSeedProductRuntime "1" aid_bind_paths\n'
+            '    StrCmp $aidSeedCommonRuntime "1" aid_bind_paths\n'
+            '    StrCmp $aidSeedManagedMcp "1" aid_bind_paths aid_skip_path_binding\n\n'
+            'aid_bind_paths:\n'
+            '    DetailPrint "Binding per-user AI Director runtime paths..."\n',
+            'path-binding guard',
+        ),
+        (
+            '    Goto aid_seed_cleanup\n\naid_copy_failed:\n',
+            '    Goto aid_after_core_seed\n\n'
+            'aid_skip_path_binding:\n'
+            '    DetailPrint "Preserving active MCP source, Python runtime, manifests, config and settings during compatibility-asset staging."\n\n'
+            'aid_after_core_seed:\n'
+            '    DetailPrint "Staging immutable MCP 4.15.3 compatibility assets without activating them..."\n'
+            f'    nsExec::ExecToStack \'"$SYSDIR\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\\{COMPAT_ASSET_HELPER_NAME}" -ExtractedRuntimeRoot "$PLUGINSDIR\\aid-runtime-out" -LocalAppData "$LocalAppData" -ReportPath "$TEMP\\AI-Director-MCP-Compatibility-Assets.json"\'\n'
+            '    Pop $R6\n'
+            '    Pop $R7\n'
+            '    StrCmp $R6 "0" aid_seed_cleanup 0\n'
+            '    DetailPrint "$R7"\n'
+            '    MessageBox MB_OK|MB_ICONSTOP "AI Director could not safely stage the immutable MCP 4.15.3 compatibility assets. Active MCP, Python, manifests, config and settings were not intentionally replaced. Review $TEMP\\AI-Director-MCP-Compatibility-Assets.json."\n'
+            '    Abort\n\n'
+            'aid_copy_failed:\n',
+            'additive compatibility-assets invocation',
+        ),
+        (
+            '    Delete "$PLUGINSDIR\\Generate-AIDirectorRuntimePaths.ps1"\n',
+            '    Delete "$PLUGINSDIR\\Generate-AIDirectorRuntimePaths.ps1"\n'
+            f'    Delete "$PLUGINSDIR\\{COMPAT_ASSET_HELPER_NAME}"\n',
+            'compatibility helper cleanup',
+        ),
+    ]
+
+    out = text
+    for old, new, label in replacements:
+        count = out.count(old)
+        if count != 1:
+            raise RuntimeError(
+                f"A6 additive NSIS transform anchor mismatch ({label}); found {count}."
+            )
+        out = out.replace(old, new, 1)
+
+    generator_pattern = re.compile(
+        r'(?m)^    File /oname=Generate-AIDirectorRuntimePaths\.ps1 "[^"\r\n]+"\r?$'
+    )
+    generator_matches = list(generator_pattern.finditer(out))
+    if len(generator_matches) != 1:
+        raise RuntimeError(
+            "A6 additive NSIS transform expected exactly one rendered path-generator File line; "
+            f"found {len(generator_matches)}."
+        )
+    rendered = generator_matches[0].group(0).rstrip("\r")
+    helper_line = f'    File /oname={COMPAT_ASSET_HELPER_NAME} "{helper_nsis}"'
+    out = out[:generator_matches[0].start()] + rendered + "\n" + helper_line + out[generator_matches[0].end():]
+    return out
+
+
 def transform_nsis_include(text: str, builder_root: Path, integration_uninstaller_name: str) -> str:
     out = _replace_macro(text, "customUnInstall", _uninstall_macro(builder_root, integration_uninstaller_name))
+    out = _transform_additive_compatibility_assets(out, builder_root)
     low = out.casefold()
     residual = [
         token for token in FORBIDDEN_LEGACY_MIGRATION_TOKENS
@@ -242,6 +333,11 @@ def validate_successor_nsis(text: str, integration_uninstaller_name: str) -> Non
         "idretry aid_u_integration_retry_elevation",
         "idcancel aid_u_integration_cancel",
         'delete "$desktop\\davinci resolve ai director.lnk"',
+        'install-aidirectormcpcompatibilityassets-v1.ps1',
+        'staging immutable mcp 4.15.3 compatibility assets without activating them',
+        'preserving active mcp source, python runtime, manifests, config and settings during compatibility-asset staging',
+        '-extractedruntimeroot "$pluginsdir\\aid-runtime-out"',
+        'ai-director-mcp-compatibility-assets.json',
     )
     missing = [token for token in required if token not in low]
     if missing:
@@ -268,6 +364,7 @@ def install_successor_policy(namespace: dict, builder_root: Path) -> None:
         raise RuntimeError("Expected make_nsis_include / validate_nsis_include functions are unavailable.")
 
     _validate_cleanup_helper(builder_root)
+    _validate_compat_asset_helper(builder_root)
 
     integration_product_name = str(namespace.get("AI_DIRECTOR_INTEGRATION_PRODUCT_NAME") or "")
     integration_uninstaller_name = str(namespace.get("RESOLVE_LAUNCHER_UNINSTALLER_NAME") or "")

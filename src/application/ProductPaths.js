@@ -41,11 +41,23 @@ const resolveMcpPythonVersion = '3.11.9';
 const resolveMcpPythonRoot = path.join(resolveRuntimeRoot, 'Python', 'MCP', resolveMcpPythonVersion);
 const resolveNodeVersion = '24.18.0';
 const resolveNodeRoot = path.join(resolveRuntimeRoot, 'Node', resolveNodeVersion);
-const resolveMcpAdvancedRuntimeVersion = '4.8.20';
-const resolveMcpAdvancedRuntimeRoot = path.join(
+const resolveMcpAdvancedRuntimeDefaultVersion = '4.8.20';
+const resolveMcpAdvancedRuntimeBaseRoot = path.join(
     resolveRuntimeRoot,
     'MCP',
-    'Advanced',
+    'Advanced'
+);
+
+function resolveMcpAdvancedRuntimeRootForVersion(version) {
+    const normalized = String(version || '').trim().replace(/^v/i, '');
+    if (!/^\d+\.\d+\.\d+$/.test(normalized)) {
+        throw new Error(`Invalid managed MCP Advanced runtime version: ${version || 'missing'}`);
+    }
+    return path.join(resolveMcpAdvancedRuntimeBaseRoot, normalized);
+}
+
+const resolveMcpAdvancedRuntimeVersion = resolveMcpAdvancedRuntimeDefaultVersion;
+const resolveMcpAdvancedRuntimeRoot = resolveMcpAdvancedRuntimeRootForVersion(
     resolveMcpAdvancedRuntimeVersion
 );
 const paths = Object.freeze({
@@ -91,6 +103,8 @@ const paths = Object.freeze({
     // the managed MCP source contract. End users do not build these modules.
     resolveMcpAdvancedRuntimeVersion,
     resolveMcpAdvancedRuntimeRoot,
+    resolveMcpAdvancedRuntimeBaseRoot,
+    resolveMcpAdvancedRuntimeRootForVersion,
 
     directRoot: path.join(llamaRoot, 'Stacks', 'CUDA13.3.1-Dual-Shared-v2', 'Direct', 'c8f321699'),
 

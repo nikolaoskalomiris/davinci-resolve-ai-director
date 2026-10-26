@@ -93,7 +93,7 @@ def parse_cache(p):
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--source-root',required=True); ap.add_argument('--shared-cuda-root',required=True); ap.add_argument('--output-root',required=True); ap.add_argument('--contract',default=str(DEFAULT_CONTRACT)); ap.add_argument('--jobs',type=int,default=3); a=ap.parse_args()
-    contract=readj(a.contract); req(sha256(a.contract)=='4F7942E972C93CF9A822310B2D493EE88BF435F39500B71F017579F065CD51E1','contract SHA mismatch')
+    contract=readj(a.contract); req(sha256(a.contract)=='4E1B55ED7A95153D9BF3368C34FF5BAC98D994395E7369D924E7E668D5B0F1AA','contract SHA mismatch')
     tm=readj(TREE_MANIFEST); req(tm['accepted_source_tree']==contract['authority']['accepted_source_tree'],'tree manifest mismatch')
     source=Path(a.source_root); req(source.is_dir(),'source root missing'); verify_tree(source,tm); req(not (source/'.git').exists(),'source root must be VCS-free')
     out=Path(a.output_root); req(not out.exists(),f'output root exists: {out}'); out.mkdir(parents=True)

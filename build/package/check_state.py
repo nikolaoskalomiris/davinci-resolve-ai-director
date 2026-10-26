@@ -16,18 +16,18 @@ APP_ROOT = ROOT / "src" / "application"
 APP_MANIFEST = ROOT / "provenance" / "application" / "CANONICAL-SOURCE-MANIFEST.json"
 
 EXPECTED_FIXED = {
-    "build/direct/AI-Director-Direct-Source-Build-Contract-v1.json": "2327DC49A9CDA1A3186AA2C5B8392A96D764AB868E6F99BF0080E11DF37B63A7",
-    "build/direct/build_direct.py": "A44E4C481937AFF3916F2BCB65351291909968DB7597B4A513D3FE9913E28389",
-    "build/direct/verify_direct_shipping_set.py": "F9AD927AA2F9E46D5FFFE6F42F889D5BED1737592475D6CBF387D7583907EFBE",
-    "build/upstream/AI-Director-Upstream-Source-Build-Contract-v2.json": "4F7942E972C93CF9A822310B2D493EE88BF435F39500B71F017579F065CD51E1",
+    "build/direct/AI-Director-Direct-Source-Build-Contract-v1.json": "A9AB28E0E6068F161206CE98425378337609A822D6DDD18A813803969352F8BC",
+    "build/direct/build_direct.py": "A7EE4A8A95729B6611CEBCD06F1AD18E1ABED06442B38EF9F4671821AAF7C7AD",
+    "build/direct/verify_direct_shipping_set.py": "16398A9A8587E81DB14849BE93E29091AB8B7ED972BA7B4CC1D5A75068133B6E",
+    "build/upstream/AI-Director-Upstream-Source-Build-Contract-v2.json": "4E1B55ED7A95153D9BF3368C34FF5BAC98D994395E7369D924E7E668D5B0F1AA",
     "build/upstream/AI-Director-Upstream-Source-Tree-Manifest-v1.json": "BA63DE7FB74C287408C009EB13277418C726C6B6D635A6C2FB5CF7C408A3E5A5",
-    "build/upstream/build_upstream.py": "AB02B3D33E8BE4C377C1833A015BB99209A05F364B86542891BE8A49DCAE5323",
+    "build/upstream/build_upstream.py": "024CB5C0288DF24E54215CAF9AAC7C7E1AA833A54854F4C490A890084404FF7C",
     "build/upstream/reconstruct_source.py": "E269528EB96403BC1C7CA7CED62EC383E26E3DC97663CB8D4B36727483C9DE2D",
     "provenance/direct/AI-Director-Direct-Provenance-v1.json": "B597B7534E5291C8333A737248680056234712BE43CBD626D25685E2596B0EB3",
     "provenance/upstream/AI-Director-Upstream-Provenance-v1.json": "6BB550BDBCE28F1CEB1C3A8CC7F451FE804C456E31480093B99CB8F6BEFD5AF0",
-    "provenance/runtime/runtime-base/RUNTIME-BASE.json": "D07EF6F287886F9433E82DAED3FBC67FFB5F9F6E567BDC7D9372A950A73BB53B",
-    "provenance/runtime/runtime-base/RUNTIME-BASE-MANIFEST.json": "19AFDAB5C807C6A94AD0FC4AEB8DE99BF90B65252BB901BEF649F5FA1269519D",
-    "provenance/runtime/runtime-base/SHIPPING-INVENTORY.json": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
+    "provenance/runtime/runtime-base/RUNTIME-BASE.json": "EAFBB232911AB26B566ADE1D9C11F2819CECE4D91C488516B6F2F6D6784ED493",
+    "provenance/runtime/runtime-base/RUNTIME-BASE-MANIFEST.json": "5CEE86421710A1BF1E2D0D525287E84162B4065928C7A9F1E39900D766F21D56",
+    "provenance/runtime/runtime-base/SHIPPING-INVENTORY.json": "AB8041B93FE7CDD92378BFE51E4D6D7A8C9CBB40674E11B3A8507CA40913CC83",
     "provenance/runtime/runtime-stack/RUNTIME-STACK.json": "872EF78E88D71E80332CEABEA685C8317F9F049669936C2C4A353B044E754E34",
     "provenance/runtime/runtime-stack/RUNTIME-STACK-MANIFEST.json": "AA04F057CA1B8788BB759DE23CFFD3B7CE65D6BA2F38B2D55C35A9BEF56EBA51",
     "branding/BRANDING.json": "0419B6BFA46B7DE1FF6A828A78A4C49B7DB819411A72A3A5867957E7A29A848B",
@@ -47,6 +47,9 @@ RUNTIME_PUBLICATION = {
     "src/runtime-backend/MCP/vfx_mcp.template.json": "B1927C2C5D7468811A467C4264DE3F40AA05C5E9DA0D1C217C16C86A5189A64D",
     "provenance/runtime/manifests/direct-c8f321699.json": "26B20C378270E2C2A02097DD37A66E3CFBDBE691AADC2DBF03FD7021409A1CB2",
     "provenance/runtime/manifests/MCP-ADVANCED-NODE-DEPENDENCY-IMAGE-4.8.20.json": "785060B9D567F123E0685B3DDC518C4B2E88CE15FE355947BDCB4ECD316DCAE3",
+    "provenance/runtime/manifests/MCP-ADVANCED-NODE-DEPENDENCY-IMAGE-4.15.3.json": "5F6A6CE58F7D8B9F96A2FC4FBDDE42E26A8E6538B4D590C1980700656C9AF9BD",
+    "provenance/runtime/manifests/MCP-ADVANCED-NODE-DEPENDENCY-IMAGE-PROVENANCE-4.15.3.json": "165AC34CC84ACEEFCF8125E4832A80D850ECEA1FB90B986300DEA77616DA990C",
+    "provenance/runtime/manifests/MCP-ADVANCED-NODE-NATIVE-REPRODUCIBILITY-4.15.3.json": "94ACAD418CB1698029EF69955FD2EBCAD503177DEAC2CBC633B7B3DF64B590F1",
     "provenance/runtime/manifests/MCP-COMPATIBILITY-4.10.4.json": "EC5EEF78244B01B8348FE4DC220DF4568730D7523C40DF1233A413F57BD1E5F9",
     "provenance/runtime/manifests/MCP-COMPATIBILITY-CONTRACT-4.10.4.json": "3ED68C583E5DB9CA148A28C64C64F5459C6B3CDC7A4915BAE016262217D33765",
     "provenance/runtime/manifests/MCP-DEPENDENCY-REUSE-4.10.4.json": "32F67966B54D516590BCD6A6CBFE5135CBDE72B5512C21FFC7751FD1F164BD74",
@@ -58,6 +61,7 @@ RUNTIME_PUBLICATION = {
     "provenance/runtime/manifests/python-3.11.9.json": "40FA93575F42FAB78C1134067542256932DE3D7055BE1DE3387D205A1456859D",
     "provenance/runtime/manifests/RELEASE-PAYLOAD-MANIFEST-identity-v1.json": "371DACB673C02B4EA5DF6DEA41DC70B38AC689529938066D5EF5B00EC77576AA",
     "provenance/runtime/licenses/AdvancedMCP/THIRD-PARTY-PACKAGES-4.8.20.json": "935426A1E81FB50DB989C1ECE8005CEE23059E69692B4E5285D59BB4AF69FF75",
+    "provenance/runtime/licenses/AdvancedMCP/THIRD-PARTY-PACKAGES-4.15.3.json": "22F1B0E06BFB32773837594C6EBB202E64CD6EA6E0C1A9913427D0BADFEB51B8",
     "provenance/runtime/licenses/FFmpeg/REDISTRIBUTION-ENGINEERING-NOTICE-8.1.3.txt": "4CA97B6986D2135B9161A189EDFB23E8AC2819B58C58909EDDF15EFB1DF1AA79",
     "provenance/runtime/licenses/Python/THIRD-PARTY-NOTICES.txt": "DB9ED823A6FC0BD345B0FA91D0697D0FBDE34A19A2A326D20AD2F54484CA8D14",
 }
@@ -71,6 +75,7 @@ CONTROL_PATHS = {
     "successor_policy.py": ROOT / "installer" / "successor_policy.py",
     "support/Remove-AIDirectorManagedState-v1.ps1": ROOT / "runtime" / "support" / "Remove-AIDirectorManagedState-v1.ps1",
     "support/Generate-AIDirectorRuntimePaths.ps1": ROOT / "runtime" / "support" / "Generate-AIDirectorRuntimePaths.ps1",
+    "support/Install-AIDirectorMcpCompatibilityAssets-v1.ps1": ROOT / "runtime" / "support" / "Install-AIDirectorMcpCompatibilityAssets-v1.ps1",
     "support/Verify-AIDirectorRuntimeBaseNsis7zParity.py": ROOT / "installer" / "validators" / "Verify-AIDirectorRuntimeBaseNsis7zParity.py",
     "version_control.py": ROOT / "build" / "package" / "version_control.py",
     "build/system-toolchain/verify_system_toolchain.py": ROOT / "build" / "system-toolchain" / "verify_system_toolchain.py",
@@ -189,12 +194,15 @@ def validate_resolve():
 def validate_runtime_publication():
     for rel,sha in RUNTIME_PUBLICATION.items(): verify_hash(rel,sha)
     seed=read_json(ROOT/'provenance/runtime/mcp/MCP-SEED.json')
-    require(seed.get('version')=='4.10.4','MCP seed version mismatch')
-    require(seed.get('commit')=='8911bd24aee76894238924317a461005dd013d94','MCP seed commit mismatch')
-    require(str(seed.get('sha256') or '').upper()=='48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6','MCP seed hash mismatch')
+    require(seed.get('version')=='4.15.3','MCP seed version mismatch')
+    require(seed.get('commit')=='931bc2cda8fd9049982a457de9ff70836c406cd7','MCP seed commit mismatch')
+    require(int(seed.get('bytes') or -1)==6419447,'MCP seed byte-count mismatch')
+    require(str(seed.get('sha256') or '').upper()=='E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C','MCP seed hash mismatch')
 
 def validate_bootstrap():
     obj=read_json(ROOT/'bootstrap/bootstrap-inputs.json')
+    state=read_json(STATE_PATH)
+    target_pending=(state.get('state_mode')=='TARGET_READY')
     require(obj.get('schema_version')==1 and len(obj.get('inputs') or [])==9,'bootstrap input contract mismatch')
     require(obj.get('normal_user_manual_toolchain_install_required') is True,'bootstrap must declare external manual system-toolchain prerequisites')
     require(obj.get('system_toolchain_installation_mode')=='EXTERNAL_MACHINE_PREREQUISITES_NOT_AUTO_INSTALLED','bootstrap system-toolchain installation mode mismatch')
@@ -231,16 +239,30 @@ def validate_bootstrap():
         for member in row.get('redistributable_members') or []:
             actual_members[str(member.get('shipping_name') or '')]=(str(member.get('sha256') or '').upper(),int(member.get('bytes') or -1))
     require(actual_members==expected_members,'shared CUDA member identity contract mismatch')
-    runtime=[x for x in obj['inputs'] if x.get('id')=='runtime-base-CUDA13-Native-Base-v3']
+    runtime=[x for x in obj['inputs'] if x.get('id')=='runtime-base-CUDA13-Native-Base-v4']
     require(len(runtime)==1,'runtime bootstrap input missing')
     row=runtime[0]
-    require(row.get('destination_file')=='_inputs/Runtime-Bases/CUDA13-Native-Base-v3/RUNTIME-BASE.7z','runtime input destination mismatch')
-    expected_url='https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v1/AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z'
-    require(obj.get('public_runtime_asset_urls_bound') is True,'public runtime asset URLs must be bound')
-    require(str(row.get('url') or '')==expected_url,'runtime-base public URL mismatch')
+    require(row.get('destination_file')=='_inputs/Runtime-Bases/CUDA13-Native-Base-v4/RUNTIME-BASE.7z','runtime input destination mismatch')
+    expected_url='https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v2/AI-Director-Runtime-Base-CUDA13-Native-Base-v4.7z'
+    require(str(row.get('url') or '')==expected_url,'runtime-base candidate/public URL mismatch')
+    require(int(row.get('bytes') or -1)==108296457,'runtime-base bootstrap byte-count mismatch')
+    require(str(row.get('sha256') or '').upper()=='29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC','runtime-base bootstrap SHA-256 mismatch')
     require('local_source_relative_path' not in row,'engineering _source runtime fallback must not exist')
-    require(row.get('asset_root_relative_path')=='AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z','runtime offline mirror path mismatch')
-    url_bound=True
+    require(row.get('asset_root_relative_path')=='AI-Director-Runtime-Base-CUDA13-Native-Base-v4.7z','runtime offline mirror path mismatch')
+    if target_pending:
+        pending = obj.get('public_runtime_asset_urls_bound') is False
+        published = obj.get('public_runtime_asset_urls_bound') is True
+        require(pending or published,'TARGET_READY runtime-base publication flag must be boolean')
+        if pending:
+            require(row.get('publication_status')=='PENDING_EXACT_ACCEPTANCE_PUBLICATION','TARGET_READY pending runtime-base publication status mismatch')
+            url_bound=False
+        else:
+            require(row.get('publication_status')=='PUBLISHED','TARGET_READY published runtime-base publication status mismatch')
+            url_bound=True
+    else:
+        require(obj.get('public_runtime_asset_urls_bound') is True,'accepted public runtime asset URLs must be bound')
+        require(row.get('publication_status')=='PUBLISHED','accepted runtime-base publication status mismatch')
+        url_bound=True
     archives={
       '_toolchain/Archives/electron-v36.3.2-win32-x64.zip':'5475DC725D50C9CEE12C0D56E1FD093C3BAD75E9DFAFD9753FDDC3A085532A37',
       '_toolchain/Archives/nsis-3.0.4.1.7z':'9877DF902530F96357D13A7A31AE2B9DF67F48B11FFC9A1700A7C961574EC5FA',
@@ -254,8 +276,8 @@ def validate_bootstrap():
         else: require(sha256(p)==sha,f'owned archive mismatch: {rel}')
     py=ROOT/'_toolchain/Python/3.11.9/python.exe'; node=ROOT/'_toolchain/Node/24.18.0/node.exe'
     if not py.is_file() or not node.is_file(): generated=False
-    rb=ROOT/'_inputs/Runtime-Bases/CUDA13-Native-Base-v3/RUNTIME-BASE.7z'
-    if rb.is_file(): require(sha256(rb)=='921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D','runtime-base input hash mismatch')
+    rb=ROOT/'_inputs/Runtime-Bases/CUDA13-Native-Base-v4/RUNTIME-BASE.7z'
+    if rb.is_file(): require(rb.stat().st_size==108296457 and sha256(rb)=='29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC','runtime-base input identity mismatch')
     else: generated=False
     shared_archives={
       '_inputs/Shared-CUDA/CUDA13.3.1/Archives/cuda_cudart-windows-x86_64-13.3.29-archive.zip':('1FEB7DD266813FFE8DBC24E115183A5AC35A4795C8D34ACA0DF85AB616B64D9C',2589792),
@@ -272,6 +294,8 @@ def validate_bootstrap():
 def validate_public_repository_state():
     require(PUBLIC_STATE_PATH.is_file(),'public-repository-state.json missing')
     obj=read_json(PUBLIC_STATE_PATH)
+    state=read_json(STATE_PATH)
+    target_pending=(state.get('state_mode')=='TARGET_READY')
     require(obj.get('schema_version')==1,'public repository state schema mismatch')
     require(obj.get('layout')=='PUBLIC_SOURCE_REPOSITORY_V1','public repository layout mismatch')
     require(obj.get('system_toolchain_boundary_resolved') is True,'system-toolchain boundary must be resolved')
@@ -279,8 +303,20 @@ def validate_public_repository_state():
     require(obj.get('system_toolchain_validator')=='build/system-toolchain/verify_system_toolchain.py','public system-toolchain validator mismatch')
     require(obj.get('plain_build_from_accepted_ready_public_semantics')=='CHECKED_OUT_VERSION_NONMUTATING','plain public BUILD semantics mismatch')
     require(obj.get('plain_build_release_state_mutation') is False,'plain public BUILD must not mutate release state')
-    require(obj.get('runtime_base_public_url_bound') is True,'runtime-base public URL state must be resolved')
-    require(obj.get('runtime_base_public_url')=='https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v1/AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z','runtime-base public state URL mismatch')
+    require(obj.get('runtime_base_public_url')=='https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v2/AI-Director-Runtime-Base-CUDA13-Native-Base-v4.7z','runtime-base public/candidate state URL mismatch')
+    require(str(obj.get('runtime_base_sha256') or '').upper()=='29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC','runtime-base public state SHA-256 mismatch')
+    require(int(obj.get('runtime_base_bytes') or -1)==108296457,'runtime-base public state byte-count mismatch')
+    if target_pending:
+        pending = obj.get('runtime_base_public_url_bound') is False
+        published = obj.get('runtime_base_public_url_bound') is True
+        require(pending or published,'TARGET_READY runtime-base public URL flag must be boolean')
+        if pending:
+            require(obj.get('runtime_base_publication_status')=='PENDING_EXACT_ACCEPTANCE_PUBLICATION','TARGET_READY pending runtime-base publication status mismatch')
+        else:
+            require(obj.get('runtime_base_publication_status')=='PUBLISHED','TARGET_READY published runtime-base publication status mismatch')
+    else:
+        require(obj.get('runtime_base_public_url_bound') is True,'accepted runtime-base public URL state must be resolved')
+        require(obj.get('runtime_base_publication_status')=='PUBLISHED','accepted runtime-base publication status mismatch')
     require(obj.get('shared_cuda_public_source_bound') is True,'shared CUDA public source must be bound')
     require(obj.get('shared_cuda_source')=='NVIDIA_OFFICIAL_REDIST_13.3.1','shared CUDA public source mismatch')
     require(obj.get('shared_cuda_release_manifest_url')=='https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.3.1.json','shared CUDA release manifest URL mismatch')
@@ -314,13 +350,20 @@ def main():
     print('SYSTEM_TOOLCHAIN_BOUNDARY=EXTERNAL_STRICT_VALIDATOR_BOUND')
     print('PLAIN_PUBLIC_BUILD_SEMANTICS=CHECKED_OUT_VERSION_NONMUTATING')
     print('DIRECT_PUBLIC_READABILITY=VERIFIED_ANONYMOUS_P1')
-    print('P1_PUBLIC_INPUT_AVAILABILITY=PASS')
+    print('P1_PUBLIC_INPUT_AVAILABILITY=PASS_ACCEPTED_INPUTS')
+    print('TARGET_RUNTIME_BASE_PUBLICATION=' + ('PUBLISHED' if url_bound else 'PENDING_EXACT_ACCEPTANCE_PUBLICATION'))
     print('LIVE_ACCEPTED_AUTHORITY=' + str(state.get('live_accepted_authority')))
     print('TARGET_VERSION=' + str(state.get('target_version')))
     print('VERSION_STATE=' + str(state.get('state_mode')))
     print('APPLICATION_SOURCE_AUTHORITY=' + str(state.get('application_source_authority')))
     print('CHECK_STATE_STATUS=PASS')
-    print('BUILDER_STATE=' + ('HEALTHY_PUBLIC_SOURCE_BUILD_READY' if generated else 'HEALTHY_PUBLIC_SOURCE_CHECKOUT_BOOTSTRAP_REQUIRED'))
+    if generated and not url_bound:
+        builder_state='HEALTHY_TARGET_READY_LOCAL_BUILD_INPUTS_PRESENT_PUBLICATION_PENDING'
+    elif generated:
+        builder_state='HEALTHY_PUBLIC_SOURCE_BUILD_READY'
+    else:
+        builder_state='HEALTHY_PUBLIC_SOURCE_CHECKOUT_BOOTSTRAP_REQUIRED'
+    print('BUILDER_STATE=' + builder_state)
     return 0
 
 if __name__=='__main__':

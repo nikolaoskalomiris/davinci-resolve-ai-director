@@ -87,7 +87,7 @@ EXPECTED = {
     "nsis_archive": "9877DF902530F96357D13A7A31AE2B9DF67F48B11FFC9A1700A7C961574EC5FA",
     "nsis_resources_archive": "593A9A92EF958321293AC6A2EE61E64BF1BD543142A5BD6B3D310709CC924103",
     "canonical_makensis": "E277B7378931B74392015F5AD6B1D744DCD8A347BAA4480350A75EBEAB8D8E3D",
-    "runtime_base_archive": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+    "runtime_base_archive": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
     "runtime_stack_archive": "F3413EDF3D0BD76D5D5D80698261F55F766A905CAD2BEF2E26A67DEAF3548C44",
     "runtime_path_generator": "73404AF0C1CD248821D298107A4485D42FB1D8DD9FCABF78AB358703D26DC066",
 }
@@ -499,7 +499,7 @@ def runtime_base(current: dict, core_sha: str):
     spec.loader.exec_module(runtime_base_control)
     result = runtime_base_control.validate_candidate(candidate, current, core_sha)
     assert_hash("runtime base archive", result["archive_path"], EXPECTED["runtime_base_archive"])
-    require(result["archive_path"].stat().st_size == 94999083, "Runtime-base v3 BCJ archive byte size mismatch")
+    require(result["archive_path"].stat().st_size == 108296457, "Runtime-base v4 BCJ archive byte size mismatch")
     return result, descriptor_path, descriptor
 
 
@@ -608,8 +608,8 @@ def build_source_runtime_stack(seven: Path, work: Path, logs: Path):
     upstream_contract_path = ROOT / "build" / "upstream" / "AI-Director-Upstream-Source-Build-Contract-v2.json"
     direct_contract = read_json(direct_contract_path)
     upstream_contract = read_json(upstream_contract_path)
-    require(sha256(direct_contract_path) == "2327DC49A9CDA1A3186AA2C5B8392A96D764AB868E6F99BF0080E11DF37B63A7", "Direct source-build contract drift")
-    require(sha256(upstream_contract_path) == "4F7942E972C93CF9A822310B2D493EE88BF435F39500B71F017579F065CD51E1", "Upstream source-build contract drift")
+    require(sha256(direct_contract_path) == "A9AB28E0E6068F161206CE98425378337609A822D6DDD18A813803969352F8BC", "Direct source-build contract drift")
+    require(sha256(upstream_contract_path) == "4E1B55ED7A95153D9BF3368C34FF5BAC98D994395E7369D924E7E668D5B0F1AA", "Upstream source-build contract drift")
 
     source_root = work / "server-source"
     source_root.mkdir()
@@ -1124,7 +1124,7 @@ def _build_once_unlocked(*, public_checked_out_build: bool = False) -> int:
                 "inventory_sha256": sha256(base["inventory_path"]),
                 "inventory_file_count": int((current.get("active_runtime_base") or {}).get("inventory_file_count") or 0),
                 "archive_filter": "BCJ",
-                "bundled_mcp_seed": "4.10.4",
+                "bundled_mcp_seed": "4.15.3",
             },
             "runtime_stack": {
                 "id": RUNTIME_STACK_ID,
@@ -1347,7 +1347,17 @@ def public_source_preflight() -> int:
     print(f"PUBLIC_PREFLIGHT_TARGET={current.get('target_version')}")
     print(f"PUBLIC_PREFLIGHT_STATE={current.get('state_mode')}")
     print("PUBLIC_PLAIN_BUILD_SEMANTICS=CHECKED_OUT_VERSION_NONMUTATING")
-    print("PUBLIC_PLAIN_BUILD_ELIGIBLE=True")
+    public_state = read_json(ROOT / "build" / "package" / "public-repository-state.json")
+    target_publication_pending = (
+        current.get("state_mode") == "TARGET_READY"
+        and public_state.get("runtime_base_public_url_bound") is False
+    )
+    if target_publication_pending:
+        print("PUBLIC_PLAIN_BUILD_ELIGIBLE=False_TARGET_RUNTIME_BASE_PUBLICATION_PENDING")
+        print("LOCAL_TARGET_READY_BUILD_ELIGIBLE=True")
+    else:
+        print("PUBLIC_PLAIN_BUILD_ELIGIBLE=True")
+        print("LOCAL_TARGET_READY_BUILD_ELIGIBLE=True")
     print(f"PUBLIC_PLAIN_BUILD_TARGET={current.get('target_version')}")
     print("PUBLIC_PLAIN_BUILD_RELEASE_STATE_MUTATION=False")
     print(f"RUNTIME_BASE_ARCHIVE={rb['archive_path']}")

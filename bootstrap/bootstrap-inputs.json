@@ -129,18 +129,19 @@
       ]
     },
     {
-      "id": "runtime-base-CUDA13-Native-Base-v3",
+      "id": "runtime-base-CUDA13-Native-Base-v4",
       "kind": "ai_director_release_asset",
-      "version": "CUDA13-Native-Base-v3",
-      "url": "https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v1/AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z",
+      "version": "CUDA13-Native-Base-v4",
+      "url": "https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v2/AI-Director-Runtime-Base-CUDA13-Native-Base-v4.7z",
       "archive_name": "RUNTIME-BASE.7z",
-      "bytes": 94999083,
-      "sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
-      "destination_file": "_inputs/Runtime-Bases/CUDA13-Native-Base-v3/RUNTIME-BASE.7z",
+      "bytes": 108296457,
+      "sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
+      "destination_file": "_inputs/Runtime-Bases/CUDA13-Native-Base-v4/RUNTIME-BASE.7z",
       "release_repository": "nikolaoskalomiris/llama-cpp-flashnext-direct",
-      "release_tag": "builder-inputs-v1",
-      "asset_name": "AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z",
-      "asset_root_relative_path": "AI-Director-Runtime-Base-CUDA13-Native-Base-v3.7z"
+      "release_tag": "builder-inputs-v2",
+      "asset_name": "AI-Director-Runtime-Base-CUDA13-Native-Base-v4.7z",
+      "asset_root_relative_path": "AI-Director-Runtime-Base-CUDA13-Native-Base-v4.7z",
+      "publication_status": "PUBLISHED"
     }
   ],
   "public_repository_layout": "PUBLIC_SOURCE_REPOSITORY_V1",
@@ -163,5 +164,6 @@
     "installed_root": "AIDirector/Common/Runtime/CUDA/13.3",
     "ordinary_upstream_update_owns_shared_cuda": false,
     "compiler_toolkit_is_shipping_runtime_source": false
-  }
+  },
+  "target_runtime_base_publication_status": "PUBLISHED"
 }

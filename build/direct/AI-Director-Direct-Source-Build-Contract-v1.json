@@ -69,13 +69,13 @@
       },
       "rc.exe": {
         "path": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\rc.exe",
-        "sha256": "65DB0D7B4F10BA0F55973FD9356543A556DA9EC1C777A0C05F05A0329C8A100A",
-        "identity": "Windows SDK 10.0.26100.0"
+        "sha256": "9E2EE68DA28B3318F50A9F1008D64567A9B402BDA384A007A9B71A3F16BD011B",
+        "identity": "Windows SDK 10.0.26100.0 / serviced binary 10.0.26100.9457"
       },
       "mt.exe": {
         "path": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\mt.exe",
-        "sha256": "FB1AB75294B78619BD6AC8CADF30CB95BEFBC7324703CBE2654EF800DDD2BF4D",
-        "identity": "Windows SDK 10.0.26100.0"
+        "sha256": "FA74DD31612C78DE40169599640FB955EF9CCB9F2DFABF80F100022FF1B8BC22",
+        "identity": "Windows SDK 10.0.26100.0 / serviced binary 10.0.26100.9457"
       },
       "vcvars64.bat": {
         "path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat",

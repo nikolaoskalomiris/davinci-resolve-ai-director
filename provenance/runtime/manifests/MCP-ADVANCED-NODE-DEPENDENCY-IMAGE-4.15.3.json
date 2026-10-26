@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "status": "IMMUTABLE_OFFLINE_DEPENDENCY_IMAGE",
+  "component": "DaVinci Resolve Advanced MCP Node dependency image",
+  "managed_mcp_version": "4.15.3",
+  "source_commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+  "product_node_version": "v24.18.0",
+  "product_npm_version": "11.16.0",
+  "package_json_sha256": "A7C60D9AD9EFC4961527BA590F5028654217E6D4726E46935F78205190500B89",
+  "package_lock_sha256": "8D390671744C4DC7A9F64FAF4AB83B759E6B8F3BC701A4D56E11A96675FA94FD",
+  "npm_install_contract": "npm ci --omit=dev --include=optional --no-audit --no-fund --ignore-scripts=false --registry=https://registry.npmjs.org/",
+  "dev_dependencies_omitted": true,
+  "optional_dependencies_omitted": false,
+  "optional_dependencies_included": true,
+  "node_modules_tree_sha256": "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964",
+  "node_modules_file_count": 4602,
+  "node_modules_bytes": 58626067,
+  "advanced_tool_count": 18,
+  "mandatory": {
+    "sharp": "0.35.5",
+    "better_sqlite3": "11.10.0",
+    "pg": "8.23.1",
+    "js_yaml": "4.3.2",
+    "mcp_sdk": "1.32.1",
+    "zod": "4.6.7"
+  },
+  "third_party_inventory": {
+    "filename": "THIRD-PARTY-PACKAGES-4.15.3.json",
+    "lock_entries": 197,
+    "installed_packages": 169,
+    "all_lock_entries_have_license": true,
+    "all_missing_lock_entries_are_dev_or_optional": true
+  },
+  "native_reproducibility": {
+    "filename": "NATIVE-REPRODUCIBILITY.json",
+    "algorithm": "AIDIRECTOR_BETTER_SQLITE_PE_REPRO_V1"
+  },
+  "network_required_for_activation": false
+}

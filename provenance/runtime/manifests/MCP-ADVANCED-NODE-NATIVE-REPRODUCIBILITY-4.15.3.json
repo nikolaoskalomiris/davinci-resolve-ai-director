@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "status": "PROVEN_RUNTIME_NATIVE_REPRODUCIBILITY_CANONICALIZATION",
+  "component": "better-sqlite3 11.10.0 Windows x64 native addon",
+  "managed_mcp_version": "4.15.3",
+  "package_version": "11.10.0",
+  "runtime_file": "node_modules/better-sqlite3/build/Release/better_sqlite3.node",
+  "prune": {
+    "policy": "KEEP_ONLY_build/Release/better_sqlite3.node",
+    "build_files_after": 1,
+    "build_bytes_after": 1906688,
+    "removed_files": 67,
+    "canonicalization": {
+      "algorithm": "AIDIRECTOR_BETTER_SQLITE_PE_REPRO_V1",
+      "scope": [
+        "COFF TimeDateStamp -> 0",
+        "all IMAGE_DEBUG_DIRECTORY TimeDateStamp -> 0",
+        "CodeView RSDS GUID -> 16 zero bytes"
+      ],
+      "output_sha256": "78EB63B1D38EFA70DAB28439D7A330CAAB952E4A21E563FB980C01B00E62FEA0",
+      "bytes": 1906688,
+      "text_sha256": "F32574F2F74E5A76C7B1E6655A727B54C6448107E91B81856D70D4C35B7E57A9",
+      "text_unchanged": true,
+      "changed_range_layout": [
+        {
+          "label": "COFF_TIME_DATE_STAMP",
+          "start": 280,
+          "end": 284,
+          "bytes": 4
+        },
+        {
+          "label": "DEBUG_ENTRY_0_TIME_DATE_STAMP",
+          "start": 1701844,
+          "end": 1701848,
+          "bytes": 4
+        },
+        {
+          "label": "DEBUG_ENTRY_0_CODEVIEW_GUID",
+          "start": 1703712,
+          "end": 1703728,
+          "bytes": 16
+        },
+        {
+          "label": "DEBUG_ENTRY_1_TIME_DATE_STAMP",
+          "start": 1701872,
+          "end": 1701876,
+          "bytes": 4
+        },
+        {
+          "label": "DEBUG_ENTRY_2_TIME_DATE_STAMP",
+          "start": 1701900,
+          "end": 1701904,
+          "bytes": 4
+        },
+        {
+          "label": "DEBUG_ENTRY_3_TIME_DATE_STAMP",
+          "start": 1701928,
+          "end": 1701932,
+          "bytes": 4
+        }
+      ],
+      "codeview_records": 1
+    }
+  },
+  "evidence_basis": {
+    "a5_v1_metadata_localization_sha256": "EBAC46FC5EBD0710A9DF654BAB4CC893B32304293E6B5522E5B172E05349E475",
+    "proven_differing_bytes": 23,
+    "proven_differing_spans": 8,
+    "proven_unaccounted_differing_bytes": 0,
+    "proven_normalized_binary_equal": true,
+    "classification": "ALL_RUNTIME_BINARY_VARIATION_EXACTLY_ACCOUNTED_FOR_BY_BUILD_PATH_AND_PE_DEBUG_TIMESTAMP_GUID_METADATA"
+  },
+  "shipping_metadata_policy": "Per-build pre-canonicalization hashes and prior-byte hashes are evidence-only and are excluded from the immutable shipping image."
+}

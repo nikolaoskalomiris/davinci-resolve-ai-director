@@ -1,13 +1,43 @@
 {
-  "schema_version": 2,
-  "runtime_base_id": "CUDA13-Native-Base-v3",
+  "schema_version": 3,
+  "runtime_base_id": "CUDA13-Native-Base-v4",
   "payload_role": "ACTIVE_RUNTIME_BASE",
-  "expected_shipping_file_count": 15720,
-  "bundled_mcp_seed": {
+  "expected_shipping_file_count": 20330,
+  "baseline_runtime_inheritance": {
+    "runtime_base_id": "CUDA13-Native-Base-v3",
+    "shipping_archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
+    "shipping_inventory_sha256": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
+    "file_count": 15720,
+    "all_baseline_file_bytes_preserved": true
+  },
+  "installed_managed_mcp_baseline": {
     "version": "4.10.4",
     "commit": "8911bd24aee76894238924317a461005dd013d94",
-    "path": "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.10.4-8911bd24aee7.tar.gz",
-    "sha256": "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6"
+    "package_json_sha256": "BA1BCD25E4AFACF00C40C5F2529B7548C54B0161017CF8EA7D9F7B84BA659E38",
+    "installer_activation": false
+  },
+  "bundled_mcp_seed": {
+    "version": "4.15.3",
+    "commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
+    "path": "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.15.3-931bc2cda8fd.tar.gz",
+    "sha256": "E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C",
+    "bytes": 6419447,
+    "generation": "git archive exact commit + deterministic gzip mtime=0"
+  },
+  "bundled_advanced_dependency_image": {
+    "version": "4.15.3",
+    "root": "AIDirector/DaVinciResolve/Runtime/MCP/Advanced/4.15.3",
+    "source_image_zip_sha256": "FE8163322E864CD0F216D3ABF13B7C3F0BA988747BEB9C83D4B8EF1D31C13EF0",
+    "source_image_zip_bytes": 20031449,
+    "payload_manifest_sha256": "093DB2168F3FAD4FD14915BADE393183DAA5FF4B3A4C6BF0C6856597A916A09D",
+    "mandatory_manifest_sha256": "5F6A6CE58F7D8B9F96A2FC4FBDDE42E26A8E6538B4D590C1980700656C9AF9BD",
+    "provenance_sha256": "165AC34CC84ACEEFCF8125E4832A80D850ECEA1FB90B986300DEA77616DA990C",
+    "native_reproducibility_sha256": "94ACAD418CB1698029EF69955FD2EBCAD503177DEAC2CBC633B7B3DF64B590F1",
+    "third_party_inventory_sha256": "22F1B0E06BFB32773837594C6EBB202E64CD6EA6E0C1A9913427D0BADFEB51B8",
+    "node_modules_tree_sha256": "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964",
+    "node_modules_file_count": 4602,
+    "node_modules_bytes": 58626067,
+    "image_file_count": 4609
   },
   "runtime_stack_dependency": {
     "id": "CUDA13.3.1-Dual-Shared-v2",
@@ -16,12 +46,21 @@
     "archive_sha256": "F3413EDF3D0BD76D5D5D80698261F55F766A905CAD2BEF2E26A67DEAF3548C44",
     "mutation_authorized": false
   },
-  "shipping_archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
-  "shipping_archive_bytes": 94999083,
-  "shipping_inventory_sha256": "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944",
-  "archive_sha256": "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D",
-  "archive_bytes": 94999083,
-  "inventory_file_count": 15720,
+  "upgrade_semantics": {
+    "mode": "ADDITIVE_COMPATIBILITY_ASSETS_ONLY",
+    "advanced_target": "AIDirector/DaVinciResolve/Runtime/MCP/Advanced/4.15.3",
+    "bootstrap_target": "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.15.3-931bc2cda8fd.tar.gz",
+    "active_managed_mcp_swap_during_installer": false,
+    "active_python_swap_during_installer": false,
+    "active_manifest_rewrite_during_installer": false,
+    "vfx_mcp_config_rewrite_during_additive_migration": false
+  },
+  "shipping_archive_sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
+  "shipping_archive_bytes": 108296457,
+  "shipping_inventory_sha256": "AB8041B93FE7CDD92378BFE51E4D6D7A8C9CBB40674E11B3A8507CA40913CC83",
+  "archive_sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
+  "archive_bytes": 108296457,
+  "inventory_file_count": 20330,
   "archive_filter": "BCJ",
-  "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v3"
+  "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v4"
 }

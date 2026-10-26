@@ -3,7 +3,7 @@ import argparse, hashlib, json
 from pathlib import Path
 SCRIPT_ROOT=Path(__file__).resolve().parent
 DEFAULT_CONTRACT=SCRIPT_ROOT/'AI-Director-Direct-Source-Build-Contract-v1.json'
-CONTRACT_SHA256='2327DC49A9CDA1A3186AA2C5B8392A96D764AB868E6F99BF0080E11DF37B63A7'
+CONTRACT_SHA256='A9AB28E0E6068F161206CE98425378337609A822D6DDD18A813803969352F8BC'
 def req(v,m):
     if not v: raise RuntimeError(m)
 def sha256(p):

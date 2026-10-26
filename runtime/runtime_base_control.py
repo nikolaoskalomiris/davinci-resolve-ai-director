@@ -10,14 +10,38 @@ RUNTIME_BASE_MANIFEST_NAME = "RUNTIME-BASE-MANIFEST.json"
 RUNTIME_BASE_ARCHIVE_NAME = "RUNTIME-BASE.7z"
 RUNTIME_BASE_INVENTORY_NAME = "SHIPPING-INVENTORY.json"
 
-EXPECTED_RUNTIME_BASE_ID = "CUDA13-Native-Base-v3"
-EXPECTED_SHIPPING_ARCHIVE_SHA256 = "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D"
-EXPECTED_SHIPPING_ARCHIVE_BYTES = 94999083
-EXPECTED_SHIPPING_INVENTORY_SHA256 = "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944"
-EXPECTED_SHIPPING_FILE_COUNT = 15720
-EXPECTED_MCP_BOOTSTRAP_PATH = "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.10.4-8911bd24aee7.tar.gz"
-EXPECTED_MCP_BOOTSTRAP_SHA256 = "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6"
-EXPECTED_MCP_COMMIT = "8911bd24aee76894238924317a461005dd013d94"
+EXPECTED_RUNTIME_BASE_ID = "CUDA13-Native-Base-v4"
+EXPECTED_SHIPPING_ARCHIVE_SHA256 = "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC"
+EXPECTED_SHIPPING_ARCHIVE_BYTES = 108296457
+EXPECTED_SHIPPING_INVENTORY_SHA256 = "AB8041B93FE7CDD92378BFE51E4D6D7A8C9CBB40674E11B3A8507CA40913CC83"
+EXPECTED_SHIPPING_FILE_COUNT = 20330
+
+EXPECTED_BASELINE_RUNTIME_BASE_ID = "CUDA13-Native-Base-v3"
+EXPECTED_BASELINE_ARCHIVE_SHA256 = "921B0B02B43E15683E3A77EAE9CA6C779308A0A702BA43C5D76D73E81090654D"
+EXPECTED_BASELINE_INVENTORY_SHA256 = "3EDEB3143EC8CB38CD8D4ED8D0FD778222B4D99E23C27B2FB1CDFE866BEC9944"
+EXPECTED_BASELINE_FILE_COUNT = 15720
+
+EXPECTED_ACTIVE_MCP_BASELINE_VERSION = "4.10.4"
+EXPECTED_ACTIVE_MCP_BASELINE_COMMIT = "8911bd24aee76894238924317a461005dd013d94"
+EXPECTED_ACTIVE_MCP_PACKAGE_SHA256 = "BA1BCD25E4AFACF00C40C5F2529B7548C54B0161017CF8EA7D9F7B84BA659E38"
+
+EXPECTED_MCP_BOOTSTRAP_VERSION = "4.15.3"
+EXPECTED_MCP_BOOTSTRAP_PATH = "AIDirector/DaVinciResolve/Updates/MCP/Bootstrap/davinci-resolve-mcp-4.15.3-931bc2cda8fd.tar.gz"
+EXPECTED_MCP_BOOTSTRAP_SHA256 = "E36B8CB5EB73A3BC2099E7D48E15EA119D6D8411D890651DF17B76BFD3781D5C"
+EXPECTED_MCP_BOOTSTRAP_BYTES = 6419447
+EXPECTED_MCP_COMMIT = "931bc2cda8fd9049982a457de9ff70836c406cd7"
+
+EXPECTED_ADVANCED_ROOT = "AIDirector/DaVinciResolve/Runtime/MCP/Advanced/4.15.3"
+EXPECTED_ADVANCED_PAYLOAD_MANIFEST_SHA256 = "093DB2168F3FAD4FD14915BADE393183DAA5FF4B3A4C6BF0C6856597A916A09D"
+EXPECTED_ADVANCED_MANDATORY_MANIFEST_SHA256 = "5F6A6CE58F7D8B9F96A2FC4FBDDE42E26A8E6538B4D590C1980700656C9AF9BD"
+EXPECTED_ADVANCED_PROVENANCE_SHA256 = "165AC34CC84ACEEFCF8125E4832A80D850ECEA1FB90B986300DEA77616DA990C"
+EXPECTED_ADVANCED_NATIVE_REPRO_SHA256 = "94ACAD418CB1698029EF69955FD2EBCAD503177DEAC2CBC633B7B3DF64B590F1"
+EXPECTED_ADVANCED_LICENSE_INVENTORY_SHA256 = "22F1B0E06BFB32773837594C6EBB202E64CD6EA6E0C1A9913427D0BADFEB51B8"
+EXPECTED_ADVANCED_NODE_TREE_SHA256 = "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964"
+EXPECTED_ADVANCED_NODE_FILES = 4602
+EXPECTED_ADVANCED_NODE_BYTES = 58626067
+EXPECTED_ADVANCED_IMAGE_FILES = 4609
+
 EXPECTED_RUNTIME_STACK_ID = "CUDA13.3.1-Dual-Shared-v2"
 EXPECTED_RUNTIME_STACK_DESCRIPTOR_SHA256 = "872EF78E88D71E80332CEABEA685C8317F9F049669936C2C4A353B044E754E34"
 EXPECTED_RUNTIME_STACK_MANIFEST_SHA256 = "AA04F057CA1B8788BB759DE23CFFD3B7CE65D6BA2F38B2D55C35A9BEF56EBA51"
@@ -33,6 +57,7 @@ FORBIDDEN_ACTIVE_METADATA = {
     "mcp_seed_promotion",
 }
 
+
 def sha256(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
@@ -40,8 +65,10 @@ def sha256(path: Path) -> str:
             h.update(block)
     return h.hexdigest().upper()
 
+
 def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8-sig"))
+
 
 def safe_rel(value: str, label: str) -> Path:
     text = str(value or "").replace("\\", "/").strip()
@@ -50,6 +77,7 @@ def safe_rel(value: str, label: str) -> Path:
             or any(part in ("", ".", "..") for part in path.parts)):
         raise RuntimeError(f"{label} unsafe path: {text!r}")
     return Path(*path.parts)
+
 
 def integer_field(obj: dict, key: str, label: str, minimum: int | None = None) -> int:
     if key not in obj or obj.get(key) is None or isinstance(obj.get(key), bool):
@@ -62,6 +90,7 @@ def integer_field(obj: dict, key: str, label: str, minimum: int | None = None) -
         raise RuntimeError(f"{label} invalid")
     return value
 
+
 def assert_hash(label: str, path: Path, expected: str) -> str:
     expected = str(expected or "").upper()
     if not re.fullmatch(r"[0-9A-F]{64}", expected):
@@ -73,70 +102,137 @@ def assert_hash(label: str, path: Path, expected: str) -> str:
         raise RuntimeError(f"{label} hash mismatch Expected={expected} Actual={actual} Path={path}")
     return actual
 
+
 def validate_inventory(obj: dict) -> None:
     if obj.get("schema_version") != 1 or obj.get("runtime_base_id") != EXPECTED_RUNTIME_BASE_ID:
-        raise RuntimeError("runtime-base v3 inventory identity mismatch")
+        raise RuntimeError("runtime-base v4 inventory identity mismatch")
     if integer_field(obj, "file_count", "inventory file count", 0) != EXPECTED_SHIPPING_FILE_COUNT:
-        raise RuntimeError("runtime-base v3 inventory file count mismatch")
+        raise RuntimeError("runtime-base v4 inventory file count mismatch")
     rows = obj.get("files")
     if not isinstance(rows, list) or len(rows) != EXPECTED_SHIPPING_FILE_COUNT:
-        raise RuntimeError("runtime-base v3 inventory rows mismatch")
-    seen = set()
-    bootstrap_hash = None
-    arm64_required = {
-        "pip/_vendor/distlib/t64-arm.exe",
-        "pip/_vendor/distlib/w64-arm.exe",
-        "setuptools/cli-arm64.exe",
-        "setuptools/gui-arm64.exe",
-    }
-    arm64_seen = set()
+        raise RuntimeError("runtime-base v4 inventory rows mismatch")
+
+    seen = {}
     for row in rows:
         rel = safe_rel(row.get("path"), "inventory file").as_posix()
-        key = rel.lower()
+        key = rel.casefold()
         if key in seen:
             raise RuntimeError(f"duplicate inventory path: {rel}")
-        seen.add(key)
         digest = str(row.get("sha256") or "").upper()
         if not re.fullmatch(r"[0-9A-F]{64}", digest):
             raise RuntimeError(f"bad inventory SHA-256: {rel}")
         integer_field(row, "bytes", f"inventory bytes {rel}", 0)
-        if key == EXPECTED_MCP_BOOTSTRAP_PATH.lower():
-            bootstrap_hash = digest
-        for suffix in arm64_required:
-            if key.endswith(suffix):
-                arm64_seen.add(suffix)
+        seen[key] = {"path": rel, "sha256": digest, "bytes": int(row.get("bytes"))}
+
+    required_hashes = {
+        "davinci-resolve-mcp/package.json": EXPECTED_ACTIVE_MCP_PACKAGE_SHA256,
+        EXPECTED_MCP_BOOTSTRAP_PATH: EXPECTED_MCP_BOOTSTRAP_SHA256,
+        f"{EXPECTED_ADVANCED_ROOT}/PAYLOAD-SHA256.json": EXPECTED_ADVANCED_PAYLOAD_MANIFEST_SHA256,
+        f"{EXPECTED_ADVANCED_ROOT}/ADVANCED-NODE-MANDATORY-DEPENDENCY-IMAGE-MANIFEST.json": EXPECTED_ADVANCED_MANDATORY_MANIFEST_SHA256,
+        f"{EXPECTED_ADVANCED_ROOT}/ADVANCED-NODE-DEPENDENCY-IMAGE-PROVENANCE.json": EXPECTED_ADVANCED_PROVENANCE_SHA256,
+        f"{EXPECTED_ADVANCED_ROOT}/NATIVE-REPRODUCIBILITY.json": EXPECTED_ADVANCED_NATIVE_REPRO_SHA256,
+        f"{EXPECTED_ADVANCED_ROOT}/THIRD-PARTY-PACKAGES-4.15.3.json": EXPECTED_ADVANCED_LICENSE_INVENTORY_SHA256,
+    }
+    for rel, expected in required_hashes.items():
+        row = seen.get(rel.casefold())
+        if not row or row["sha256"] != expected:
+            raise RuntimeError(f"runtime-base v4 required payload hash mismatch: {rel}")
+
+    seed = seen[EXPECTED_MCP_BOOTSTRAP_PATH.casefold()]
+    if seed["bytes"] != EXPECTED_MCP_BOOTSTRAP_BYTES:
+        raise RuntimeError("runtime-base v4 MCP seed byte count mismatch")
+
+    advanced_prefix = (EXPECTED_ADVANCED_ROOT + "/").casefold()
+    advanced_files = sum(1 for key in seen if key.startswith(advanced_prefix))
+    if advanced_files != EXPECTED_ADVANCED_IMAGE_FILES:
+        raise RuntimeError(
+            f"runtime-base v4 Advanced 4.15.3 file count mismatch expected={EXPECTED_ADVANCED_IMAGE_FILES} actual={advanced_files}"
+        )
+
+    if not any(key.startswith("aidirector/davinciresolve/runtime/mcp/advanced/4.8.20/") for key in seen):
+        raise RuntimeError("runtime-base v4 does not retain predecessor Advanced 4.8.20 image")
+    old_seed = seen.get("aidirector/davinciresolve/updates/mcp/bootstrap/davinci-resolve-mcp-4.10.4-8911bd24aee7.tar.gz")
+    if not old_seed or old_seed["sha256"] != "48370655E414BAAEC1D18259C5DFD53E4CA2C71C698D60C13A5CA872F7BAA0A6":
+        raise RuntimeError("runtime-base v4 does not retain exact 4.10.4 bootstrap seed")
+
     forbidden_roots = (
         "aidirector/common/runtime/cuda/12.8/",
         "aidirector/davinciresolve/runtime/llama/direct/",
         "aidirector/davinciresolve/runtime/llama/upstream/",
     )
     if "aidirector/common/manifests/cuda-12.8.json" in seen:
-        raise RuntimeError("v3 inventory contains retired CUDA 12.8 manifest")
+        raise RuntimeError("v4 inventory contains retired CUDA 12.8 manifest")
     if any(any(path.startswith(prefix) for prefix in forbidden_roots) for path in seen):
-        raise RuntimeError("v3 inventory contains retired legacy runtime roots")
+        raise RuntimeError("v4 inventory contains retired legacy runtime roots")
     if any("4.8.22" in path for path in seen):
-        raise RuntimeError("v3 inventory contains stale 4.8.22 versioned state")
-    if bootstrap_hash != EXPECTED_MCP_BOOTSTRAP_SHA256:
-        raise RuntimeError("MCP 4.10.4 bootstrap missing/mismatch")
-    if arm64_seen != arm64_required:
-        raise RuntimeError(f"ARM64 launcher parity incomplete: {sorted(arm64_required - arm64_seen)}")
+        raise RuntimeError("v4 inventory contains stale 4.8.22 versioned state")
+
 
 def validate_manifest(manifest: dict) -> None:
-    if manifest.get("schema_version") != 2 or manifest.get("runtime_base_id") != EXPECTED_RUNTIME_BASE_ID:
-        raise RuntimeError("active runtime-base manifest identity mismatch")
+    if manifest.get("schema_version") != 3 or manifest.get("runtime_base_id") != EXPECTED_RUNTIME_BASE_ID:
+        raise RuntimeError("active runtime-base v4 manifest identity mismatch")
     if manifest.get("payload_role") != "ACTIVE_RUNTIME_BASE":
-        raise RuntimeError("active runtime-base manifest role mismatch")
+        raise RuntimeError("active runtime-base v4 manifest role mismatch")
     leaked = sorted(FORBIDDEN_ACTIVE_METADATA.intersection(manifest))
     if leaked:
         raise RuntimeError(f"historical runtime-base metadata remains active: {leaked}")
     if integer_field(manifest, "expected_shipping_file_count", "manifest file count", 0) != EXPECTED_SHIPPING_FILE_COUNT:
-        raise RuntimeError("runtime-base manifest file count mismatch")
+        raise RuntimeError("runtime-base v4 manifest file count mismatch")
+
+    baseline = manifest.get("baseline_runtime_inheritance") or {}
+    if (
+        baseline.get("runtime_base_id") != EXPECTED_BASELINE_RUNTIME_BASE_ID
+        or str(baseline.get("shipping_archive_sha256") or "").upper() != EXPECTED_BASELINE_ARCHIVE_SHA256
+        or str(baseline.get("shipping_inventory_sha256") or "").upper() != EXPECTED_BASELINE_INVENTORY_SHA256
+        or int(baseline.get("file_count") or -1) != EXPECTED_BASELINE_FILE_COUNT
+        or baseline.get("all_baseline_file_bytes_preserved") is not True
+    ):
+        raise RuntimeError("runtime-base v4 baseline inheritance metadata mismatch")
+
+    active = manifest.get("installed_managed_mcp_baseline") or {}
+    if (
+        active.get("version") != EXPECTED_ACTIVE_MCP_BASELINE_VERSION
+        or active.get("commit") != EXPECTED_ACTIVE_MCP_BASELINE_COMMIT
+        or str(active.get("package_json_sha256") or "").upper() != EXPECTED_ACTIVE_MCP_PACKAGE_SHA256
+        or active.get("installer_activation") is not False
+    ):
+        raise RuntimeError("runtime-base v4 active MCP baseline metadata mismatch")
+
     seed = manifest.get("bundled_mcp_seed") or {}
-    if (seed.get("version") != "4.10.4"
-            or seed.get("commit") != EXPECTED_MCP_COMMIT
-            or seed.get("path") != EXPECTED_MCP_BOOTSTRAP_PATH
-            or str(seed.get("sha256") or "").upper() != EXPECTED_MCP_BOOTSTRAP_SHA256):
-        raise RuntimeError("bundled MCP 4.10.4 seed metadata mismatch")
+    if (
+        seed.get("version") != EXPECTED_MCP_BOOTSTRAP_VERSION
+        or seed.get("commit") != EXPECTED_MCP_COMMIT
+        or seed.get("path") != EXPECTED_MCP_BOOTSTRAP_PATH
+        or str(seed.get("sha256") or "").upper() != EXPECTED_MCP_BOOTSTRAP_SHA256
+        or int(seed.get("bytes") or -1) != EXPECTED_MCP_BOOTSTRAP_BYTES
+    ):
+        raise RuntimeError("runtime-base v4 MCP 4.15.3 seed metadata mismatch")
+
+    advanced = manifest.get("bundled_advanced_dependency_image") or {}
+    checks = {
+        "version": EXPECTED_MCP_BOOTSTRAP_VERSION,
+        "root": EXPECTED_ADVANCED_ROOT,
+        "source_image_zip_sha256": "FE8163322E864CD0F216D3ABF13B7C3F0BA988747BEB9C83D4B8EF1D31C13EF0",
+        "payload_manifest_sha256": EXPECTED_ADVANCED_PAYLOAD_MANIFEST_SHA256,
+        "mandatory_manifest_sha256": EXPECTED_ADVANCED_MANDATORY_MANIFEST_SHA256,
+        "provenance_sha256": EXPECTED_ADVANCED_PROVENANCE_SHA256,
+        "native_reproducibility_sha256": EXPECTED_ADVANCED_NATIVE_REPRO_SHA256,
+        "third_party_inventory_sha256": EXPECTED_ADVANCED_LICENSE_INVENTORY_SHA256,
+        "node_modules_tree_sha256": EXPECTED_ADVANCED_NODE_TREE_SHA256,
+    }
+    for key, expected in checks.items():
+        value = advanced.get(key)
+        if isinstance(expected, str) and key.endswith("sha256"):
+            value = str(value or "").upper()
+        if value != expected:
+            raise RuntimeError(f"runtime-base v4 Advanced image metadata mismatch: {key}")
+    if int(advanced.get("node_modules_file_count") or -1) != EXPECTED_ADVANCED_NODE_FILES:
+        raise RuntimeError("runtime-base v4 Advanced node_modules file count mismatch")
+    if int(advanced.get("node_modules_bytes") or -1) != EXPECTED_ADVANCED_NODE_BYTES:
+        raise RuntimeError("runtime-base v4 Advanced node_modules bytes mismatch")
+    if int(advanced.get("image_file_count") or -1) != EXPECTED_ADVANCED_IMAGE_FILES:
+        raise RuntimeError("runtime-base v4 Advanced image file count mismatch")
+
     dependency = manifest.get("runtime_stack_dependency") or {}
     expected_dependency = {
         "id": EXPECTED_RUNTIME_STACK_ID,
@@ -152,37 +248,58 @@ def validate_manifest(manifest: dict) -> None:
             raise RuntimeError(f"runtime-stack dependency mismatch: {key}")
     if dependency.get("mutation_authorized") is not False:
         raise RuntimeError("runtime-stack mutation must remain false")
+
+    semantics = manifest.get("upgrade_semantics") or {}
+    required_false = (
+        "active_managed_mcp_swap_during_installer",
+        "active_python_swap_during_installer",
+        "active_manifest_rewrite_during_installer",
+        "vfx_mcp_config_rewrite_during_additive_migration",
+    )
+    if semantics.get("mode") != "ADDITIVE_COMPATIBILITY_ASSETS_ONLY":
+        raise RuntimeError("runtime-base v4 upgrade semantics mode mismatch")
+    for key in required_false:
+        if semantics.get(key) is not False:
+            raise RuntimeError(f"runtime-base v4 upgrade semantics must keep {key}=false")
+
     if str(manifest.get("shipping_archive_sha256") or "").upper() != EXPECTED_SHIPPING_ARCHIVE_SHA256:
-        raise RuntimeError("runtime-base manifest archive mismatch")
+        raise RuntimeError("runtime-base v4 manifest archive mismatch")
     if str(manifest.get("shipping_inventory_sha256") or "").upper() != EXPECTED_SHIPPING_INVENTORY_SHA256:
-        raise RuntimeError("runtime-base manifest inventory mismatch")
+        raise RuntimeError("runtime-base v4 manifest inventory mismatch")
     if integer_field(manifest, "shipping_archive_bytes", "manifest archive bytes", 1) != EXPECTED_SHIPPING_ARCHIVE_BYTES:
-        raise RuntimeError("runtime-base manifest archive size mismatch")
+        raise RuntimeError("runtime-base v4 manifest archive size mismatch")
     if integer_field(manifest, "inventory_file_count", "manifest inventory count", 0) != EXPECTED_SHIPPING_FILE_COUNT:
-        raise RuntimeError("runtime-base manifest inventory count mismatch")
+        raise RuntimeError("runtime-base v4 manifest inventory count mismatch")
     if manifest.get("archive_filter") != "BCJ":
-        raise RuntimeError("runtime-base manifest filter mismatch")
+        raise RuntimeError("runtime-base v4 manifest filter mismatch")
     if manifest.get("shipping_inventory_source_runtime_base_id") != EXPECTED_RUNTIME_BASE_ID:
-        raise RuntimeError("runtime-base manifest inventory source mismatch")
+        raise RuntimeError("runtime-base v4 manifest inventory source mismatch")
+
 
 def validate_candidate(candidate, current, builder_sha):
-    del builder_sha  # Active runtime payload identity is not coupled to a historical builder hash.
+    del builder_sha
     descriptor = candidate["descriptor"]
     root = candidate["root"]
     metadata_root = candidate.get("metadata_root") or root
-    if descriptor.get("schema_version") != 2 or descriptor.get("runtime_base_id") != EXPECTED_RUNTIME_BASE_ID:
-        raise RuntimeError("active runtime-base descriptor identity mismatch")
+
+    if descriptor.get("schema_version") != 3 or descriptor.get("runtime_base_id") != EXPECTED_RUNTIME_BASE_ID:
+        raise RuntimeError("active runtime-base v4 descriptor identity mismatch")
     if descriptor.get("kind") != "runtime-base" or descriptor.get("payload_role") != "ACTIVE_RUNTIME_BASE":
-        raise RuntimeError("active runtime-base descriptor role mismatch")
+        raise RuntimeError("active runtime-base v4 descriptor role mismatch")
     leaked = sorted(FORBIDDEN_ACTIVE_METADATA.intersection(descriptor))
     if leaked:
         raise RuntimeError(f"historical runtime-base metadata remains active: {leaked}")
     if descriptor.get("files") not in ([], None):
         raise RuntimeError("runtime-base may not carry application replacements")
-    if descriptor.get("bundled_mcp_version") != "4.10.4" or descriptor.get("bundled_mcp_commit") != EXPECTED_MCP_COMMIT:
-        raise RuntimeError("runtime-base bundled MCP identity mismatch")
+    if descriptor.get("installed_managed_mcp_baseline_version") != EXPECTED_ACTIVE_MCP_BASELINE_VERSION:
+        raise RuntimeError("runtime-base v4 installed baseline version mismatch")
+    if descriptor.get("bundled_mcp_version") != EXPECTED_MCP_BOOTSTRAP_VERSION or descriptor.get("bundled_mcp_commit") != EXPECTED_MCP_COMMIT:
+        raise RuntimeError("runtime-base v4 bundled MCP identity mismatch")
+    if descriptor.get("bundled_advanced_version") != EXPECTED_MCP_BOOTSTRAP_VERSION:
+        raise RuntimeError("runtime-base v4 bundled Advanced version mismatch")
     if descriptor.get("archive_filter") != "BCJ" or descriptor.get("nsis7z_full_parity_required") is not True:
-        raise RuntimeError("runtime-base archive/parity contract mismatch")
+        raise RuntimeError("runtime-base v4 archive/parity contract mismatch")
+
     specs = [
         ("runtime_base_manifest", RUNTIME_BASE_MANIFEST_NAME, "runtime_base_manifest_sha256"),
         ("shipping_archive", RUNTIME_BASE_ARCHIVE_NAME, "shipping_archive_sha256"),
@@ -198,14 +315,16 @@ def validate_candidate(candidate, current, builder_sha):
         expected = str(descriptor.get(hash_key) or "").upper()
         assert_hash(key, path, expected)
         paths[key] = path
+
     if str(descriptor.get("shipping_archive_sha256") or "").upper() != EXPECTED_SHIPPING_ARCHIVE_SHA256:
-        raise RuntimeError("runtime-base descriptor archive mismatch")
+        raise RuntimeError("runtime-base v4 descriptor archive mismatch")
     if str(descriptor.get("shipping_inventory_sha256") or "").upper() != EXPECTED_SHIPPING_INVENTORY_SHA256:
-        raise RuntimeError("runtime-base descriptor inventory mismatch")
+        raise RuntimeError("runtime-base v4 descriptor inventory mismatch")
     if integer_field(descriptor, "shipping_archive_bytes", "descriptor archive bytes", 1) != EXPECTED_SHIPPING_ARCHIVE_BYTES:
-        raise RuntimeError("runtime-base descriptor archive size mismatch")
+        raise RuntimeError("runtime-base v4 descriptor archive size mismatch")
     if integer_field(descriptor, "inventory_file_count", "descriptor inventory count", 0) != EXPECTED_SHIPPING_FILE_COUNT:
-        raise RuntimeError("runtime-base descriptor inventory count mismatch")
+        raise RuntimeError("runtime-base v4 descriptor inventory count mismatch")
+
     manifest = load_json(paths["runtime_base_manifest"])
     validate_manifest(manifest)
     validate_inventory(load_json(paths["shipping_inventory"]))
@@ -217,10 +336,11 @@ def validate_candidate(candidate, current, builder_sha):
         "inventory_path": paths["shipping_inventory"],
     }
 
+
 def load_active(builder, current):
     entry = current.get("active_runtime_base")
     if not isinstance(entry, dict) or entry.get("id") != EXPECTED_RUNTIME_BASE_ID:
-        raise RuntimeError("CURRENT active runtime-base v3 identity mismatch")
+        raise RuntimeError("CURRENT active runtime-base v4 identity mismatch")
     root = builder / "_inputs" / "Runtime-Bases" / EXPECTED_RUNTIME_BASE_ID
     metadata_root = builder / "provenance" / "runtime" / "runtime-base"
     descriptor_path = metadata_root / RUNTIME_BASE_DESCRIPTOR
@@ -235,12 +355,12 @@ def load_active(builder, current):
     }
     result = validate_candidate(candidate, current, sha256(builder / "installer" / "build_installer.py"))
     if str(entry.get("archive_sha256") or "").upper() != EXPECTED_SHIPPING_ARCHIVE_SHA256:
-        raise RuntimeError("CURRENT active runtime-base v3 archive binding mismatch")
+        raise RuntimeError("CURRENT active runtime-base v4 archive binding mismatch")
     if str(entry.get("runtime_base_manifest_sha256") or "").upper() != sha256(metadata_root / RUNTIME_BASE_MANIFEST_NAME):
-        raise RuntimeError("CURRENT active runtime-base v3 manifest binding mismatch")
+        raise RuntimeError("CURRENT active runtime-base v4 manifest binding mismatch")
     if str(entry.get("inventory_sha256") or "").upper() != EXPECTED_SHIPPING_INVENTORY_SHA256:
-        raise RuntimeError("CURRENT active runtime-base v3 inventory binding mismatch")
+        raise RuntimeError("CURRENT active runtime-base v4 inventory binding mismatch")
     if entry.get("archive_filter") != "BCJ" or entry.get("inventory_file_count") != EXPECTED_SHIPPING_FILE_COUNT:
-        raise RuntimeError("CURRENT active runtime-base v3 parity metadata mismatch")
+        raise RuntimeError("CURRENT active runtime-base v4 parity metadata mismatch")
     result["descriptor"] = descriptor
     return result
