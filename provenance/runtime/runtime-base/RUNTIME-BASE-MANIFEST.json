@@ -2,7 +2,7 @@
   "schema_version": 4,
   "runtime_base_id": "CUDA13-Native-Base-v5",
   "payload_role": "ACTIVE_RUNTIME_BASE",
-  "expected_shipping_file_count": 15790,
+  "expected_shipping_file_count": 20392,
   "baseline_runtime_inheritance": {
     "runtime_base_id": "CUDA13-Native-Base-v4",
     "shipping_archive_sha256": "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC",
@@ -24,7 +24,11 @@
     "strict_contract_sha256": "57ECECA939B23F5E44D9A78909074159DEFACAA171DAED6B94E58BC6370AB95C",
     "dependency_reuse_record_sha256": "0A4C9714433CD702C26F9BC48760794C5E4C3D7494C304BBC16CFC00FC93A08E",
     "installer_activation": false,
-    "first_start_overlay_mutation_required": false
+    "first_start_overlay_mutation_required": false,
+    "active_advanced_node_modules_materialized": true,
+    "active_advanced_node_modules_tree_sha256": "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964",
+    "active_advanced_node_modules_file_count": 4602,
+    "active_advanced_node_modules_bytes": 58626067
   },
   "bundled_mcp_seed": {
     "version": "4.15.3",
@@ -70,14 +74,15 @@
     "active_manifest_rewrite_during_installer": false,
     "active_mcp_overlay_mutation_on_first_start": false,
     "vfx_mcp_config_rewrite_during_installer": false,
-    "historical_4_10_4_versioned_provenance_retained": true
+    "historical_4_10_4_versioned_provenance_retained": true,
+    "active_mcp_advanced_dependencies_materialized_before_install": true
   },
-  "shipping_archive_sha256": "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A",
-  "shipping_archive_bytes": 96918486,
-  "shipping_inventory_sha256": "88249F66294113A0CC31E2527DAD6CFD6BEAB4A0B79C2A78F860B7C3D9261C7C",
-  "archive_sha256": "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A",
-  "archive_bytes": 96918486,
-  "inventory_file_count": 15790,
+  "shipping_archive_sha256": "7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F",
+  "shipping_archive_bytes": 108500102,
+  "shipping_inventory_sha256": "A07A72CA71EF048A1AE894E3792CCE1D3521301743BB8F48E62218F5D798869F",
+  "archive_sha256": "7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F",
+  "archive_bytes": 108500102,
+  "inventory_file_count": 20392,
   "archive_filter": "BCJ",
   "shipping_inventory_source_runtime_base_id": "CUDA13-Native-Base-v5"
 }

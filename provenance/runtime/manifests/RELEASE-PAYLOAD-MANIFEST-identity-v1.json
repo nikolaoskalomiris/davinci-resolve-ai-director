@@ -80,9 +80,9 @@
       "payload_manifest_sha256": "093DB2168F3FAD4FD14915BADE393183DAA5FF4B3A4C6BF0C6856597A916A09D"
     },
     "managed_mcp": {
-      "file_count": 1301,
-      "total_bytes": 19645112,
-      "inventory_slice_sha256": "33F97BA9FAC2582D951AD5BE7AFBA0D1CAB52EA1776964302C50F4B507ECE35A",
+      "file_count": 5903,
+      "total_bytes": 78271179,
+      "inventory_slice_sha256": "4C34FEF84DD8D8431D190F014D65DEB72108D784ACD687BF2FB78EDEE60DCB59",
       "inventory_slice_algorithm": "SHA256_UTF8_COMPACT_JSON_SORTED_CASEFOLD_RELATIVE_PATH_ROWS_V1",
       "version": "4.15.3",
       "commit": "931bc2cda8fd9049982a457de9ff70836c406cd7",
@@ -127,7 +127,17 @@
     "advanced_dependency_lineage": "4.15.3 immutable A5 image",
     "python_dependency_lineage": "3.11.9 immutable runtime, exact requirements match",
     "historical_4_10_4_versioned_manifests_retained": true,
-    "runtime_generated_mcp_artifacts_retained": false
+    "runtime_generated_mcp_artifacts_retained": false,
+    "active_advanced_dependency_materialization": {
+      "status": "MATERIALIZED_IN_CLEAN_BASELINE",
+      "source": "AIDirector/DaVinciResolve/Runtime/MCP/Advanced/4.15.3/node_modules",
+      "target": "davinci-resolve-mcp/resolve-advanced/node_modules",
+      "node_modules_tree_sha256": "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964",
+      "file_count": 4602,
+      "bytes": 58626067,
+      "sharp_0_35_5_sha256": "971048779F9C8598DF14641DFC03C625885C93F473A788E65CA2DEB50D0B083E",
+      "better_sqlite3_sha256": "78EB63B1D38EFA70DAB28439D7A330CAAB952E4A21E563FB980C01B00E62FEA0"
+    }
   },
   "component_identity_policy": {
     "unchanged_component_entries": "retained from predecessor release payload identity because bytes are unchanged",
@@ -136,7 +146,8 @@
   },
   "runtime_base_rebind": {
     "runtime_base_id": "CUDA13-Native-Base-v5",
-    "probe_archive_sha256": "1B2648E1962EF9B6D866256156E1FC3D2B79BAF38B7B552A3EEAF31075027204",
-    "final_shipping_archive_identity": "BOUND_BY_RUNTIME_BASE_DESCRIPTOR_AND_SHIPPING_INVENTORY"
+    "predecessor_shipping_archive_sha256": "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A",
+    "final_shipping_archive_identity": "BOUND_BY_RUNTIME_BASE_DESCRIPTOR_AND_SHIPPING_INVENTORY",
+    "repair_reason": "clean-install active MCP omitted immutable A5 node_modules in static-build-005"
   }
 }

@@ -34,7 +34,7 @@ set "AI_DIRECTOR_BOOTSTRAP_SCRIPT=%BOOTSTRAP%"
 set "BOOTSTRAP_SHA="
 for /f "usebackq delims=" %%H in (`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$h=(Get-FileHash -LiteralPath $env:AI_DIRECTOR_BOOTSTRAP_SCRIPT -Algorithm SHA256).Hash.ToUpperInvariant(); Write-Output $h"`) do set "BOOTSTRAP_SHA=%%H"
 set "AI_DIRECTOR_BOOTSTRAP_SCRIPT="
-if /I not "%BOOTSTRAP_SHA%"=="2119818A8A3D64BF6DBA620D6D67AC485616AAF90EBAE0688F26CB4CC06F806C" (
+if /I not "%BOOTSTRAP_SHA%"=="E23CA890581C5EF6868BA866F4A99F655D0BFBD89276FCDCE69730029DBE09BD" (
   echo BOOTSTRAP_STATUS=ERROR
   echo ERROR=Bootstrap control SHA256 mismatch.
   exit /b 3

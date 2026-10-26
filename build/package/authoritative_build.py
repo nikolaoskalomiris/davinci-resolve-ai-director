@@ -87,7 +87,7 @@ EXPECTED = {
     "nsis_archive": "9877DF902530F96357D13A7A31AE2B9DF67F48B11FFC9A1700A7C961574EC5FA",
     "nsis_resources_archive": "593A9A92EF958321293AC6A2EE61E64BF1BD543142A5BD6B3D310709CC924103",
     "canonical_makensis": "E277B7378931B74392015F5AD6B1D744DCD8A347BAA4480350A75EBEAB8D8E3D",
-    "runtime_base_archive": "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A",
+    "runtime_base_archive": "7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F",
     "runtime_stack_archive": "F3413EDF3D0BD76D5D5D80698261F55F766A905CAD2BEF2E26A67DEAF3548C44",
     "runtime_path_generator": "73404AF0C1CD248821D298107A4485D42FB1D8DD9FCABF78AB358703D26DC066",
 }
@@ -499,7 +499,7 @@ def runtime_base(current: dict, core_sha: str):
     spec.loader.exec_module(runtime_base_control)
     result = runtime_base_control.validate_candidate(candidate, current, core_sha)
     assert_hash("runtime base archive", result["archive_path"], EXPECTED["runtime_base_archive"])
-    require(result["archive_path"].stat().st_size == 96918486, "Runtime-base v5 BCJ archive byte size mismatch")
+    require(result["archive_path"].stat().st_size == 108500102, "Runtime-base v5 BCJ archive byte size mismatch")
     return result, descriptor_path, descriptor
 
 

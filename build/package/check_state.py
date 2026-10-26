@@ -25,9 +25,9 @@ EXPECTED_FIXED = {
     "build/upstream/reconstruct_source.py": "E269528EB96403BC1C7CA7CED62EC383E26E3DC97663CB8D4B36727483C9DE2D",
     "provenance/direct/AI-Director-Direct-Provenance-v1.json": "B597B7534E5291C8333A737248680056234712BE43CBD626D25685E2596B0EB3",
     "provenance/upstream/AI-Director-Upstream-Provenance-v1.json": "6BB550BDBCE28F1CEB1C3A8CC7F451FE804C456E31480093B99CB8F6BEFD5AF0",
-    "provenance/runtime/runtime-base/RUNTIME-BASE.json": "A1988D739B6D3E29B0443A35E03FE36B7B72E41BBAFFA3061F7BCAC782F474D8",
-    "provenance/runtime/runtime-base/RUNTIME-BASE-MANIFEST.json": "A8D34FB4DE0507CBFA42A59D3504B7AB36911109809ACDD946CE3C41F0AEB0D5",
-    "provenance/runtime/runtime-base/SHIPPING-INVENTORY.json": "88249F66294113A0CC31E2527DAD6CFD6BEAB4A0B79C2A78F860B7C3D9261C7C",
+    "provenance/runtime/runtime-base/RUNTIME-BASE.json": "85582421F420467E92E4914B35E0736BFFBD74C8CA3147F47BB6B4D06C0C16C1",
+    "provenance/runtime/runtime-base/RUNTIME-BASE-MANIFEST.json": "D1EF384AE53AB4C7ED58FBB4A16047ED4428647DFF3854363C1CC92D15D4EA7E",
+    "provenance/runtime/runtime-base/SHIPPING-INVENTORY.json": "A07A72CA71EF048A1AE894E3792CCE1D3521301743BB8F48E62218F5D798869F",
     "provenance/runtime/runtime-stack/RUNTIME-STACK.json": "872EF78E88D71E80332CEABEA685C8317F9F049669936C2C4A353B044E754E34",
     "provenance/runtime/runtime-stack/RUNTIME-STACK-MANIFEST.json": "AA04F057CA1B8788BB759DE23CFFD3B7CE65D6BA2F38B2D55C35A9BEF56EBA51",
     "branding/BRANDING.json": "0419B6BFA46B7DE1FF6A828A78A4C49B7DB819411A72A3A5867957E7A29A848B",
@@ -62,7 +62,7 @@ RUNTIME_PUBLICATION = {
     "provenance/runtime/manifests/NODE-RUNTIME-MANIFEST.json": "15616CF3583B8DA4FB40DE8F9C23286E6826ED698733973675E5B01877A72807",
     "provenance/runtime/manifests/python-3.11.9-installed-files.json": "F9CEED0AC915EB470260F6977BA9AF2D1786B598CEEB3D1487C8E75BF46A694C",
     "provenance/runtime/manifests/python-3.11.9.json": "40FA93575F42FAB78C1134067542256932DE3D7055BE1DE3387D205A1456859D",
-    "provenance/runtime/manifests/RELEASE-PAYLOAD-MANIFEST-identity-v1.json": "B028F801C74497B4E4016B81B252E542C1E9F2927BFCBEEC86612BC728E4D937",
+    "provenance/runtime/manifests/RELEASE-PAYLOAD-MANIFEST-identity-v1.json": "91B9455A07D9C0C7B004CFCBEBE2114B77E805F2DB389E66F67B17BBDF04BEBE",
     "provenance/runtime/licenses/AdvancedMCP/THIRD-PARTY-PACKAGES-4.8.20.json": "935426A1E81FB50DB989C1ECE8005CEE23059E69692B4E5285D59BB4AF69FF75",
     "provenance/runtime/licenses/AdvancedMCP/THIRD-PARTY-PACKAGES-4.15.3.json": "22F1B0E06BFB32773837594C6EBB202E64CD6EA6E0C1A9913427D0BADFEB51B8",
     "provenance/runtime/licenses/FFmpeg/REDISTRIBUTION-ENGINEERING-NOTICE-8.1.3.txt": "4CA97B6986D2135B9161A189EDFB23E8AC2819B58C58909EDDF15EFB1DF1AA79",
@@ -248,8 +248,8 @@ def validate_bootstrap():
     require(row.get('destination_file')=='_inputs/Runtime-Bases/CUDA13-Native-Base-v5/RUNTIME-BASE.7z','runtime input destination mismatch')
     expected_url='https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v2/AI-Director-Runtime-Base-CUDA13-Native-Base-v5.7z'
     require(str(row.get('url') or '')==expected_url,'runtime-base candidate/public URL mismatch')
-    require(int(row.get('bytes') or -1)==96918486,'runtime-base bootstrap byte-count mismatch')
-    require(str(row.get('sha256') or '').upper()=='1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A','runtime-base bootstrap SHA-256 mismatch')
+    require(int(row.get('bytes') or -1)==108500102,'runtime-base bootstrap byte-count mismatch')
+    require(str(row.get('sha256') or '').upper()=='7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F','runtime-base bootstrap SHA-256 mismatch')
     require('local_source_relative_path' not in row,'engineering _source runtime fallback must not exist')
     require(row.get('asset_root_relative_path')=='AI-Director-Runtime-Base-CUDA13-Native-Base-v5.7z','runtime offline mirror path mismatch')
     if target_pending:
@@ -280,7 +280,7 @@ def validate_bootstrap():
     py=ROOT/'_toolchain/Python/3.11.9/python.exe'; node=ROOT/'_toolchain/Node/24.18.0/node.exe'
     if not py.is_file() or not node.is_file(): generated=False
     rb=ROOT/'_inputs/Runtime-Bases/CUDA13-Native-Base-v5/RUNTIME-BASE.7z'
-    if rb.is_file(): require(rb.stat().st_size==96918486 and sha256(rb)=='1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A','runtime-base input identity mismatch')
+    if rb.is_file(): require(rb.stat().st_size==108500102 and sha256(rb)=='7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F','runtime-base input identity mismatch')
     else: generated=False
     shared_archives={
       '_inputs/Shared-CUDA/CUDA13.3.1/Archives/cuda_cudart-windows-x86_64-13.3.29-archive.zip':('1FEB7DD266813FFE8DBC24E115183A5AC35A4795C8D34ACA0DF85AB616B64D9C',2589792),
@@ -307,8 +307,8 @@ def validate_public_repository_state():
     require(obj.get('plain_build_from_accepted_ready_public_semantics')=='CHECKED_OUT_VERSION_NONMUTATING','plain public BUILD semantics mismatch')
     require(obj.get('plain_build_release_state_mutation') is False,'plain public BUILD must not mutate release state')
     require(obj.get('runtime_base_public_url')=='https://github.com/nikolaoskalomiris/llama-cpp-flashnext-direct/releases/download/builder-inputs-v2/AI-Director-Runtime-Base-CUDA13-Native-Base-v5.7z','runtime-base public/candidate state URL mismatch')
-    require(str(obj.get('runtime_base_sha256') or '').upper()=='1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A','runtime-base public state SHA-256 mismatch')
-    require(int(obj.get('runtime_base_bytes') or -1)==96918486,'runtime-base public state byte-count mismatch')
+    require(str(obj.get('runtime_base_sha256') or '').upper()=='7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F','runtime-base public state SHA-256 mismatch')
+    require(int(obj.get('runtime_base_bytes') or -1)==108500102,'runtime-base public state byte-count mismatch')
     if target_pending:
         pending = obj.get('runtime_base_public_url_bound') is False
         published = obj.get('runtime_base_public_url_bound') is True

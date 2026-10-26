@@ -11,10 +11,10 @@ RUNTIME_BASE_ARCHIVE_NAME = "RUNTIME-BASE.7z"
 RUNTIME_BASE_INVENTORY_NAME = "SHIPPING-INVENTORY.json"
 
 EXPECTED_RUNTIME_BASE_ID = "CUDA13-Native-Base-v5"
-EXPECTED_SHIPPING_ARCHIVE_SHA256 = "1F51536B3507C93FE72504A6B72557C70BD09D1195760996B2FB7FB8E20D8C4A"
-EXPECTED_SHIPPING_ARCHIVE_BYTES = 96918486
-EXPECTED_SHIPPING_INVENTORY_SHA256 = "88249F66294113A0CC31E2527DAD6CFD6BEAB4A0B79C2A78F860B7C3D9261C7C"
-EXPECTED_SHIPPING_FILE_COUNT = 15790
+EXPECTED_SHIPPING_ARCHIVE_SHA256 = "7AD5B820B68F8CC949B6FF656D7FC0977858E9CBFF41EC241EC5F913317AC46F"
+EXPECTED_SHIPPING_ARCHIVE_BYTES = 108500102
+EXPECTED_SHIPPING_INVENTORY_SHA256 = "A07A72CA71EF048A1AE894E3792CCE1D3521301743BB8F48E62218F5D798869F"
+EXPECTED_SHIPPING_FILE_COUNT = 20392
 
 EXPECTED_BASELINE_RUNTIME_BASE_ID = "CUDA13-Native-Base-v4"
 EXPECTED_BASELINE_ARCHIVE_SHA256 = "29C50DB94D0655A997809A59F12B5AC98F2FC593746191C495FFA018D00111BC"
@@ -130,6 +130,8 @@ def validate_inventory(obj: dict) -> None:
         "davinci-resolve-mcp/package.json": EXPECTED_ACTIVE_MCP_PACKAGE_SHA256,
         "davinci-resolve-mcp/src/server.py": EXPECTED_ACTIVE_MCP_SERVER_SHA256,
         "davinci-resolve-mcp/.davinci-resolve-mcp-managed.json": EXPECTED_ACTIVE_MCP_MARKER_SHA256,
+        "davinci-resolve-mcp/resolve-advanced/node_modules/@img/sharp-win32-x64/lib/sharp-win32-x64-0.35.5.node": "971048779F9C8598DF14641DFC03C625885C93F473A788E65CA2DEB50D0B083E",
+        "davinci-resolve-mcp/resolve-advanced/node_modules/better-sqlite3/build/Release/better_sqlite3.node": "78EB63B1D38EFA70DAB28439D7A330CAAB952E4A21E563FB980C01B00E62FEA0",
         EXPECTED_MCP_BOOTSTRAP_PATH: EXPECTED_MCP_BOOTSTRAP_SHA256,
         f"{EXPECTED_ADVANCED_ROOT}/PAYLOAD-SHA256.json": EXPECTED_ADVANCED_PAYLOAD_MANIFEST_SHA256,
         f"{EXPECTED_ADVANCED_ROOT}/ADVANCED-NODE-MANDATORY-DEPENDENCY-IMAGE-MANIFEST.json": EXPECTED_ADVANCED_MANDATORY_MANIFEST_SHA256,
@@ -206,6 +208,10 @@ def validate_manifest(manifest: dict) -> None:
         or str(active.get("managed_marker_sha256") or "").upper() != EXPECTED_ACTIVE_MCP_MARKER_SHA256
         or active.get("installer_activation") is not False
         or active.get("first_start_overlay_mutation_required") is not False
+        or active.get("active_advanced_node_modules_materialized") is not True
+        or str(active.get("active_advanced_node_modules_tree_sha256") or "").upper() != "A456900C27BA316C974D40290F117AFD61D2C30D0DFC6F0EC3DE2AFA85CB4964"
+        or int(active.get("active_advanced_node_modules_file_count") or -1) != 4602
+        or int(active.get("active_advanced_node_modules_bytes") or -1) != 58626067
     ):
         raise RuntimeError("runtime-base v5 active MCP baseline metadata mismatch")
 
@@ -273,6 +279,8 @@ def validate_manifest(manifest: dict) -> None:
     for key in required_false:
         if semantics.get(key) is not False:
             raise RuntimeError(f"runtime-base v5 clean-install semantics must keep {key}=false")
+    if semantics.get("active_mcp_advanced_dependencies_materialized_before_install") is not True:
+        raise RuntimeError("runtime-base v5 active MCP Advanced dependency materialization mismatch")
     if semantics.get("historical_4_10_4_versioned_provenance_retained") is not True:
         raise RuntimeError("runtime-base v5 historical predecessor provenance retention mismatch")
 
