@@ -422,8 +422,26 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
 
+          $releaseStatePath = Join-Path $env:GITHUB_WORKSPACE 'build\package\release-state.json'
+          if (-not (Test-Path -LiteralPath $releaseStatePath -PathType Leaf)) {
+            throw "release-state.json is missing from the checked-out public source."
+          }
+
+          $releaseState = Get-Content -LiteralPath $releaseStatePath -Raw -Encoding UTF8 | ConvertFrom-Json
+
+          if ([string]$releaseState.state_mode -ne 'ACCEPTED_READY') {
+            throw "Public checked-out build evidence requires ACCEPTED_READY state."
+          }
+
+          $targetVersion = [string]$releaseState.target_version
+          $acceptedVersion = [string]$releaseState.live_accepted_authority
+
+          if (-not $targetVersion -or $targetVersion -ne $acceptedVersion) {
+            throw "Public checked-out build target/accepted authority mismatch. Target=$targetVersion Accepted=$acceptedVersion"
+          }
+
           $workspaceParent = Split-Path -Parent $env:GITHUB_WORKSPACE
-          $candidateVersionRoot = Join-Path $workspaceParent 'AI-Director-Release-Candidates\0.3.25'
+          $candidateVersionRoot = Join-Path $workspaceParent "AI-Director-Release-Candidates\$targetVersion"
 
           if (-not (Test-Path -LiteralPath $candidateVersionRoot -PathType Container)) {
             throw "Release candidate version root was not produced: $candidateVersionRoot"
