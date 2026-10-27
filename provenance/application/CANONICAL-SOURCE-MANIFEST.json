@@ -4,7 +4,7 @@
   "product": "DaVinci Resolve AI Director",
   "version": "0.3.27",
   "source_authority": "CANONICAL",
-  "source_phase": "TARGET_READY",
+  "source_phase": "ACCEPTED_READY",
   "file_count": 13,
   "files": [
     {

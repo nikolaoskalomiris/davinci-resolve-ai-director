@@ -1,8 +1,8 @@
 {
   "schema_version": 5,
   "product": "DaVinci Resolve AI Director",
-  "state_mode": "TARGET_READY",
-  "stable_version": "0.3.26",
+  "state_mode": "ACCEPTED_READY",
+  "stable_version": "0.3.27",
   "target_version": "0.3.27",
   "builder_mode": "CANONICAL_SOURCE_BUILDER",
   "application_source_authority": "CANONICAL",
@@ -10,7 +10,7 @@
     "id": "AI-Director-Canonical-Application-0.3.27-v1",
     "source_dir": "src/application",
     "manifest_path": "provenance/application/CANONICAL-SOURCE-MANIFEST.json",
-    "manifest_sha256": "93E2365CF3DDC0888A25C3B7F12077E35223E3C2737B3313D238C46633CB95DA",
+    "manifest_sha256": "175FBD726BCDDFDB0BCF7932CB88A88D97FC7D700E5755904CD7EA62B329080D",
     "file_count": 13
   },
   "ordered_installer_policies": [
@@ -65,7 +65,7 @@
     "CHECK-STATE.cmd": "205B7DE6E5525B6772D00710A7577BB910357A9A3610661EFF6A09E50A85ED4A",
     "VERSION.cmd": "183F1F9373AC0B3B061DCD2294205452960923D8E372415D2D96A4FB874095CC"
   },
-  "live_accepted_authority": "0.3.26",
+  "live_accepted_authority": "0.3.27",
   "health_check_entrypoint": "CHECK-STATE.cmd",
   "build_entrypoint": "BUILD.cmd",
   "stable_promotion_executed": false,
