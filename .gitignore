@@ -24,3 +24,15 @@ Desktop.ini
 .idea/
 
 # Public source, manifests, provenance, branding and documentation remain tracked.
+
+# Python bytecode/cache noise
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.pyright/
+.pyre/
+.pytype/
+.ruff_cache/
+.hypothesis/
