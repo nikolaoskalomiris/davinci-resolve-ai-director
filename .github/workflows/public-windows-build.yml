@@ -133,22 +133,123 @@ jobs:
           Write-Host "CI_VS_FIXED_BOOTSTRAPPER_SHA256=$actualBootstrapperSha256"
           Write-Host "CI_VS_FIXED_INSTALL=PASS"
 
-      - name: Verify Windows SDK 10.0.26100.0 component presence
+      - name: Install exact Windows SDK 10.0.26100.9457 servicing level
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
+          $sdkDownloadsPage = 'https://learn.microsoft.com/en-us/windows/apps/windows-sdk/downloads'
+          $targetSdkProductVersion = '10.1.26100.9457'
+          $targetToolVersion = '10.0.26100.9457'
           $rc = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\rc.exe'
           $mt = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\mt.exe'
+          $expectedRcSha256 = '9E2EE68DA28B3318F50A9F1008D64567A9B402BDA384A007A9B71A3F16BD011B'
+          $expectedMtSha256 = 'FA74DD31612C78DE40169599640FB955EF9CCB9F2DFABF80F100022FF1B8BC22'
+          $sdkInstaller = Join-Path $env:RUNNER_TEMP 'winsdksetup-10.0.26100.9457.exe'
 
-          foreach ($path in @($rc, $mt)) {
-            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
-              throw "Required Windows SDK 10.0.26100.0 tool is missing: $path"
+          function Test-ExactSdkTools {
+            if (-not (Test-Path -LiteralPath $rc -PathType Leaf) -or
+                -not (Test-Path -LiteralPath $mt -PathType Leaf)) {
+              return $false
+            }
+
+            $rcHash = (Get-FileHash -LiteralPath $rc -Algorithm SHA256).Hash.ToUpperInvariant()
+            $mtHash = (Get-FileHash -LiteralPath $mt -Algorithm SHA256).Hash.ToUpperInvariant()
+            $rcVersion = (Get-Item -LiteralPath $rc).VersionInfo.ProductVersion
+            $mtVersion = (Get-Item -LiteralPath $mt).VersionInfo.ProductVersion
+
+            return (
+              $rcHash -eq $expectedRcSha256 -and
+              $mtHash -eq $expectedMtSha256 -and
+              $rcVersion -eq $targetToolVersion -and
+              $mtVersion -eq $targetToolVersion
+            )
+          }
+
+          if (-not (Test-ExactSdkTools)) {
+            $page = Invoke-WebRequest -UseBasicParsing -Uri $sdkDownloadsPage
+            $html = [string]$page.Content
+
+            $pattern = '(?is)Windows SDK for Windows 11\s*\(10\.0\.26100\.9457\).*?href=["''](?<url>[^"'']+)["''][^>]*>\s*Installer\s*</a>'
+            $match = [regex]::Match($html, $pattern)
+
+            if (-not $match.Success) {
+              throw "Unable to discover the official Windows SDK 10.0.26100.9457 installer URL from Microsoft Learn."
+            }
+
+            $sdkInstallerUrl = $match.Groups['url'].Value
+            if ($sdkInstallerUrl -notmatch '^https://(go\.microsoft\.com|download\.microsoft\.com)/') {
+              throw "Discovered Windows SDK installer URL is not an allowed Microsoft download endpoint: $sdkInstallerUrl"
+            }
+
+            Write-Host "CI_WINDOWS_SDK_9457_INSTALLER_URL=$sdkInstallerUrl"
+
+            Invoke-WebRequest -UseBasicParsing -Uri $sdkInstallerUrl -OutFile $sdkInstaller
+
+            $signature = Get-AuthenticodeSignature -LiteralPath $sdkInstaller
+            if ($signature.Status -ne 'Valid' -or
+                -not $signature.SignerCertificate -or
+                $signature.SignerCertificate.Subject -notmatch 'Microsoft') {
+              throw "Windows SDK 10.0.26100.9457 installer Authenticode verification failed."
+            }
+
+            $process = Start-Process `
+              -FilePath $sdkInstaller `
+              -ArgumentList '/features OptionId.DesktopCPPx64 /quiet /norestart /ceip off' `
+              -Wait `
+              -PassThru
+
+            if ($process.ExitCode -notin @(0, 3010)) {
+              throw "Windows SDK 10.0.26100.9457 installation failed with exit code $($process.ExitCode)."
             }
           }
 
-          Write-Host "CI_WINDOWS_SDK_COMPONENT_PATHS=PASS"
-          Write-Host "CI_WINDOWS_SDK_EXACT_HASH_AUTHORITY=DIRECT_UPSTREAM_BUILD_CONTRACTS"
+          $actualRcSha256 = if (Test-Path -LiteralPath $rc -PathType Leaf) {
+            (Get-FileHash -LiteralPath $rc -Algorithm SHA256).Hash.ToUpperInvariant()
+          } else {
+            'MISSING'
+          }
+          $actualMtSha256 = if (Test-Path -LiteralPath $mt -PathType Leaf) {
+            (Get-FileHash -LiteralPath $mt -Algorithm SHA256).Hash.ToUpperInvariant()
+          } else {
+            'MISSING'
+          }
+          $actualRcVersion = if (Test-Path -LiteralPath $rc -PathType Leaf) {
+            (Get-Item -LiteralPath $rc).VersionInfo.ProductVersion
+          } else {
+            'MISSING'
+          }
+          $actualMtVersion = if (Test-Path -LiteralPath $mt -PathType Leaf) {
+            (Get-Item -LiteralPath $mt).VersionInfo.ProductVersion
+          } else {
+            'MISSING'
+          }
+
+          Write-Host "CI_WINDOWS_SDK_RC_VERSION=$actualRcVersion"
+          Write-Host "CI_WINDOWS_SDK_RC_SHA256=$actualRcSha256"
+          Write-Host "CI_WINDOWS_SDK_MT_VERSION=$actualMtVersion"
+          Write-Host "CI_WINDOWS_SDK_MT_SHA256=$actualMtSha256"
+
+          if (-not (Test-ExactSdkTools)) {
+            throw "Exact Windows SDK 10.0.26100.9457 rc.exe/mt.exe identities were not established."
+          }
+
+          $sdkEntry = Get-ItemProperty `
+              'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' `
+              -ErrorAction SilentlyContinue |
+            Where-Object {
+              $_.Publisher -like 'Microsoft*' -and
+              $_.DisplayVersion -eq $targetSdkProductVersion
+            } |
+            Select-Object -First 1
+
+          if (-not $sdkEntry) {
+            throw "Windows SDK product registration $targetSdkProductVersion was not found after exact-tool validation."
+          }
+
+          Write-Host "CI_WINDOWS_SDK_PRODUCT_VERSION=$targetSdkProductVersion"
+          Write-Host "CI_WINDOWS_SDK_EXACT_RC_MT=PASS"
 
       - name: Verify exact Microsoft toolchain hashes
         shell: pwsh
@@ -172,25 +273,35 @@ jobs:
             'vcvars64.bat'
           )
 
+          $mismatches = @()
+
           foreach ($name in $toolNames) {
             $record = $contract.toolchain.tools.$name
             if (-not $record) {
-              throw "Microsoft toolchain contract record is missing: $name"
+              $mismatches += "MISSING_CONTRACT_RECORD $name"
+              continue
             }
 
             $path = [string]$record.path
             $expected = ([string]$record.sha256).ToUpperInvariant()
 
             if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
-              throw "Required Microsoft toolchain file is missing: $name :: $path"
+              $mismatches += "MISSING_FILE $name path=$path expected=$expected"
+              continue
             }
 
             $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToUpperInvariant()
             if ($actual -ne $expected) {
-              throw "Microsoft toolchain SHA256 mismatch: $name Expected=$expected Actual=$actual"
+              $mismatches += "SHA256_MISMATCH $name expected=$expected actual=$actual path=$path"
+              continue
             }
 
             Write-Host "CI_MICROSOFT_TOOLCHAIN_HASH_PASS=$name"
+          }
+
+          if ($mismatches.Count -ne 0) {
+            $mismatches | ForEach-Object { Write-Host "CI_MICROSOFT_TOOLCHAIN_MISMATCH=$_" }
+            throw "Microsoft toolchain exact hash gate failed with $($mismatches.Count) mismatch(es)."
           }
 
           Write-Host "CI_MICROSOFT_TOOLCHAIN_HASH_COUNT=8"
