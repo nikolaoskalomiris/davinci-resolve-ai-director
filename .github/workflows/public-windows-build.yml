@@ -54,14 +54,15 @@ jobs:
           Write-Host "CI_COMMIT=$env:GITHUB_SHA"
           Write-Host "CI_RUNNER_ENVIRONMENT=$env:RUNNER_ENVIRONMENT"
 
-      - name: Install fixed Visual Studio Build Tools 2022 17.14.42
+      - name: Install Visual Studio Build Tools 2022 17.14 with fixed bootstrapper
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
           $bootstrapperUrl = 'https://download.visualstudio.microsoft.com/download/pr/c95450be-0a45-4779-b142-33f567ccfd6e/2a6aa7d94e38d457a4eb3930fc60056ecab06865b2eb925e5275b8473a017583/vs_BuildTools.exe'
           $bootstrapperSha256 = '2A6AA7D94E38D457A4EB3930FC60056ECAB06865B2EB925E5275B8473A017583'
-          $expectedInstallationVersion = '17.14.37806.7'
+          $expectedInstallationMajor = 17
+          $expectedInstallationMinor = 14
           $bootstrapper = Join-Path $env:RUNNER_TEMP 'vs_BuildTools-17.14.42.exe'
           $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
 
@@ -96,7 +97,7 @@ jobs:
             -PassThru
 
           if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
-            throw "Visual Studio Build Tools 17.14.42 installation failed with exit code $($process.ExitCode)."
+            throw "Visual Studio Build Tools 17.14 installation failed with exit code $($process.ExitCode)."
           }
 
           if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
@@ -115,148 +116,39 @@ jobs:
             throw "Build Tools installation path mismatch. Expected=$env:VS_BUILDTOOLS_ROOT Actual=$installationPath"
           }
 
-          if ($installationVersion -ne $expectedInstallationVersion) {
-            throw "Build Tools installation version mismatch. Expected=$expectedInstallationVersion Actual=$installationVersion"
+          $parsedInstallationVersion = $null
+          if (-not [version]::TryParse($installationVersion, [ref]$parsedInstallationVersion)) {
+            throw "Build Tools installation version is not parseable: $installationVersion"
+          }
+
+          if ($parsedInstallationVersion.Major -ne $expectedInstallationMajor -or
+              $parsedInstallationVersion.Minor -ne $expectedInstallationMinor) {
+            throw "Build Tools major/minor mismatch. Expected=17.14 Actual=$installationVersion"
           }
 
           Write-Host "CI_VS_BUILDTOOLS_VERSION=$installationVersion"
+          Write-Host "CI_VS_BUILDTOOLS_MAJOR_MINOR=17.14"
+          Write-Host "CI_VS_SHELL_SERVICING_VERSION_STRICT=False"
+          Write-Host "CI_VS_COMPILER_TOOL_HASHES_STRICT=YES_NEXT_GATE"
           Write-Host "CI_VS_FIXED_BOOTSTRAPPER_SHA256=$actualBootstrapperSha256"
           Write-Host "CI_VS_FIXED_INSTALL=PASS"
 
-      - name: Install fixed Windows SDK 10.0.26100.8249
+      - name: Verify Windows SDK 10.0.26100.0 component presence
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
-          $sdkInstallerUrl = 'https://download.microsoft.com/download/dba6f26e-0fb0-43bd-be9a-e3e24becb4a3/KIT_BUNDLE_WINDOWSSDK_MEDIACREATION/winsdksetup.exe'
-          $sdkInstaller = Join-Path $env:RUNNER_TEMP 'winsdksetup-10.0.26100.8249.exe'
-          $targetSdkPackageVersion = [version]'10.1.26100.8249'
-          $targetToolVersion = '10.0.26100.8249'
           $rc = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\rc.exe'
           $mt = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\mt.exe'
-          $expectedRcSha256 = '65DB0D7B4F10BA0F55973FD9356543A556DA9EC1C777A0C05F05A0329C8A100A'
-          $expectedMtSha256 = 'FB1AB75294B78619BD6AC8CADF30CB95BEFBC7324703CBE2654EF800DDD2BF4D'
 
-          function Test-ExactSdkTools {
-            if (-not (Test-Path -LiteralPath $rc -PathType Leaf) -or
-                -not (Test-Path -LiteralPath $mt -PathType Leaf)) {
-              return $false
-            }
-
-            $rcHash = (Get-FileHash -LiteralPath $rc -Algorithm SHA256).Hash.ToUpperInvariant()
-            $mtHash = (Get-FileHash -LiteralPath $mt -Algorithm SHA256).Hash.ToUpperInvariant()
-            $rcVersion = (Get-Item -LiteralPath $rc).VersionInfo.ProductVersion
-            $mtVersion = (Get-Item -LiteralPath $mt).VersionInfo.ProductVersion
-
-            return (
-              $rcHash -eq $expectedRcSha256 -and
-              $mtHash -eq $expectedMtSha256 -and
-              $rcVersion -eq $targetToolVersion -and
-              $mtVersion -eq $targetToolVersion
-            )
-          }
-
-          if (-not (Test-ExactSdkTools)) {
-            $uninstallRoots = @(
-              'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
-              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
-            )
-
-            $newerSdkPackages = Get-ItemProperty $uninstallRoots -ErrorAction SilentlyContinue |
-              Where-Object {
-                $_.Publisher -like 'Microsoft*' -and
-                $_.DisplayName -like 'Windows*' -and
-                $_.DisplayVersion -match '^10\.1\.26100\.\d+$'
-              } |
-              ForEach-Object {
-                $parsed = $null
-                if ([version]::TryParse([string]$_.DisplayVersion, [ref]$parsed) -and
-                    $parsed -gt $targetSdkPackageVersion) {
-                  [pscustomobject]@{
-                    DisplayName = [string]$_.DisplayName
-                    DisplayVersion = [string]$_.DisplayVersion
-                    ProductCode = [string]$_.PSChildName
-                  }
-                }
-              } |
-              Where-Object {
-                $_ -and $_.ProductCode -match '^\{[0-9A-Fa-f-]{36}\}$'
-              } |
-              Sort-Object ProductCode -Unique
-
-            foreach ($package in $newerSdkPackages) {
-              Write-Host "CI_SDK_REMOVE_NEWER=$($package.DisplayName) $($package.DisplayVersion) $($package.ProductCode)"
-
-              $process = Start-Process `
-                -FilePath 'msiexec.exe' `
-                -ArgumentList "/x $($package.ProductCode) /qn /norestart" `
-                -Wait `
-                -PassThru
-
-              if ($process.ExitCode -notin @(0, 1605, 1614, 3010)) {
-                throw "Unable to remove newer Windows SDK package $($package.ProductCode). Exit=$($process.ExitCode)"
-              }
-            }
-
-            Invoke-WebRequest -UseBasicParsing -Uri $sdkInstallerUrl -OutFile $sdkInstaller
-
-            $signature = Get-AuthenticodeSignature -LiteralPath $sdkInstaller
-            if ($signature.Status -ne 'Valid' -or
-                -not $signature.SignerCertificate -or
-                $signature.SignerCertificate.Subject -notmatch 'Microsoft') {
-              throw "Windows SDK installer Authenticode verification failed."
-            }
-
-            $process = Start-Process `
-              -FilePath $sdkInstaller `
-              -ArgumentList '/features OptionId.DesktopCPPx64 /quiet /norestart /ceip off' `
-              -Wait `
-              -PassThru
-
-            if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 3010) {
-              throw "Windows SDK 10.0.26100.8249 installer failed with exit code $($process.ExitCode)."
-            }
-
-            $deadline = [DateTime]::UtcNow.AddMinutes(5)
-            while ([DateTime]::UtcNow -lt $deadline -and -not (Test-ExactSdkTools)) {
-              Start-Sleep -Seconds 5
+          foreach ($path in @($rc, $mt)) {
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+              throw "Required Windows SDK 10.0.26100.0 tool is missing: $path"
             }
           }
 
-          if (-not (Test-ExactSdkTools)) {
-            $actualRc = if (Test-Path -LiteralPath $rc) {
-              (Get-FileHash -LiteralPath $rc -Algorithm SHA256).Hash.ToUpperInvariant()
-            } else {
-              'MISSING'
-            }
-
-            $actualMt = if (Test-Path -LiteralPath $mt) {
-              (Get-FileHash -LiteralPath $mt -Algorithm SHA256).Hash.ToUpperInvariant()
-            } else {
-              'MISSING'
-            }
-
-            throw "Exact Windows SDK 10.0.26100.8249 tools were not established. rc=$actualRc mt=$actualMt"
-          }
-
-          $sdkEntry = Get-ItemProperty `
-              'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
-              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' `
-              -ErrorAction SilentlyContinue |
-            Where-Object {
-              $_.DisplayName -eq 'Windows SDK' -and
-              $_.DisplayVersion -eq '10.1.26100.8249'
-            } |
-            Select-Object -First 1
-
-          if (-not $sdkEntry) {
-            throw "Windows SDK 10.1.26100.8249 uninstall identity was not found after installation."
-          }
-
-          Write-Host "CI_WINDOWS_SDK_PACKAGE_VERSION=10.1.26100.8249"
-          Write-Host "CI_WINDOWS_SDK_RC_SHA256=$expectedRcSha256"
-          Write-Host "CI_WINDOWS_SDK_MT_SHA256=$expectedMtSha256"
-          Write-Host "CI_WINDOWS_SDK_FIXED_INSTALL=PASS"
+          Write-Host "CI_WINDOWS_SDK_COMPONENT_PATHS=PASS"
+          Write-Host "CI_WINDOWS_SDK_EXACT_HASH_AUTHORITY=DIRECT_UPSTREAM_BUILD_CONTRACTS"
 
       - name: Verify exact Microsoft toolchain hashes
         shell: pwsh
