@@ -6,7 +6,7 @@ These instructions apply to work in this repository. They express durable rules,
 
 - This is an existing Windows/Electron/llama.cpp/MCP engineering project. Inspect the current tree and trace relevant control flow/state transitions/mutation boundaries/runtime ownership/failure recovery before designing changes.
 - Published product source authority is the current public GitHub repository `nikolaoskalomiris/davinci-resolve-ai-director`, its current tracked source, current refs/tags/releases, and exact release assets/provenance. The accepted release tag and later `main` maintenance must be tracked as separate authorities. Never infer that `main` and a release tag must point to the same commit.
-- The local continuity mirror is `C:\AI\SoR Continuity`. It is useful orientation, not product-source authority or canonical ChatGPT Library access. Do not mutate it. OpenHands cannot read ChatGPT Library by default; be transparent when only the local mirror was available.
+- Canonical project continuity lives only at `C:\AI\SoR Continuity`. It is the local orientation/history/roadmap authority, not product-source authority. External conversational memory or library services are outside the development workflow. Reconcile meaningful engineering state locally using the established append-only journal/materialized-state successor workflow; preserve history, validate coherence, and write the manifest last.
 - At task start, inventory the continuity directory as it exists now. Inspect its actual manifest and validator, read the manifest-declared current members and journal head, and validate local coherence if the validator is read-only. Do not assume a bootstrap filename. A validator pass cannot establish current GitHub/Drive freshness.
 - Verify this checkout by `git rev-parse --show-toplevel`, `git remote -v`, branch, HEAD/tree, and clean/dirty/untracked path identity. Do not infer that a generated per-conversation workspace is this repository.
 - The Google Drive mirror is operator-maintained secondary material. Do not modify it; assume it can be stale.
@@ -17,7 +17,7 @@ These instructions apply to work in this repository. They express durable rules,
 - Frozen accepted/reference Builder: `C:\AI\AI-Director-Builder`; do not mutate unless explicitly reopened by the user.
 - Retained release-candidate evidence: `C:\AI\AI-Director-Release-Candidates`; preserve existing contents.
 - Disposable development and test work: unique directories under `%USERPROFILE%\Downloads` unless the user explicitly changes the topology.
-- Local continuity mirror: `C:\AI\SoR Continuity`; read-only and secondary.
+- Canonical local continuity: `C:\AI\SoR Continuity`; update through the validated successor workflow, never by overwriting historical journal entries.
 - The local OpenHands backend runs as the signed-in user and can be highly privileged. Do not run it elevated. Configured access to `C:\AI`, `%USERPROFILE%\Downloads`, `%LOCALAPPDATA%`, `%APPDATA%`, `C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\Workflow Integration Plugins`, or `%USERPROFILE%\.lmstudio\models` does not imply blanket authorization to change everything there. OS ACLs still apply.
 - Keep model files under `%USERPROFILE%\.lmstudio\models` read-only. Do not bypass a ProgramData ACL denial by elevating; report the limitation and request authorization if a machine-scoped write is necessary.
 

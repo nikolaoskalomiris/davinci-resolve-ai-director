@@ -28,9 +28,9 @@ One new local main commit preserves this integration; no history rewrite/push/re
 
 Read-only incremental upstream MCP review from v4.15.3 through each adjacent tag to observed v5.3.1, then updater-retirement design for MCP and Upstream llama.cpp. Do not upgrade based only on tool count or release notes. Compare schemas/semantics, safety/authorization, runtime/dependency/license contracts, and product adapter/prompt behavior. No end-user updater removal is implemented in this commit.
 
-## Continuity limitation
+## Local continuity authority
 
-This repository handoff is versioned engineering evidence, not a claimed canonical ChatGPT Library successor. Local continuity mirror journal 0116 was validated but remains stale and read-only. Canonical reconciliation remains pending access/operator workflow. No historical acceptance or release promotion is fabricated.
+Canonical project continuity lives only at `C:\AI\SoR Continuity`. Update that local package through its append-only journal/materialized-state successor workflow with validation and manifest-last publication. External conversational library access is not a prerequisite. The integration originally inspected journal 0116; that is historical evidence, not a permanent current-head assertion. Re-read the local manifest for the active head. No historical acceptance or release promotion is implied by this policy change.
 
 ## Preserved diagnostic failures
 
