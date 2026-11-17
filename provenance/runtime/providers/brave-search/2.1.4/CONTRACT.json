@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "provider": "brave-search",
+  "version": "2.1.4",
+  "evidence_state": "VERIFIED",
+  "scope": "Retained reconstruction identity only; not historical B2 or product acceptance",
+  "source_commit": "8bcb302657b0f072612c2f3e53182ff17912013c",
+  "source_tree": "2c6b964cb59aa51e3b3643325066fbac05f19440",
+  "entrypoint": "dist/index.js",
+  "core_file_count": 3589,
+  "core_bytes": 15914748,
+  "core_inventory_sha256": "f8bd1c72fce849e56737258cd2396b80b227e30adfba00574b485bfdd49ebebe",
+  "manifest_sha256": "c30427caa6ddf5c71d096645fd9a78155c8dd29e529f95221dc2015b20f1773b",
+  "public_acquisition": {
+    "evidence_state": "UNVERIFIED",
+    "status": "GAP_NO_REVIEWED_PUBLIC_RECONSTRUCTION_OR_BUNDLE_CONTRACT",
+    "bundle_url": null,
+    "offline_input_required": true,
+    "reconstruction_authorized": false,
+    "limitations": [
+      "104 upstream lock entries lack integrity/resolved data",
+      "Two retained cache reconstructions do not establish historical artifact identity",
+      "Registry metadata is retained evidence, not an implemented fresh acquisition route"
+    ]
+  },
+  "toolchain_intent": {
+    "node": "24.18.0",
+    "npm": "11.16.0",
+    "typescript": "5.9.3",
+    "shx": "0.4.0",
+    "executed_by_module": false
+  },
+  "origin": {
+    "candidate": "AI-Director-ResolveKey-v3-20261117-222604 repaired candidate-runtime Brave/2.1.4",
+    "recovery": "AI-Director-Recovery-20261116-184757/provider-rebuild/bundle",
+    "metadata_policy": "Retained metadata unchanged; historical absolute toolchain paths are evidence, never inputs"
+  },
+  "licensing": {
+    "provider": "MIT; upstream/LICENSE and licenses/PROVIDER-LICENSE",
+    "dependencies": "96 production package roots; packages-and-licenses.json and licenses/",
+    "scope": "Not legal advice or external service terms/privacy/pricing approval"
+  }
+}

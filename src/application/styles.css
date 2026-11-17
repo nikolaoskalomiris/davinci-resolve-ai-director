@@ -1896,3 +1896,19 @@ button#send:disabled {
         grid-template-columns: 1fr !important;
     }
 }
+
+/* Match the existing compact settings typography; no inherited page-sized copy. */
+.settings-internet .settings-check-row { align-items: center; margin-top: 0; }
+.settings-internet-help,
+.settings-internet-status { margin: 8px 0; color: #888; font-size: 9px; line-height: 1.4; }
+.settings-internet .settings-field { margin-top: 12px; }
+.settings-internet-actions,
+.settings-model-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+.settings-field input.credential-saved {
+    background: #252525;
+    color: #777;
+    border-color: #303030;
+    cursor: default;
+}
+.settings-field input.credential-saved::placeholder { color: #999; opacity: 1; letter-spacing: 3px; }

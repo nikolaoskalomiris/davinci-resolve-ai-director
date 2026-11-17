@@ -22,11 +22,17 @@ contextBridge.exposeInMainWorld('aiDirector', {
     getSettingsState: () =>
         ipcRenderer.invoke('aid:getSettingsState'),
 
+    selectManualModel: () => ipcRenderer.invoke('aid:selectManualModel'),
+
     rescanModels: () =>
         ipcRenderer.invoke('aid:rescanModels'),
 
     applySettings: (settings) =>
         ipcRenderer.invoke('aid:applySettings', settings || {}),
+
+    getBraveCredentialStatus: () => ipcRenderer.invoke('aid:getBraveCredentialStatus'),
+    setBraveCredential: (value) => ipcRenderer.invoke('aid:setBraveCredential', value),
+    removeBraveCredential: () => ipcRenderer.invoke('aid:removeBraveCredential'),
 
     locateExternalFfmpeg: () =>
         ipcRenderer.invoke('aid:locateExternalFfmpeg'),

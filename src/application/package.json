@@ -25,6 +25,7 @@
       "styles.css",
       "markdown.js",
       "ProductPaths.js",
+      "InternetCapability.js",
       "UpdateManager.js",
       "package.json"
     ],

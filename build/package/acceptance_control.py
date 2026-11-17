@@ -1063,6 +1063,10 @@ def main() -> int:
     print("UNINSTALL_EXECUTED=False")
     print("INSTALLED_PRODUCT_TOUCHED=False")
 
+    if not args.recover_if_needed:
+        require(read_json(CURRENT_PATH).get("state_mode") != "DEVELOPMENT",
+                "Acceptance is blocked for unreleased DEVELOPMENT source; explicitly prepare a target first")
+
     if args.recover_if_needed:
         status = recover_pending_acceptance_transaction()
         print(f"ACCEPTANCE_TRANSACTION_RECOVERY_STATUS={status}")

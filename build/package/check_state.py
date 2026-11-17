@@ -41,9 +41,9 @@ EXPECTED_FIXED = {
 RUNTIME_PUBLICATION = {
     "src/runtime-backend/config/vfx_runtime.json": "819376D4BF391176281D25E974BC18D0045BE64195BDFAA84A043E099E30CCAA",
     "src/runtime-backend/prompts/VFXDirector.txt": "F2717170396EF3E90702B33D7503EB4D66F2DB135B3CAA70BDA1A54D58F0BA10",
-    "src/runtime-backend/ResolveVFXHost.py": "C0C26A6029229CD1D2C4F12B8382960D1271DC62152C5582E9457BD28EEDFEF1",
+    "src/runtime-backend/ResolveVFXHost.py": "058508BCF61D912B73A2376F2A7C3A07135AADF6BCFDE3487FE54111D313FBA9",
     "src/runtime-backend/StartVFX.py": "DB2C06C5625BCE154FCB5ABC1AE718063757076FFD87C1E9A2A26BAC61BBD5BA",
-    "src/runtime-backend/VFXRuntime.py": "0C63A9010C5DD7B8BF0245C4F836162414DDF2B3CD655773921BF68156081C8C",
+    "src/runtime-backend/VFXRuntime.py": "D77012E323566C284714F51391B652A1F6E44ADD8F991F9F1817F86BFCFD7934",
     "src/runtime-backend/MCP/vfx_mcp.template.json": "B1927C2C5D7468811A467C4264DE3F40AA05C5E9DA0D1C217C16C86A5189A64D",
     "provenance/runtime/manifests/direct-c8f321699.json": "26B20C378270E2C2A02097DD37A66E3CFBDBE691AADC2DBF03FD7021409A1CB2",
     "provenance/runtime/manifests/MCP-ADVANCED-NODE-DEPENDENCY-IMAGE-4.8.20.json": "785060B9D567F123E0685B3DDC518C4B2E88CE15FE355947BDCB4ECD316DCAE3",
@@ -140,9 +140,19 @@ def validate_state():
     target=semver(state.get('target_version'))
     require(stable==accepted,'stable authority mismatch')
     mode=state.get('state_mode')
-    require(mode in ('ACCEPTED_READY','TARGET_READY'),'unsupported version state')
-    if mode=='ACCEPTED_READY': require(target==accepted,'ACCEPTED_READY target mismatch')
+    require(mode in ('ACCEPTED_READY','TARGET_READY','DEVELOPMENT'),'unsupported version state')
+    if mode in ('ACCEPTED_READY','DEVELOPMENT'): require(target==accepted,'Unprepared source target mismatch')
     else: require(target>accepted,'TARGET_READY target must be newer')
+    if state.get("state_mode") == "DEVELOPMENT":
+        development = state.get("development_source") or {}
+        historical = ROOT / "provenance/application/ACCEPTED-SOURCE-MANIFEST-0.3.27.json"
+        require(development.get("status") == "UNRELEASED", "Development source must be unreleased")
+        require(development.get("build_policy") == "EXPLICIT_TARGET_PREPARATION_REQUIRED", "Development build policy mismatch")
+        require(development.get("release_acceptance_promoted") is False, "Development cannot promote release acceptance")
+        require(development.get("accepted_source_manifest") == historical.relative_to(ROOT).as_posix(), "Accepted historical source path mismatch")
+        require(development.get("accepted_source_manifest_sha256") == sha256(historical), "Historical accepted source binding mismatch")
+        historical_manifest = read_json(historical)
+        require(historical_manifest.get("source_phase") == "ACCEPTED_READY" and historical_manifest.get("version") == state.get("live_accepted_authority"), "Historical accepted source identity mismatch")
     canonical=state.get('canonical_application') or {}
     require(canonical.get('source_dir')=='src/application','canonical source path mismatch')
     require(canonical.get('manifest_path')=='provenance/application/CANONICAL-SOURCE-MANIFEST.json','canonical manifest path mismatch')
@@ -161,7 +171,8 @@ def validate_application(state):
     require(m.get('version')==state.get('target_version'),'application manifest version mismatch')
     require(m.get('source_phase')==state.get('state_mode'),'application source phase mismatch')
     rows=m.get('files') or []
-    require(len(rows)==13 and m.get('file_count')==13,'application manifest count mismatch')
+    require(len(rows)==14 and m.get('file_count')==14,'application manifest count mismatch')
+    require({r.get("path") for r in m["files"]} == {'package.json', 'build/electron-builder.config.cjs', 'main.js', 'build/installer.nsh', 'ResolveUiStatusObserver.ps1', 'UpdateManager.js', 'InternetCapability.js', 'styles.css', 'preload.js', 'markdown.js', 'renderer.js', 'index.html', 'ProductPaths.js', 'package-lock.json'}, "Reviewed application membership mismatch")
     expected=set()
     for row in rows:
         rel=str(row.get('path') or '').replace('\\','/')
@@ -340,6 +351,12 @@ def main():
     validate_application(state)
     for rel,sha in EXPECTED_FIXED.items(): verify_hash(rel,sha)
     validate_branding(); validate_resolve(); validate_runtime_publication()
+    development_bindings = state.get('development_control_bindings') or {}
+    require(bool(development_bindings), 'Track B development bindings missing')
+    for relative, expected in development_bindings.items():
+        require(not Path(relative).is_absolute() and '..' not in Path(relative).parts, 'Unsafe development binding')
+        verify_hash(relative, expected)
+
     public_state=validate_public_repository_state()
     generated,url_bound=validate_bootstrap()
     print('PUBLIC_SOURCE_LAYOUT=PASS')
@@ -360,7 +377,9 @@ def main():
     print('VERSION_STATE=' + str(state.get('state_mode')))
     print('APPLICATION_SOURCE_AUTHORITY=' + str(state.get('application_source_authority')))
     print('CHECK_STATE_STATUS=PASS')
-    if generated and not url_bound:
+    if state.get('state_mode') == 'DEVELOPMENT':
+        builder_state='HEALTHY_DEVELOPMENT_SOURCE_BUILD_BLOCKED_UNTIL_VERSION_PREPARATION'
+    elif generated and not url_bound:
         builder_state='HEALTHY_TARGET_READY_LOCAL_BUILD_INPUTS_PRESENT_PUBLICATION_PENDING'
     elif generated:
         builder_state='HEALTHY_PUBLIC_SOURCE_BUILD_READY'

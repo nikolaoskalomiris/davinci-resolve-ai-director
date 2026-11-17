@@ -4,13 +4,18 @@
   "product": "DaVinci Resolve AI Director",
   "version": "0.3.27",
   "source_authority": "CANONICAL",
-  "source_phase": "ACCEPTED_READY",
-  "file_count": 13,
+  "source_phase": "DEVELOPMENT",
+  "file_count": 14,
   "files": [
     {
+      "path": "InternetCapability.js",
+      "sha256": "F175038C0ED81CD430ABD930B3EB879E7B7A93070A5CBE58AFEA664A631E1B13",
+      "bytes": 9602
+    },
+    {
       "path": "ProductPaths.js",
-      "sha256": "761085A808CB4EA42AEDD4342F4E55CDDEFBB40D33FDEE192EE74D6866789ADB",
-      "bytes": 5277
+      "sha256": "304B2B7B080D227769C7D99A7D662F608EFAB3F32A16DA0709FFF67DA2A3570F",
+      "bytes": 5452
     },
     {
       "path": "ResolveUiStatusObserver.ps1",
@@ -34,13 +39,13 @@
     },
     {
       "path": "index.html",
-      "sha256": "D005712A75126376B94D67F21B8CF50E0621FC787DE46273753BD74403AE9E69",
-      "bytes": 21684
+      "sha256": "DFED6F93B28CCE51170F3837F95201B4B7C4704984E3EC4E82EFDA778837B456",
+      "bytes": 23072
     },
     {
       "path": "main.js",
-      "sha256": "E977DA79C52269C402E8750474B5A01398503E7E43D62424745151F2E5542CB6",
-      "bytes": 208736
+      "sha256": "7FDE98B7040CE53C0F15E0A52853CA31ECD095EFC2927CECA57C2225CD4B9F72",
+      "bytes": 221219
     },
     {
       "path": "markdown.js",
@@ -54,23 +59,23 @@
     },
     {
       "path": "package.json",
-      "sha256": "D7C3D0215999802697A09EBCC56CC436C05FFBBB5181BA186EB0B011904AC540",
-      "bytes": 1609
+      "sha256": "A4038C0E46815FE9D2DF2514AB766E6376515895ADBC1A3E184DBB8303BE124A",
+      "bytes": 1640
     },
     {
       "path": "preload.js",
-      "sha256": "8FA26DAE646B21E7524181B3D29F9431B6CB982E781A76C394AAC2AC1A6BDA14",
-      "bytes": 3275
+      "sha256": "F5020CD892C5F556697BC3BF0F6263CA4B9B0DB7020A9A61FE3FBA1F97B9A1E9",
+      "bytes": 3609
     },
     {
       "path": "renderer.js",
-      "sha256": "DEBB6AF6E73EC45B8DFF9E01CD26E298908E4560CF04E9898EA31C9F9513B3E5",
-      "bytes": 128813
+      "sha256": "D2CC525DF795CE8E3D8E8414E2FB63625BD0DCB3284DFDB39A88A320DE874A6B",
+      "bytes": 133451
     },
     {
       "path": "styles.css",
-      "sha256": "9E382004A62F55F3374E7BB3DEA49E346D679BDE7FF53BA99FA2BA9653CC8C7B",
-      "bytes": 36414
+      "sha256": "9CD61DB70A6990DC2F7D36E457001C5D16FD2DC681D01819427932EEB51FB0A7",
+      "bytes": 37103
     }
   ],
   "active_application_overlay_composition": false

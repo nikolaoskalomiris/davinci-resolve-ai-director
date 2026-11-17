@@ -76,6 +76,8 @@ const paths = Object.freeze({
     resolveRuntimeConfig: path.join(backendRoot, 'config', 'vfx_runtime.json'),
     resolvePrompt: path.join(backendRoot, 'prompts', 'VFXDirector.txt'),
     resolveMcpConfig: path.join(resolveRoot, 'MCP', 'vfx_mcp.json'),
+    resolveInternetMcpConfig: path.join(resolveRoot, 'MCP', 'vfx_mcp.internet.json'),
+    resolveInternetProviderRoot: path.join(resolveRuntimeRoot, 'MCP', 'Brave', '2.1.4'),
     resolveLogsRoot: path.join(resolveRoot, 'Logs'),
     resolveCacheRoot: path.join(resolveRoot, 'Cache'),
     resolveUpdatesRoot: path.join(resolveRoot, 'Updates'),

@@ -1,4 +1,9 @@
-const { app, BrowserWindow, ipcMain, Menu, clipboard, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, clipboard, dialog, shell, safeStorage } = require('electron');
+// Scrub before updater/host module loading, including implicit child inheritance.
+for (const key of Object.keys(process.env)) {
+    if (key.toUpperCase().startsWith('BRAVE_')) delete process.env[key];
+}
+const InternetCapability = require('./InternetCapability');
 const { spawn, execFile } = require('child_process');
 const crypto = require('crypto');
 const path = require('path');
@@ -122,7 +127,7 @@ const LM_STUDIO_CLI_CANDIDATES = Object.freeze([
 
 const LEGACY_FLASH_MODEL_ID = 'flash-next-iq3-xxs';
 const LEGACY_REJECTED_QWEN3_8B_ID = 'qwen3-8b-q8-xl';
-const SETTINGS_SCHEMA_VERSION = 10;
+const SETTINGS_SCHEMA_VERSION = 11;
 const MIN_SUPPORTED_CONTEXT_LENGTH = 131072;
 const MAX_SUPPORTED_OUTPUT_TOKENS = 32768;
 const DEFAULT_TUNING_SETTINGS = Object.freeze({
@@ -214,6 +219,7 @@ const DEFAULT_PERSISTENT_SETTINGS = Object.freeze({
     tuning: DEFAULT_TUNING_SETTINGS,
     inference: DEFAULT_INFERENCE_SETTINGS,
     appearance: DEFAULT_APPEARANCE_SETTINGS,
+    internet: Object.freeze({ enabled: false }),
     ffmpeg: DEFAULT_FFMPEG_SETTINGS,
     primeExecutionCache: true
 });
@@ -321,7 +327,11 @@ function isMultipartNonPrimary(filename) {
 
 function isAuxiliaryGguf(filename) {
     const lower = String(filename || '').toLowerCase();
-    return /(?:^|[-_.])(mmproj|mtp|draft)(?:[-_.]|$)/i.test(lower);
+    // A primary model can advertise Native-MTP-Preserved in its name.
+    // Keep projector/draft exclusions; do not interpret that primary descriptor as a draft.
+    if (/(?:^|[-_.])(mmproj|draft)(?:[-_.]|$)/i.test(lower)) return true;
+    return /(?:^|[-_.])mtp(?:[-_.]|$)/i.test(lower) &&
+        !/(?:^|[-_.])native[-_.]mtp[-_.]preserved(?:[-_.]|$)/i.test(lower);
 }
 
 function parseQuantization(filename) {
@@ -368,7 +378,7 @@ function findSiblingMtpModel(primaryPath) {
     try {
         const directory = path.dirname(primaryPath);
         const candidates = fs.readdirSync(directory, { withFileTypes: true })
-            .filter((entry) => entry.isFile() && /\.gguf$/i.test(entry.name) && /(?:^|[-_.])mtp(?:[-_.]|$)/i.test(entry.name))
+            .filter((entry) => entry.isFile() && /\.gguf$/i.test(entry.name) && isAuxiliaryGguf(entry.name) && !/(?:^|[-_.])(mmproj|draft)(?:[-_.]|$)/i.test(entry.name) && /(?:^|[-_.])mtp(?:[-_.]|$)/i.test(entry.name))
             .map((entry) => path.join(directory, entry.name));
         candidates.sort((a, b) => {
             const ashared = /shared/i.test(path.basename(a)) ? 0 : 1;
@@ -664,6 +674,85 @@ function reconcilePersistentModelSelection({ persist = false } = {}) {
     return changed;
 }
 
+function manualModelRegistryPath() {
+    return path.join(path.dirname(getSettingsFilePath()), 'manual-models.json');
+}
+
+function readManualModelPaths() {
+    const file = manualModelRegistryPath();
+    if (!fs.existsSync(file)) return [];
+    const value = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (value.schemaVersion !== 1 || !Array.isArray(value.paths) || value.paths.length > 128 ||
+        value.paths.some((p) => typeof p !== 'string' || !path.isAbsolute(p))) {
+        throw new Error('Saved manual model list is invalid.');
+    }
+    return [...new Set(value.paths.map((p) => path.normalize(p)))];
+}
+
+function inspectPrimaryModelFile(selectedPath) {
+    const file = path.resolve(selectedPath);
+    const name = path.basename(file);
+    if (!/\.gguf$/i.test(name) || isAuxiliaryGguf(name) || isMultipartNonPrimary(name)) {
+        throw new Error('Choose a primary GGUF, not a projector, draft, or later split.');
+    }
+    if (!fs.statSync(file).isFile()) throw new Error('Choose a GGUF file.');
+    const fd = fs.openSync(file, 'r');
+    try {
+        const header = Buffer.alloc(8);
+        if (fs.readSync(fd, header, 0, 8, 0) !== 8 || header.toString('ascii', 0, 4) !== 'GGUF' ||
+            ![2, 3].includes(header.readUInt32LE(4))) throw new Error('Invalid or unsupported GGUF header.');
+    } finally { fs.closeSync(fd); }
+    const split = name.match(/-(\d{5})-of-(\d{5})\.gguf$/i);
+    if (split) {
+        const count = Number(split[2]);
+        if (count < 1 || count > 1024) throw new Error('Invalid split GGUF count.');
+        for (let i = 1; i <= count; i++) {
+            const sibling = file.replace(/-\d{5}-of-\d{5}\.gguf$/i, `-${String(i).padStart(5, '0')}-of-${split[2]}.gguf`);
+            if (!fs.existsSync(sibling) || !fs.statSync(sibling).isFile()) throw new Error('A split GGUF part is missing.');
+        }
+    }
+    return file;
+}
+
+function buildManualModelProfile(selectedPath) {
+    const file = inspectPrimaryModelFile(selectedPath);
+    const real = fs.realpathSync(file);
+    const root = LM_STUDIO_MODEL_ROOTS.find((r) => {
+        const rel = path.relative(r, real);
+        return rel && !rel.startsWith('..' + path.sep) && rel !== '..' && !path.isAbsolute(rel);
+    });
+    const model = buildDiscoveredModelProfile(real, root || path.dirname(real),
+        root ? path.relative(root, real) : path.basename(real));
+    if (model.rejected) throw new Error('This model family is not supported.');
+    if (!model.available) throw new Error(model.availabilityReason || 'This model is not available.');
+    if (!root) model.id = `manual:${crypto.createHash('sha256').update(real.toLowerCase()).digest('hex')}`;
+    return model;
+}
+
+function manualModelSelectionBlocked() {
+    return settingsApplyInProgress || settingsRuntimeTransitionActive() || activeChatRequestId || shuttingDown;
+}
+
+async function selectManualModel() {
+    if (manualModelSelectionBlocked()) return { ok: false, error: 'Wait for the current operation to finish.' };
+    const selected = await dialog.showOpenDialog(mainWindow || undefined, {
+        title: 'Choose Primary GGUF', properties: ['openFile'],
+        filters: [{ name: 'GGUF model', extensions: ['gguf'] }]
+    });
+    if (selected.canceled || !selected.filePaths?.length) return { ok: false, canceled: true };
+    if (manualModelSelectionBlocked()) return { ok: false, error: 'Wait for the current operation to finish.' };
+    try {
+        const model = buildManualModelProfile(selected.filePaths[0]);
+        const paths = readManualModelPaths();
+        const next = [...paths.filter((p) => p.toLowerCase() !== model.primaryModel.toLowerCase()), model.primaryModel];
+        if (next.length > 128) throw new Error('Manual model list is full.');
+        InternetCapability.atomicWrite(manualModelRegistryPath(), Buffer.from(JSON.stringify({ schemaVersion: 1, paths: next }, null, 2) + '\n'));
+        modelCatalog.set(model.id, model);
+        modelCatalogInfo = { ...modelCatalogInfo, discoveredCount: modelCatalog.size };
+        return { ok: true, modelId: model.id, state: getSettingsState() };
+    } catch (error) { return { ok: false, error: error.message || 'Could not select this model.' }; }
+}
+
 async function refreshModelCatalog() {
     if (modelCatalogRefreshPromise) return modelCatalogRefreshPromise;
 
@@ -676,6 +765,15 @@ async function refreshModelCatalog() {
             scanModelRoot(root, index, catalog, stats);
         }
 
+        let manualWarning = null;
+        try {
+            for (const file of readManualModelPaths()) {
+                try {
+                    const model = buildManualModelProfile(file);
+                    if (!catalog.has(model.id)) catalog.set(model.id, model);
+                } catch (_) { manualWarning = 'A saved manual model is unavailable. Choose it again if needed.'; }
+            }
+        } catch (_) { manualWarning = 'Saved manual model list could not be read.'; }
         modelCatalog = catalog;
         modelCatalogInfo = {
             roots: [...LM_STUDIO_MODEL_ROOTS],
@@ -684,7 +782,7 @@ async function refreshModelCatalog() {
             cliExecutable: lms.executable,
             discoveredCount: catalog.size,
             rejectedCount: stats.rejectedCount,
-            warning: catalog.size ? null : `No primary GGUF models were found under ${LM_STUDIO_MODEL_ROOTS.join(' or ')}.`,
+            warning: manualWarning || (catalog.size ? null : `No primary GGUF models were found under ${LM_STUDIO_MODEL_ROOTS.join(' or ')}.`),
             refreshedAt: new Date().toISOString()
         };
         return catalog;
@@ -762,6 +860,7 @@ function cloneSettings(settings = persistentSettings) {
                 ? String(settings.appearance.skin).toLowerCase()
                 : DEFAULT_APPEARANCE_SETTINGS.skin
         },
+        internet: InternetCapability.normalize(settings?.internet),
         ffmpeg: normalizeFfmpegConfig(settings?.ffmpeg),
         primeExecutionCache: settings.primeExecutionCache !== false
     };
@@ -1216,6 +1315,7 @@ function validateSettingsCandidate(candidate, { requireProfile = true, requireMo
         inference,
         appearance,
         ffmpeg,
+        internet: InternetCapability.normalize(candidate?.internet),
         primeExecutionCache
     };
 }
@@ -1284,6 +1384,7 @@ function migrateSettings(raw) {
             source.inference = { ...inference, promptCacheReuse: true };
         }
     }
+    source.internet = InternetCapability.normalize(source.internet);
     source.schemaVersion = SETTINGS_SCHEMA_VERSION;
     return source;
 }
@@ -1366,6 +1467,12 @@ function persistSettings(settings = persistentSettings) {
 }
 
 const LLAMA_MCP_CONFIG = ProductPaths.resolveMcpConfig;
+const internetCapability = new InternetCapability.Capability({ paths: ProductPaths, safeStorage,
+    settingsPath: getSettingsFilePath });
+function getActiveMcpConfig() {
+    return persistentSettings.internet?.enabled ? ProductPaths.resolveInternetMcpConfig : LLAMA_MCP_CONFIG;
+}
+
 
 const LLAMA_HOST = '127.0.0.1';
 const LLAMA_PORT = 8091;
@@ -1391,7 +1498,7 @@ function getCommonLaunchArgs(settings = persistentSettings) {
         '--load-mode', 'none',
         '--no-warmup',
         '--jinja',
-        '--mcp-servers-config', LLAMA_MCP_CONFIG,
+        '--mcp-servers-config', getActiveMcpConfig(),
         '--no-webui',
         '--host', LLAMA_HOST,
         '--port', String(LLAMA_PORT)
@@ -1470,6 +1577,7 @@ function getModelLaunchArgs(model = getSelectedModelProfile(), settings = persis
 
 function getLlamaArgs(profile = getSelectedServerProfile(), model = getSelectedModelProfile()) {
     if (!model) throw new Error('No detected model is selected.');
+    internetCapability.prepare(persistentSettings.internet?.enabled === true);
     const args = [
         '-m', model.primaryModel,
         '--alias', model.alias,
@@ -2187,7 +2295,9 @@ async function getResolve() {
     return resolveObj;
 }
 
-const RESOLVE_UI_STATUS_OBSERVER = app.isPackaged
+// A stock Electron shell running resources/app.asar still reports !isPackaged.
+// ASAR scripts cannot be passed to PowerShell -File; extra resources live outside it.
+const RESOLVE_UI_STATUS_OBSERVER = (app.isPackaged || path.extname(__dirname).toLowerCase() === '.asar')
     ? path.join(process.resourcesPath, 'ResolveUiStatusObserver.ps1')
     : path.join(__dirname, 'ResolveUiStatusObserver.ps1');
 const STANDALONE_RESOLVE_UI_OBSERVER_INTERVAL_MS = 500;
@@ -2320,7 +2430,7 @@ async function ensureStandaloneResolveObserver() {
         }
 
         const child = spawn(
-            'powershell.exe',
+            path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe'),
             [
                 '-NoProfile',
                 '-NonInteractive',
@@ -2329,7 +2439,7 @@ async function ensureStandaloneResolveObserver() {
                 '-IntervalMs', String(STANDALONE_RESOLVE_UI_OBSERVER_INTERVAL_MS)
             ],
             {
-                cwd: app.isPackaged ? process.resourcesPath : __dirname,
+                cwd: path.dirname(RESOLVE_UI_STATUS_OBSERVER),
                 env: { ...process.env },
                 windowsHide: true,
                 stdio: ['ignore', 'pipe', 'pipe']
@@ -2635,6 +2745,11 @@ function buildServerEnvironment(profile = getSelectedServerProfile()) {
         delete env.AI_DIRECTOR_FFPROBE_SHA256;
     }
 
+    InternetCapability.scrub(env);
+    if (persistentSettings.internet?.enabled) {
+        env.BRAVE_API_KEY = internetCapability.decrypt();
+        env.BRAVE_API_KEY_FILE = '';
+    }
     return env;
 }
 
@@ -2666,7 +2781,8 @@ function ffmpegFreeInheritedPathEntries(env = process.env) {
 }
 
 function buildBackendEnvironment() {
-    const env = { ...process.env };
+    const env = InternetCapability.scrub({ ...process.env });
+    env.FIRSTGAME_VFX_INTERNET_ENABLED = persistentSettings.internet?.enabled ? 'true' : 'false';
     const cleanPathEntries = ffmpegFreeInheritedPathEntries(env);
     for (const key of Object.keys(env)) {
         if (key.toUpperCase() === 'PATH') delete env[key];
@@ -2789,7 +2905,7 @@ async function verifyExistingLlamaServer(
     const commandLine = normalizeProcessText(info.CommandLine);
     const expectedExecutable = normalizeProcessText(profile.exe);
     const expectedModel = normalizeProcessText(model.primaryModel);
-    const expectedMcpConfig = normalizeProcessText(LLAMA_MCP_CONFIG);
+    const expectedMcpConfig = normalizeProcessText(getActiveMcpConfig());
 
     if (executablePath !== expectedExecutable) {
         return {
@@ -2972,11 +3088,15 @@ async function ensureLlamaServer() {
         throw new Error('AI Director server is stopped.');
     }
 
+    if (persistentSettings.internet?.enabled && serverReady && !serverOwned) {
+        throw new Error('Internet requires an AI Director-owned llama-server.');
+    }
     if (serverReady && (serverProcess || !serverOwned)) {
         return getServerStatus();
     }
 
     if (await httpHealthCheck()) {
+        if (persistentSettings.internet?.enabled) throw new Error('Internet cannot reuse an external listener.');
         const verified = await verifyExistingLlamaServer(profile);
         if (!verified.ok) {
             const error = new Error(verified.error || 'AI Director could not verify the llama-server already listening on port 8091.');
@@ -3975,6 +4095,9 @@ async function setServerProfile(profileId) {
     if (settingsApplyInProgress) {
         return { ok: false, error: 'Server profile cannot be changed while settings are being applied.', server: getServerStatus() };
     }
+    if (persistentSettings.internet?.enabled) {
+        return applyPersistentSettings({ ...cloneSettings(), serverProfile: String(profileId || '').toLowerCase() });
+    }
     const nextId = String(profileId || '').toLowerCase();
     const nextProfile = SERVER_PROFILES[nextId];
 
@@ -4281,6 +4404,78 @@ function adoptOperationalCandidate(candidate) {
     }
 }
 
+async function validateInternetSurface() {
+    const response = await sendBackendRequest('validate_tools');
+    if (!response?.ok) throw new Error('Fresh Internet authorization validation failed.');
+    InternetCapability.verifySurface(response.result, persistentSettings.internet?.enabled === true);
+}
+
+async function applyInternetTransaction(candidate, candidateFfmpegStatus) {
+    const previous = cloneSettings();
+    const previousProfile = selectedServerProfileId;
+    const previousDesired = serverDesired;
+    const wasRunning = Boolean(serverReady && serverOwned);
+    const previousFfmpeg = ffmpegRuntimeStatus;
+    const configSnapshot = internetCapability.snapshot();
+    const settingsFile = getSettingsFilePath();
+    const settingsSnapshot = fs.existsSync(settingsFile) ? fs.readFileSync(settingsFile) : null;
+    settingsApplyInProgress = true;
+    let mutated = false;
+    let rollbackError = null;
+    try {
+        internetCapability.prevalidate(candidate.internet.enabled);
+        mutated = true; // stopServer changes desired/backend state even if stop fails.
+        const stopped = await stopServer({ internal: true });
+        if (!stopped.ok) throw new Error('Could not stop the owned runtime.');
+        adoptOperationalCandidate(candidate);
+        ffmpegRuntimeStatus = candidateFfmpegStatus;
+        selectedServerProfileId = candidate.serverProfile;
+        serverDesired = true;
+        backendCachePrimed = false;
+        await ensureLlamaServer();
+        await startBackendHost();
+        // Fresh read-only discovery/semantic authorization, then optional inference.
+        await validateInternetSurface();
+        await ensureExecutionCacheReady();
+        await validateInternetSurface();
+        if (!wasRunning && previous.setupCompleted) {
+            const stoppedAgain = await stopServer({ internal: true });
+            if (!stoppedAgain.ok) throw new Error('Could not restore stopped server intent.');
+            serverDesired = previousDesired;
+        }
+        persistSettings(persistentSettings);
+        settingsLoadError = null;
+        return { ok: true, impact: 'internet_transaction', state: getSettingsState() };
+    } catch (_) {
+        if (mutated) {
+            try {
+                const stopped = await stopServer({ internal: true });
+                if (!stopped.ok) throw new Error('Partial runtime could not stop.');
+                persistentSettings = { ...previous, appearance: currentAppearance() };
+                selectedServerProfileId = previousProfile;
+                ffmpegRuntimeStatus = previousFfmpeg;
+                internetCapability.restore(configSnapshot);
+                if (settingsSnapshot === null) fs.rmSync(settingsFile, { force: true });
+                else InternetCapability.atomicWrite(settingsFile, settingsSnapshot);
+                serverDesired = previousDesired;
+                if (wasRunning && !shuttingDown) {
+                    serverDesired = true;
+                    await ensureLlamaServer();
+                    await startBackendHost();
+                    await validateInternetSurface();
+                    await ensureExecutionCacheReady();
+                    await validateInternetSurface();
+                }
+                serverDesired = previousDesired;
+            } catch (_) { rollbackError = 'Rollback failed; runtime requires operator recovery.'; }
+        }
+        return { ok: false, error: rollbackError || 'Internet transaction failed; previous state retained.', state: getSettingsState() };
+    } finally {
+        settingsApplyInProgress = false;
+        notifyServerStatus(getServerStatus());
+    }
+}
+
 async function applyPersistentSettings(candidateInput) {
     // Apply against the already-discovered catalog. Settings opens from cached
     // discovery state and explicit Rescan Models owns model discovery; starting
@@ -4343,6 +4538,11 @@ async function applyPersistentSettings(candidateInput) {
         };
     }
 
+    if (candidate.internet.enabled !== Boolean(persistentSettings.internet?.enabled) ||
+        (candidate.internet.enabled && (candidate.serverProfile !== selectedServerProfileId ||
+            settingsImpact(persistentSettings, candidate) === 'full_server'))) {
+        return applyInternetTransaction(candidate, candidateFfmpegStatus);
+    }
     const previous = cloneSettings(persistentSettings);
     const previousFfmpegRuntimeStatus = {
         ...ffmpegRuntimeStatus,
@@ -4810,7 +5010,10 @@ async function installUpdate(component) {
                     }
                     if (!backendCachePrimed) throw new Error('Updated VFX backend did not complete the execution-cache health gate.');
 
-                    const expectedToolCount = Number.isFinite(result.expectedBackendToolCount) ? result.expectedBackendToolCount : preUpdateToolCount;
+                    const expectedToolCount = Number.isFinite(result.expectedBackendToolCount)
+                        ? result.expectedBackendToolCount + (persistentSettings.internet?.enabled ? InternetCapability.TOOLS.length : 0)
+                        : preUpdateToolCount;
+                    if (persistentSettings.internet?.enabled) await validateInternetSurface();
                     if (Number.isFinite(expectedToolCount) && backend.toolCount !== expectedToolCount) {
                         throw new Error(`Updated backend tool inventory mismatch. Expected ${expectedToolCount}, actual ${backend.toolCount}.`);
                     }
@@ -5092,10 +5295,26 @@ ipcMain.handle('aid:getSettingsState', async () => {
     }
     return getSettingsState();
 });
+ipcMain.handle('aid:selectManualModel', async () => selectManualModel());
 ipcMain.handle('aid:rescanModels', async () => {
     await refreshModelCatalog();
     reconcilePersistentModelSelection({ persist: Boolean(persistentSettings.setupCompleted) });
     return getSettingsState();
+});
+ipcMain.handle('aid:getBraveCredentialStatus', async () => internetCapability.status());
+ipcMain.handle('aid:setBraveCredential', async (_event, value) => {
+    if (settingsApplyInProgress || persistentSettings.internet?.enabled || serverProcess || serverReady || settingsRuntimeTransitionActive() || activeChatRequestId) {
+        return { ok: false, error: 'Stop the server and apply Local mode before changing credentials.' };
+    }
+    try { internetCapability.set(value); return { ok: true, ...internetCapability.status() }; }
+    catch (_) { return { ok: false, error: 'Protected credential storage failed.' }; }
+});
+ipcMain.handle('aid:removeBraveCredential', async () => {
+    if (settingsApplyInProgress || persistentSettings.internet?.enabled || serverProcess || serverReady || settingsRuntimeTransitionActive() || activeChatRequestId) {
+        return { ok: false, error: 'Stop the server and apply Local mode before removing credentials.' };
+    }
+    try { internetCapability.remove(); return { ok: true, ...internetCapability.status() }; }
+    catch (_) { return { ok: false, error: 'Protected credential removal failed.' }; }
 });
 ipcMain.handle('aid:applySettings', async (_event, candidate) => applyPersistentSettings(candidate || {}));
 ipcMain.handle('aid:locateExternalFfmpeg', async () => locateExternalFfmpeg());

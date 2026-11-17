@@ -62,6 +62,9 @@ def main() -> int:
     try:
         runtime = VFXRuntime()
         tools = runtime.discover_tools()
+        if runtime.internet_enabled:
+            runtime.validate_tool_surface()
+            tools = runtime.discover_tools()
 
         send({
             "event": "ready",
@@ -112,6 +115,10 @@ def main() -> int:
                             "tool_count": len(tools),
                         },
                     })
+
+                elif op == "validate_tools":
+                    result = runtime.validate_tool_surface()
+                    send({"id": request_id, "ok": True, "result": result})
 
                 elif op == "prime":
                     result = runtime.prime_execution_cache()

@@ -41,6 +41,12 @@ CONTEXT_TELEMETRY_VERSION = 1
 # in prose rather than JSON-Schema enums.
 MODEL_COMPOUND_PREFIX = "davinci-resolve_"
 MODEL_ADVANCED_PREFIX = "davinci-resolve-advanced_"
+INTERNET_ENABLED_ENV = "FIRSTGAME_VFX_INTERNET_ENABLED"
+INTERNET_TOOL_NAMES = frozenset({
+    "brave-search_brave_web_search",
+    "brave-search_brave_llm_context",
+})
+PROVIDER_TRANSIENT_PLACEHOLDER = "[Internet provider result used transiently; raw result not retained.]"
 MODEL_FUNCTION_DESCRIPTION_CHARS = 20000
 MODEL_PROPERTY_DESCRIPTION_CHARS = 160
 EXECUTION_MEMORY_MARKER = "EXECUTION MEMORY (runtime-maintained):"
@@ -724,6 +730,10 @@ class VFXRuntime:
             self.prompt_path
         )
         self.session = session or requests.Session()
+        internet_flag = os.environ.get(INTERNET_ENABLED_ENV, "false").strip().lower()
+        if internet_flag not in {"true", "false"}:
+            raise VFXRuntimeError("Internet capability flag must be true or false.")
+        self.internet_enabled = internet_flag == "true"
         self._tools: Optional[dict[str, VFXTool]] = None
         # Execution-governor state. The deadline covers the whole run_turn()
         # operation: model turns, MCP safety inspection, and tool calls.
@@ -1633,17 +1643,29 @@ class VFXRuntime:
             name = item.get("tool")
             if not isinstance(name, str):
                 continue
-            if not (
+            is_resolve = (
                 name.startswith("davinci-resolve_")
                 or name.startswith("davinci-resolve-full_")
                 or name.startswith("davinci-resolve-advanced_")
-            ):
+            )
+            is_internet = name in INTERNET_TOOL_NAMES
+            if name.startswith("brave-search_") and not is_internet:
+                raise VFXAuthorizationError("Unreviewed Internet provider tool discovered.")
+            if is_internet and not self.internet_enabled:
+                raise VFXAuthorizationError("Internet provider tools are forbidden in Local mode.")
+            if not is_resolve and not is_internet:
                 continue
             if item.get("type") != "mcp":
                 continue
             definition = item.get("definition")
             if not isinstance(definition, Mapping):
                 continue
+            if name in discovered:
+                raise VFXProtocolError("Duplicate authorized tool identity discovered.")
+            if is_internet:
+                function = definition.get("function")
+                if not isinstance(function, Mapping) or function.get("name") != name:
+                    raise VFXAuthorizationError("Internet provider definition identity mismatch.")
             discovered[name] = VFXTool(
                 name=name,
                 definition=dict(definition),
@@ -1681,6 +1703,7 @@ class VFXRuntime:
             if (
                 name.startswith(MODEL_COMPOUND_PREFIX)
                 or name.startswith(MODEL_ADVANCED_PREFIX)
+                or (self.internet_enabled and name in INTERNET_TOOL_NAMES)
             )
         ]
         if not any(
@@ -1705,6 +1728,30 @@ class VFXRuntime:
             )
             for tool in semantic
         ]
+
+    def validate_tool_surface(self) -> dict[str, Any]:
+        """Fresh read-only authorization validation; never executes a tool/model call."""
+        tools = self.discover_tools(refresh=True)
+        semantic = self._all_tool_definitions()
+        internet = sorted(name for name in tools if name in INTERNET_TOOL_NAMES)
+        semantic_internet = sorted(
+            definition["function"]["name"] for definition in semantic
+            if definition.get("function", {}).get("name") in INTERNET_TOOL_NAMES
+        )
+        resolve_count = len(tools) - len(internet)
+        expected_internet = sorted(INTERNET_TOOL_NAMES) if self.internet_enabled else []
+        if (resolve_count != 445 or internet != expected_internet
+                or semantic_internet != expected_internet
+                or len(semantic) != 55 + len(expected_internet)):
+            raise VFXAuthorizationError("Local/Internet tool surface does not match the reviewed candidate contract.")
+        return {
+            "resolve_tool_count": resolve_count,
+            "internet_tool_count": len(internet),
+            "discovered_tool_count": len(tools),
+            "semantic_tool_count": len(semantic),
+            "internet_tools": internet,
+            "semantic_internet_tools": semantic_internet,
+        }
 
     def _all_tool_definitions(self) -> list[Mapping[str, Any]]:
         """Return semantic compound + advanced tool definitions for model use.
@@ -1821,14 +1868,21 @@ class VFXRuntime:
                 "Model requested undiscovered Resolve tool: "
                 f"{call.tool_name}"
             )
-        result = self._request(
-            "POST",
-            self.tools_endpoint,
-            json={
-                "tool": call.tool_name,
-                "params": dict(call.arguments),
-            },
-        )
+        try:
+            result = self._request(
+                "POST",
+                self.tools_endpoint,
+                json={
+                    "tool": call.tool_name,
+                    "params": dict(call.arguments),
+                },
+            )
+        except Exception:
+            if call.tool_name in INTERNET_TOOL_NAMES:
+                raise VFXServerError("Internet provider request failed; check the local credential and service status.") from None
+            raise
+        if call.tool_name in INTERNET_TOOL_NAMES and isinstance(result, Mapping) and result.get("error"):
+            raise VFXServerError("Internet provider request failed; check the local credential and service status.")
         if not isinstance(result, Mapping):
             raise VFXProtocolError(
                 "Resolve tool returned a non-object result."
@@ -2694,27 +2748,29 @@ class VFXRuntime:
                         )
                     self._telemetry["tool_calls"] = self._metric_int(self._telemetry.get("tool_calls")) + 1
                     tool_call_index = self._telemetry["tool_calls"]
+                    is_provider_call = call.tool_name in INTERNET_TOOL_NAMES
+                    visible_arguments = {} if is_provider_call else dict(call.arguments)
                     self._emit_progress(
                         "tool_start",
                         phase="tool",
-                        label="Calling Resolve tool",
+                        label="Searching Internet" if is_provider_call else "Calling Resolve tool",
                         tool_name=call.tool_name,
-                        tool_arguments=dict(call.arguments),
+                        tool_arguments=visible_arguments,
                         tool_call_index=tool_call_index,
                         round=round_index,
                         round_position=call_position,
                         round_total=len(calls),
                     )
                     result_text = self._execute_tool(call)
-                    result_excerpt = _compact_result_text(
-                        result_text,
-                        MAX_PROGRESS_RESULT_EXCERPT_CHARS,
+                    result_excerpt = (
+                        PROVIDER_TRANSIENT_PLACEHOLDER if is_provider_call else
+                        _compact_result_text(result_text, MAX_PROGRESS_RESULT_EXCERPT_CHARS)
                     )
                     self._emit_progress(
                         "tool_complete",
                         phase="tool",
                         tool_name=call.tool_name,
-                        tool_arguments=dict(call.arguments),
+                        tool_arguments=visible_arguments,
                         result_excerpt=result_excerpt,
                         tool_call_index=tool_call_index,
                         round=round_index,
@@ -2722,8 +2778,12 @@ class VFXRuntime:
                         round_total=len(calls),
                         summary=self._telemetry_summary(),
                     )
-                    all_calls.append(call)
-                    all_results.append(result_text)
+                    # Raw provider content lives only in this turn's model context.
+                    # The parent/session/UI receive presence-only operational evidence.
+                    all_calls.append(
+                        VFXToolCall(call.call_id, call.tool_name, {}) if is_provider_call else call
+                    )
+                    all_results.append(PROVIDER_TRANSIENT_PLACEHOLDER if is_provider_call else result_text)
                     round_results.append(result_text)
                     messages.append(
                         {

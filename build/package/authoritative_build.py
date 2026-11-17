@@ -414,7 +414,7 @@ def validate_current_prebuild(current: dict, controller_sha: str, *, public_chec
     canonical = current.get("canonical_application") or {}
     require(canonical.get("id") == f"AI-Director-Canonical-Application-{TARGET_VERSION}-v1", "Canonical application identity mismatch")
     require(str(canonical.get("manifest_sha256") or "").upper() == CANONICAL_MANIFEST_SHA256, "Canonical manifest binding mismatch")
-    require(int(canonical.get("file_count") or 0) == 13, "Canonical application file count mismatch")
+    require(int(canonical.get("file_count") or 0) == 14, "Canonical application file count mismatch")
     require(canonical.get("source_dir") == "src/application", "Canonical source_dir mismatch")
 
     require((current.get("active_runtime_base") or {}).get("id") == RUNTIME_BASE_ID, "CURRENT active runtime-base mismatch")
@@ -765,7 +765,8 @@ def prepare_project(api, current: dict, root: Path, logs: Path):
         "Canonical source manifest identity/version mismatch",
     )
     rows = manifest.get("files")
-    require(isinstance(rows, list) and len(rows) == 13 and manifest.get("file_count") == 13, "Canonical source manifest count mismatch")
+    require(isinstance(rows, list) and len(rows) == 14 and manifest.get("file_count") == 14, "Canonical source manifest count mismatch")
+    require({r.get("path") for r in rows} == {'package.json', 'build/electron-builder.config.cjs', 'main.js', 'build/installer.nsh', 'ResolveUiStatusObserver.ps1', 'UpdateManager.js', 'InternetCapability.js', 'styles.css', 'preload.js', 'markdown.js', 'renderer.js', 'index.html', 'ProductPaths.js', 'package-lock.json'}, "Reviewed application membership mismatch")
     expected_paths = set()
     for row in rows:
         rel = str(row.get("path") or "").replace("\\", "/")
@@ -1485,6 +1486,15 @@ def accept_candidate(candidate: str | None, dry_run: bool) -> int:
 
 def main() -> int:
     args = parse_args()
+
+    # Refuse before recovery, toolchain probing, operation locks or output creation.
+    current = read_json(CURRENT_PATH)
+    if current.get("state_mode") == "DEVELOPMENT":
+        raise RuntimeError("Unreleased DEVELOPMENT source: explicitly prepare a target using VERSION before BUILD/preflight/accept. No build or recovery was executed.")
+
+    readiness = read_json(ROOT / "development" / "RELEASE-READINESS.json")
+    require(readiness.get("schema_version") == 1 and readiness.get("status") == "READY",
+            "Unreleased Track B packaging is blocked; resolve development/RELEASE-READINESS.json gates before build/preflight/accept")
 
     if args.preflight:
         return public_source_preflight()

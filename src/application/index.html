@@ -205,7 +205,10 @@
                     </label>
                     <div id="settingsModelDetails" class="settings-impact">Select a detected model.</div>
                     <div id="settingsModelDiscovery" class="settings-operation-status" aria-live="polite"></div>
-                    <button id="settingsModelRefresh" class="settings-secondary" type="button">Rescan Models</button>
+                    <div class="settings-model-actions">
+                        <button id="settingsModelRefresh" class="settings-secondary" type="button">Rescan</button>
+                        <button id="settingsModelBrowse" class="settings-secondary" type="button">Choose GGUF…</button>
+                    </div>
                 </section>
 
                 <section class="settings-section settings-runtime-grid">
@@ -234,6 +237,23 @@
                     </label>
                 </section>
 
+                <section class="settings-section settings-internet">
+                    <div class="settings-section-title">Internet</div>
+                    <label class="settings-check-row">
+                        <input id="settingsInternetEnabled" type="checkbox">
+                        <span>Brave Search</span>
+                    </label>
+                    <p class="settings-internet-help">Optional web search. Off by default.</p>
+                    <label class="settings-field">
+                        <span>API key</span>
+                        <input id="settingsBraveKey" type="password" autocomplete="off" spellcheck="false" placeholder="Enter API key">
+                    </label>
+                    <p id="settingsBraveKeyStatus" class="settings-internet-status" role="status">Key status unavailable.</p>
+                    <div class="settings-internet-actions">
+                        <button id="settingsBraveKeySave" class="settings-secondary" type="button">Save key</button>
+                        <button id="settingsBraveKeyRemove" class="settings-secondary" type="button">Remove key</button>
+                    </div>
+                </section>
                 <section class="settings-section settings-ffmpeg">
                     <div class="settings-section-title">External FFmpeg (Optional)</div>
                     <div id="settingsFfmpegSummary" class="settings-ffmpeg-summary">Continue Without FFmpeg</div>

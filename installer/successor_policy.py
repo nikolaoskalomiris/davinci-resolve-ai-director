@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
+import json
 import re
 from pathlib import Path
 
@@ -360,10 +362,98 @@ def _transform_additive_compatibility_assets(text: str, builder_root: Path) -> s
     return out
 
 
+
+PROVIDER_HELPER_NAME = "Install-AIDirectorInternetProvider-v1.ps1"
+EXPECTED_PROVIDER_HELPER_SHA256 = "DCE0A35BF53BD54C6DE275916783352AD76C7BAC94D6CA335CF04C314774B318"
+PROVIDER_MANIFEST_SHA256 = "C30427CAA6DDF5C71D096645FD9A78155C8DD29E529F95221DC2015B20F1773B"
+
+
+def _provider_payload(builder_root: Path) -> Path:
+    # Explicit generation-time import: installer execution never needs Python.
+    module_path = builder_root / "runtime" / "provider_control.py"
+    spec = importlib.util.spec_from_file_location("aid_installer_provider_control", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Provider validation module unavailable")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    root = builder_root / "_inputs" / "Providers" / "brave-search" / "2.1.4"
+    module.validate_provider(root)
+    if _sha256(root / "PROVIDER-MANIFEST.json") != PROVIDER_MANIFEST_SHA256:
+        raise RuntimeError("Provider manifest identity mismatch")
+    helper = builder_root / "runtime" / "support" / PROVIDER_HELPER_NAME
+    if _sha256(helper) != EXPECTED_PROVIDER_HELPER_SHA256:
+        raise RuntimeError("Provider installer helper identity mismatch")
+    return root
+
+
+def _provider_nsis_block(builder_root: Path) -> str:
+    root = _provider_payload(builder_root)
+    manifest = json.loads((root / "PROVIDER-MANIFEST.json").read_text(encoding="utf-8"))
+    # Explicit inventory, not File /r or basename exclusions. Hono cache files
+    # and original licenses are ordinary mandatory payload members.
+    lines = ['    SetOutPath "$PLUGINSDIR"',
+             f'    File /oname={PROVIDER_HELPER_NAME} "{_nsis_escape_path(builder_root / "runtime" / "support" / PROVIDER_HELPER_NAME)}"']
+    names = ["PROVIDER-MANIFEST.json"] + [row["path"] for row in manifest["files"]]
+    for name in names:
+        relative = Path(name)
+        directory = str(relative.parent).replace("/", "\\")
+        output = "$PLUGINSDIR\\aid-provider-payload" + ("\\" + directory if directory != "." else "")
+        lines += [f'    SetOutPath "{output}"',
+                  f'    File /oname={relative.name} "{_nsis_escape_path(root / relative)}"']
+    for empty in ("@esbuild", "@nodelib", "@types"):
+        lines.append(f'    CreateDirectory "$PLUGINSDIR\\aid-provider-payload\\node_modules\\{empty}"')
+    lines += [
+        '    SetOutPath "$PLUGINSDIR"',
+        f'    nsExec::ExecToStack \'"$SYSDIR\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\\{PROVIDER_HELPER_NAME}" -PayloadRoot "$PLUGINSDIR\\aid-provider-payload" -ProductRoot "$LocalAppData\\AIDirector\\DaVinciResolve"\'',
+        '    Pop $R6', '    Pop $R7',
+        '    StrCmp $R6 "0" aid_provider_ok 0',
+        '    DetailPrint "$R7"',
+        '    MessageBox MB_OK|MB_ICONSTOP "AI Director provider verification failed. Existing provider was not replaced. Operation-owned partial staging is retained for diagnosis."',
+        '    Abort', 'aid_provider_ok:',
+        '    DetailPrint "$R7"',
+        # Only installer plugin data is disposable; never remove runtime paths.
+        '    RMDir /r "$PLUGINSDIR\\aid-provider-payload"',
+        f'    Delete "$PLUGINSDIR\\{PROVIDER_HELPER_NAME}"',
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _transform_provider_assets(text: str, builder_root: Path) -> str:
+    anchor = 'aid_seed_not_required:\n'
+    if text.count(anchor) != 1 or "aid_provider_ok:" in text:
+        raise RuntimeError("Provider installer join anchor mismatch")
+    return text.replace(anchor, anchor + _provider_nsis_block(builder_root), 1)
+
+
+def _validate_provider_nsis(text: str) -> None:
+    start = text.find("aid_seed_not_required:\n")
+    end = text.find('    DetailPrint "Existing complete DaVinci Resolve AI Director runtime preserved."', start)
+    if start < 0 or end < start:
+        raise RuntimeError("Provider unconditional installer boundary missing")
+    block = text[start:end]
+    required = (
+        'aid_provider_ok:', '    StrCmp $R6 "0" aid_provider_ok 0',
+        ' -PayloadRoot "$PLUGINSDIR\\aid-provider-payload"',
+        ' -ProductRoot "$LocalAppData\\AIDirector\\DaVinciResolve"',
+        '    Abort', 'File /oname=PROVIDER-MANIFEST.json ',
+    )
+    if any(block.count(token) != 1 for token in required):
+        raise RuntimeError("Provider installer invocation/abort contract mismatch")
+    if block.count('    File /oname=') != 3591:
+        raise RuntimeError("Provider installer exact file count mismatch")
+    if block.count('    nsExec::ExecToStack ') != 1 or block.count(PROVIDER_HELPER_NAME) != 4:
+        raise RuntimeError("Provider helper embedding/invocation/cleanup mismatch")
+    cache_files = [line for line in block.splitlines() if '    File /oname=' in line and '/middleware/cache/' in line.replace('\\', '/')]
+    if len(cache_files) != 3:
+        raise RuntimeError("Provider Hono cache files missing")
+
+
 def transform_nsis_include(text: str, builder_root: Path, integration_uninstaller_name: str) -> str:
     out = _replace_macro(text, "customUnInstall", _uninstall_macro(builder_root, integration_uninstaller_name))
     out = _transform_additive_compatibility_assets(out, builder_root)
     out = _transform_runtime_base_v4_common_ownership(out)
+    out = _transform_provider_assets(out, builder_root)
+    _validate_provider_nsis(out)
     low = out.casefold()
     residual = [
         token for token in FORBIDDEN_LEGACY_MIGRATION_TOKENS
@@ -378,6 +468,7 @@ def transform_nsis_include(text: str, builder_root: Path, integration_uninstalle
 
 
 def validate_successor_nsis(text: str, integration_uninstaller_name: str) -> None:
+    _validate_provider_nsis(text)
     low = text.casefold()
     required = (
         "preserving davinci resolve ai director product runtime during update",
@@ -470,6 +561,8 @@ def install_successor_policy(namespace: dict, builder_root: Path) -> None:
         # run normally. No exception-message whitelist is used.
         legacy_validate(text, *args, **kwargs)
         validate_successor_nsis(text, integration_uninstaller_name)
+        if text.count(_provider_nsis_block(builder_root)) != 1:
+            raise RuntimeError("Provider rendered inventory/helper binding mismatch")
 
     namespace["make_nsis_include"] = make_nsis_include_successor
     namespace["validate_nsis_include"] = validate_nsis_include_successor

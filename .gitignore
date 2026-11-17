@@ -36,3 +36,7 @@ __pycache__/
 .pytype/
 .ruff_cache/
 .hypothesis/
+
+# Reviewed third-party license texts, not installed dependency code.
+!provenance/runtime/providers/brave-search/2.1.4/licenses/node_modules/
+!provenance/runtime/providers/brave-search/2.1.4/licenses/node_modules/**

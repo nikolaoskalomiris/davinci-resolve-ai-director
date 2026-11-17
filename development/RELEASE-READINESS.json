@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "BLOCKED",
+  "scope": "UNRELEASED_TRACK_B_SOURCE_INTEGRATION",
+  "blockers": [
+    "Reviewed public provider acquisition/reconstruction contract is absent; only explicit offline pinned input staging is available",
+    "Accepted runtime-base carries historical backend; versioned/transactional backend installer activation and clean/upgrade fixtures must be completed before build",
+    "Full installer/build and operator acceptance deferred by no-build decision"
+  ],
+  "accepted_release_unchanged": "0.3.27",
+  "runtime_base_archive_unchanged": true
+}

@@ -1,0 +1,93 @@
+{
+  "status": "VERIFIED",
+  "repository": "https://github.com/brave/brave-search-mcp-server",
+  "tag": "v2.1.4",
+  "commit": "8bcb302657b0f072612c2f3e53182ff17912013c",
+  "git_tree": "2c6b964cb59aa51e3b3643325066fbac05f19440",
+  "archive_sha256": "61ce4b0b6aaae67061989af54361a4bf123a58d47b14e964e27cbf13876f7765",
+  "source_critical_hashes": {
+    "package.json": "10e7f879d6f2ef661dc1b72f4e63daeb363bd8650c47bd64b6be3be99ed1fce3",
+    "package-lock.json": "3713c44446476ae6a30c608cc0f23e06515736327742bed7803a2d0ab025c78f",
+    "LICENSE": "43dc6a32f9c44dd4647cdb3f48677a8681c500a89cfd0e682808d241ec4250a9"
+  },
+  "toolchain": {
+    "C:\\Users\\SoR\\Downloads\\AI-Director-Recovery-20261116-184757\\source\\_toolchain\\Node\\24.18.0\\node.exe": {
+      "sha256": "9a4eb5f1c29c6a2e93852ead46b999e284a6a5ca8bab4d4e241d587d025a52de",
+      "bytes": 92534088
+    },
+    "C:\\Users\\SoR\\Downloads\\AI-Director-Recovery-20261116-184757\\source\\_toolchain\\Node\\24.18.0\\node_modules\\npm\\bin\\npm-cli.js": {
+      "sha256": "3ce7cba6f5128dd5f54c98b6a5036b0f850496878cc2e21044b675fe3c594e3e",
+      "bytes": 56
+    },
+    "C:\\Users\\SoR\\Downloads\\AI-Director-Recovery-20261116-184757\\source\\_toolchain\\Node\\24.18.0\\node_modules\\npm\\package.json": {
+      "sha256": "c9e4dbbf3a23089937d9ee161b59b6ab6368a54de5663167c03bd45062afb004",
+      "bytes": 6854
+    }
+  },
+  "core_files": 3589,
+  "core_tree_sha256": "f8bd1c72fce849e56737258cd2396b80b227e30adfba00574b485bfdd49ebebe",
+  "reproducibility": {
+    "status": "VERIFIED",
+    "builds": [
+      {
+        "build": 1,
+        "files": 3589,
+        "tree_sha256": "f8bd1c72fce849e56737258cd2396b80b227e30adfba00574b485bfdd49ebebe"
+      },
+      {
+        "build": 2,
+        "files": 3589,
+        "tree_sha256": "f8bd1c72fce849e56737258cd2396b80b227e30adfba00574b485bfdd49ebebe"
+      }
+    ],
+    "comparison": "Exact manifest bytes equal, including every shipped file; no exclusions",
+    "algorithm": "SHA256 of UTF-8 compact JSONL, one LF-terminated record per regular file; records sorted lexicographically by relative POSIX path; key order path,size,sha256; no BOM; file content SHA256 lowercase hex. Directories, timestamps, ACLs and modes are not serialized.",
+    "historical_B2_identity": "UNVERIFIED: no historical reference supplied or inspected"
+  },
+  "stdio_tests": [
+    {
+      "test": "cli-guarded",
+      "status": "VERIFIED",
+      "returncode": 0,
+      "tools": [
+        "brave_web_search",
+        "brave_llm_context"
+      ],
+      "network_guard": true
+    },
+    {
+      "test": "env-guarded",
+      "status": "VERIFIED",
+      "returncode": 0,
+      "tools": [
+        "brave_web_search",
+        "brave_llm_context"
+      ],
+      "network_guard": true
+    },
+    {
+      "test": "cli-unmodified",
+      "status": "VERIFIED",
+      "returncode": 0,
+      "tools": [
+        "brave_web_search",
+        "brave_llm_context"
+      ],
+      "network_guard": false
+    },
+    {
+      "test": "env-unmodified",
+      "status": "VERIFIED",
+      "returncode": 0,
+      "tools": [
+        "brave_web_search",
+        "brave_llm_context"
+      ],
+      "network_guard": false
+    }
+  ],
+  "dependencies": 96,
+  "registry_artifacts_identical_across_builds": true,
+  "upstream_lock_missing_integrity_count": 104,
+  "boundaries": "core/ only is the hashed provider runtime. manifests/ and licenses/ are supplemental metadata outside core. Node executable is external, hashed, not bundled. Upstream source retained separately in provider-rebuild/upstream. Original source package.json and package-lock.json preserved byte-for-byte. Dev dependency declarations remain in original metadata; only pruned production node_modules shipped. No claim of historical B2 identity or product/GUI acceptance."
+}

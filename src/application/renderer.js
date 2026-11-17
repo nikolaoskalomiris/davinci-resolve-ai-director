@@ -42,6 +42,7 @@ const settingsProfileUpstreamAvailability = document.getElementById('settingsPro
 const settingsProfileDirectAvailability = document.getElementById('settingsProfileDirectAvailability');
 const settingsModelSelect = document.getElementById('settingsModelSelect');
 const settingsModelRefresh = document.getElementById('settingsModelRefresh');
+const settingsModelBrowse = document.getElementById('settingsModelBrowse');
 const settingsModelDetails = document.getElementById('settingsModelDetails');
 const settingsModelDiscovery = document.getElementById('settingsModelDiscovery');
 const settingsContextLength = document.getElementById('settingsContextLength');
@@ -57,6 +58,11 @@ const settingsFfmpegGet = document.getElementById('settingsFfmpegGet');
 const settingsFfmpegLocate = document.getElementById('settingsFfmpegLocate');
 const settingsFfmpegDisable = document.getElementById('settingsFfmpegDisable');
 const settingsPrimeCache = document.getElementById('settingsPrimeCache');
+const settingsInternetEnabled = document.getElementById('settingsInternetEnabled');
+const settingsBraveKey = document.getElementById('settingsBraveKey');
+const settingsBraveKeyStatus = document.getElementById('settingsBraveKeyStatus');
+const settingsBraveKeySave = document.getElementById('settingsBraveKeySave');
+const settingsBraveKeyRemove = document.getElementById('settingsBraveKeyRemove');
 const settingsGpuLayers = document.getElementById('settingsGpuLayers');
 const settingsCpuMoeLayers = document.getElementById('settingsCpuMoeLayers');
 const settingsKvCacheType = document.getElementById('settingsKvCacheType');
@@ -1347,7 +1353,7 @@ function readSettingsForm() {
     const promptCacheReuse = promptCacheValue !== 'off';
 
     return {
-        schemaVersion: 10,
+        schemaVersion: 11,
         setupCompleted: true,
         serverProfile: settingsDraftProfile,
         modelProfile: settingsDraftModel,
@@ -1378,11 +1384,66 @@ function readSettingsForm() {
         },
         appearance: { skin: normalizeSkin(settingsDraftSkin) },
         ffmpeg: normalizeFfmpegDraft(settingsDraftFfmpeg),
+        internet: { enabled: settingsInternetEnabled.checked },
         primeExecutionCache: settingsPrimeCache.checked
     };
 }
 
+let braveCredentialPresent = false;
+let braveCredentialEditing = false;
+function renderBraveCredentialField() {
+    const saved = braveCredentialPresent && !braveCredentialEditing;
+    settingsBraveKey.readOnly = saved;
+    settingsBraveKey.classList.toggle('credential-saved', saved);
+    settingsBraveKey.placeholder = saved ? '••••••••' : 'Enter API key';
+    settingsBraveKey.setAttribute('aria-label', saved ? 'API key saved' : 'API key');
+    settingsBraveKeySave.textContent = saved ? 'Replace key' : 'Save key';
+}
+async function refreshBraveCredentialStatus() {
+    try {
+        const status = await window.aiDirector.getBraveCredentialStatus();
+        braveCredentialPresent = status.present === true;
+        renderBraveCredentialField();
+        settingsBraveKeyStatus.textContent = !status.available ? 'Secure storage unavailable.' :
+            (status.present ? 'Key saved.' : 'No key saved.');
+    } catch (_) { settingsBraveKeyStatus.textContent = 'Key status unavailable.'; }
+}
+async function changeBraveCredential(remove) {
+    if (settingsActionInFlight) return;
+    if (!remove && braveCredentialPresent && !braveCredentialEditing) {
+        braveCredentialEditing = true;
+        settingsBraveKey.value = '';
+        renderBraveCredentialField();
+        settingsBraveKey.focus();
+        return;
+    }
+    settingsActionInFlight = true;
+    settingsBraveKeySave.disabled = settingsBraveKeyRemove.disabled = true;
+    try {
+        // IPC is the protected local-entry path; never put this value into the settings object.
+        const pending = remove ? window.aiDirector.removeBraveCredential() : window.aiDirector.setBraveCredential(settingsBraveKey.value);
+        settingsBraveKey.value = '';
+        const result = await pending;
+        braveCredentialEditing = false;
+        await refreshBraveCredentialStatus();
+        if (!result?.ok) settingsBraveKeyStatus.textContent = result?.error || 'Credential operation failed.';
+    } catch (_) { settingsBraveKeyStatus.textContent = 'Credential operation failed.'; }
+    finally {
+        settingsBraveKey.value = '';
+        settingsActionInFlight = false;
+        settingsBraveKeySave.disabled = settingsBraveKeyRemove.disabled = false;
+        updateSettingsApplyState();
+    }
+}
+settingsBraveKeySave.addEventListener('click', () => changeBraveCredential(false));
+settingsBraveKeyRemove.addEventListener('click', () => changeBraveCredential(true));
+settingsInternetEnabled.addEventListener('change', updateSettingsImpact);
+settingsDialog.addEventListener('close', () => { settingsBraveKey.value = ''; });
+
 function describeSettingsImpact(base, next) {
+    if (Boolean(base?.internet?.enabled) !== next.internet.enabled) {
+        return 'Changing Brave Search restarts the server.';
+    }
     if (!base || settingsState?.setupRequired) {
         return next.primeExecutionCache
             ? 'AI Director will validate these settings, start the selected server and backend, then prime the execution prefix.'
@@ -1480,6 +1541,7 @@ function comparableSettings(settings) {
             repetitionPenalty: inference.repetitionPenalty ?? null,
             promptCacheReuse: inference.promptCacheReuse !== false
         },
+        internet: { enabled: source.internet?.enabled === true },
         ffmpeg: normalizeFfmpegDraft(source.ffmpeg),
         primeExecutionCache: source.primeExecutionCache !== false
     };
@@ -1544,6 +1606,7 @@ function updateSettingsRuntimeGate(
     // Rescan remains protected by the broad runtime gate. Only Apply gains the
     // narrower supersedable-prime behavior.
     settingsModelRefresh.disabled = settingsActionInFlight || settingsRuntimeBusy;
+    settingsModelBrowse.disabled = settingsActionInFlight || settingsRuntimeBusy;
     renderFfmpegDraft();
 
     if (!settingsApplyBlocked && settingsOperationStatus.textContent === SETTINGS_RUNTIME_WAIT_MESSAGE) {
@@ -1626,6 +1689,10 @@ function populateSettingsDialog(state, { firstRun = false } = {}) {
     settingsPromptCacheReuse.value = (inference.promptCacheReuse ?? inferenceDefaults.promptCacheReuse) ? 'on' : 'off';
     document.getElementById('settingsInferencePanel')?.syncInferenceUi?.();
     settingsPrimeCache.checked = source?.primeExecutionCache !== false;
+    settingsInternetEnabled.checked = source?.internet?.enabled === true;
+    settingsBraveKey.value = '';
+    braveCredentialEditing = false;
+    void refreshBraveCredentialStatus();
     renderFfmpegDraft();
     syncModelRecipeHints();
     settingsOperationStatus.textContent = currentSettingsRuntimeMessage(state);
@@ -2818,6 +2885,26 @@ settingsSkinOptions.forEach((button) => {
     button.addEventListener('click', () => { void setSettingsSkin(button.dataset.skin); });
 });
 settingsModelSelect.addEventListener('change', () => setSettingsModel(settingsModelSelect.value));
+settingsModelBrowse.addEventListener('click', async () => {
+    if (settingsActionInFlight || settingsRuntimeBusy || isProcessing) return;
+    settingsActionInFlight = true;
+    settingsModelBrowse.disabled = settingsModelRefresh.disabled = true;
+    updateSettingsApplyState();
+    try {
+        const result = await window.aiDirector.selectManualModel();
+        if (result?.canceled) return;
+        if (!result?.ok) throw new Error(result?.error || 'Could not select this model.');
+        settingsState = result.state;
+        renderModelOptions(result.modelId);
+        setSettingsModel(result.modelId);
+        settingsModelDiscovery.textContent = `${settingsState.modelDiscovery?.discoveredCount ?? 0} models available`;
+    } catch (error) { settingsModelDiscovery.textContent = error.message || 'Could not select this model.'; }
+    finally {
+        settingsActionInFlight = false;
+        settingsModelBrowse.disabled = settingsModelRefresh.disabled = settingsRuntimeBusy;
+        updateSettingsApplyState();
+    }
+});
 settingsModelRefresh.addEventListener('click', async () => {
     if (settingsActionInFlight || settingsRuntimeBusy || isProcessing) return;
     const previousSelection = settingsDraftModel;

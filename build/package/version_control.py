@@ -211,12 +211,22 @@ def validate_current_for_versioning() -> tuple[dict, tuple[int, int, int], tuple
     target = parse_semver(str(current.get("target_version") or ""))
     require(stable == accepted, "stable_version must equal live accepted authority")
     state = current.get("state_mode")
-    require(state in ("TARGET_READY", "ACCEPTED_READY"), f"Unsupported version state: {state!r}")
+    require(state in ("TARGET_READY", "ACCEPTED_READY", "DEVELOPMENT"), f"Unsupported version state: {state!r}")
     if state == "TARGET_READY":
         require(target > accepted, "TARGET_READY requires target > accepted authority")
     else:
         require(target == accepted, "ACCEPTED_READY requires target == accepted authority")
 
+    if current.get("state_mode") == "DEVELOPMENT":
+        development = current.get("development_source") or {}
+        historical = ROOT / "provenance/application/ACCEPTED-SOURCE-MANIFEST-0.3.27.json"
+        require(development.get("status") == "UNRELEASED", "Development source must be unreleased")
+        require(development.get("build_policy") == "EXPLICIT_TARGET_PREPARATION_REQUIRED", "Development build policy mismatch")
+        require(development.get("release_acceptance_promoted") is False, "Development cannot promote release acceptance")
+        require(development.get("accepted_source_manifest") == historical.relative_to(ROOT).as_posix(), "Accepted historical source path mismatch")
+        require(development.get("accepted_source_manifest_sha256") == sha256(historical), "Historical accepted source binding mismatch")
+        historical_manifest = read_json(historical)
+        require(historical_manifest.get("source_phase") == "ACCEPTED_READY" and historical_manifest.get("version") == current.get("live_accepted_authority"), "Historical accepted source identity mismatch")
     bindings = current.get("control_bindings") or {}
     require(str(bindings.get("version_control.py") or "").upper() == sha256(Path(__file__).resolve()), "version_control.py binding mismatch")
     require(str(bindings.get("check_state.py") or "").upper() == sha256(CHECK_PATH), "check_state.py binding mismatch")
@@ -236,7 +246,8 @@ def validate_manifest_against_tree(current: dict) -> None:
     require(manifest.get("version") == target, "Canonical manifest version mismatch")
     require(manifest.get("source_phase") == current.get("state_mode"), "Canonical manifest source phase mismatch")
     rows = manifest.get("files")
-    require(isinstance(rows, list) and len(rows) == 13 and manifest.get("file_count") == 13, "Canonical manifest file count mismatch")
+    require(isinstance(rows, list) and len(rows) == 14 and manifest.get("file_count") == 14, "Canonical manifest file count mismatch")
+    require({r.get("path") for r in manifest["files"]} == {'package.json', 'build/electron-builder.config.cjs', 'main.js', 'build/installer.nsh', 'ResolveUiStatusObserver.ps1', 'UpdateManager.js', 'InternetCapability.js', 'styles.css', 'preload.js', 'markdown.js', 'renderer.js', 'index.html', 'ProductPaths.js', 'package-lock.json'}, "Reviewed application membership mismatch")
     expected = set()
     for row in rows:
         rel = str(row.get("path") or "").replace("\\", "/")
@@ -273,7 +284,7 @@ def prospective_payloads(current: dict, selected: str) -> dict[str, bytes]:
     }
 
     actual = {p.relative_to(APP_ROOT).as_posix(): p for p in APP_ROOT.rglob("*") if p.is_file()}
-    require(len(actual) == 13, f"Canonical source file count mismatch: {len(actual)}")
+    require(len(actual) == 14, f"Canonical source file count mismatch: {len(actual)}")
     rows = []
     for rel in sorted(actual):
         data = replacements.get(rel, actual[rel].read_bytes())
@@ -289,7 +300,7 @@ def prospective_payloads(current: dict, selected: str) -> dict[str, bytes]:
         "version": selected,
         "source_authority": "CANONICAL",
         "source_phase": "TARGET_READY",
-        "file_count": 13,
+        "file_count": 14,
         "files": rows,
         "active_application_overlay_composition": False,
     }
@@ -297,6 +308,8 @@ def prospective_payloads(current: dict, selected: str) -> dict[str, bytes]:
     manifest_sha = sha256_bytes(manifest_bytes)
 
     next_current = dict(current)
+    if next_current.get("state_mode") == "DEVELOPMENT":
+        next_current["development_predecessor"] = next_current.pop("development_source")
     next_current["state_mode"] = "TARGET_READY"
     next_current["target_version"] = selected
     next_current["stable_version"] = str(current.get("live_accepted_authority"))
@@ -305,7 +318,7 @@ def prospective_payloads(current: dict, selected: str) -> dict[str, bytes]:
         "source_dir": "src/application",
         "manifest_path": "provenance/application/CANONICAL-SOURCE-MANIFEST.json",
         "manifest_sha256": manifest_sha,
-        "file_count": 13,
+        "file_count": 14,
     }
     next_current.pop("last_build_status", None)
     next_current.pop("build_authorized", None)
@@ -873,6 +886,8 @@ def status(current: dict, accepted: tuple[int, int, int], target: tuple[int, int
     print("BUILD_ADVANCES_ACCEPTED_AUTHORITY=False")
     print("FAILED_BUILD_CONSUMES_VERSION=False")
     print("ACCEPTANCE_PROMOTION=SEPARATE_EXPLICIT_GATE")
+    print("DEVELOPMENT_SOURCE=" + str(current.get("state_mode") == "DEVELOPMENT"))
+    print("BUILD_ELIGIBLE=" + str(current.get("state_mode") != "DEVELOPMENT"))
     print("VERSION_STATUS=PASS")
     return 0
 
